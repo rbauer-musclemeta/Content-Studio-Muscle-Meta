@@ -107,7 +107,7 @@ class PaymentFlowTester:
                     checkout_url = data.get("checkout_url") or data.get("url")
                     if not checkout_url.startswith("https://checkout.stripe.com"):
                         self.log_test("Create Checkout Session", False, 
-                                    f"Invalid checkout URL format: {data['checkout_url']}")
+                                    f"Invalid checkout URL format: {checkout_url}")
                         return False
                         
                     self.log_test("Create Checkout Session", True, 
