@@ -213,7 +213,7 @@ async def stripe_webhook(request: Request):
 async def get_transactions(limit: int = 50, skip: int = 0):
     """Get payment transactions (for admin/debugging purposes)"""
     try:
-        transactions = await db.payment_transactions.find().skip(skip).limit(limit).to_list(limit)
+        transactions = await db.payment_transactions.find({}, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
         return transactions
     except Exception as e:
         logger.error(f"Error fetching transactions: {str(e)}")
@@ -223,9 +223,10 @@ async def get_transactions(limit: int = 50, skip: int = 0):
 async def get_transaction(session_id: str):
     """Get a specific transaction by session ID"""
     try:
-        transaction = await db.payment_transactions.find_one({"session_id": session_id})
+        transaction = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
         if not transaction:
             raise HTTPException(status_code=404, detail="Transaction not found")
+        return transaction
         return transaction
     except Exception as e:
         logger.error(f"Error fetching transaction {session_id}: {str(e)}")
