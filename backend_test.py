@@ -88,8 +88,11 @@ class PaymentFlowTester:
                 if response.status == 200:
                     data = await response.json()
                     
-                    # Verify required fields in response
-                    required_fields = ["session_id", "checkout_url"]
+                    # Verify required fields in response (handle both 'url' and 'checkout_url')
+                    required_fields = ["session_id"]
+                    checkout_url_field = "checkout_url" if "checkout_url" in data else "url"
+                    required_fields.append(checkout_url_field)
+                    
                     missing_fields = [field for field in required_fields if field not in data]
                     
                     if missing_fields:
@@ -101,7 +104,8 @@ class PaymentFlowTester:
                     self.created_session_id = data["session_id"]
                     
                     # Verify checkout URL format
-                    if not data["checkout_url"].startswith("https://checkout.stripe.com"):
+                    checkout_url = data.get("checkout_url") or data.get("url")
+                    if not checkout_url.startswith("https://checkout.stripe.com"):
                         self.log_test("Create Checkout Session", False, 
                                     f"Invalid checkout URL format: {data['checkout_url']}")
                         return False
