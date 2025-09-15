@@ -11,8 +11,14 @@ from typing import Dict, Any
 # Setup logging
 logger = logging.getLogger(__name__)
 
-# Database setup
-from server import db
+# Database setup - avoid circular import
+from motor.motor_asyncio import AsyncIOMotorClient
+import os
+
+# Initialize database connection directly
+mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+client = AsyncIOMotorClient(mongo_url)
+db = client[os.environ.get('DB_NAME', 'test_database')]
 
 # Payment router
 payments = APIRouter(prefix="/api/payments")
