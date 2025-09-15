@@ -101,3 +101,152 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Test the complete course payment flow for the Muscle-Meta Matrix platform including API health checks, course payment flow, database integration, error handling, and Stripe integration verification."
+
+backend:
+  - task: "API Health Check"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Backend API root endpoint responding correctly with 'Hello World' message"
+
+  - task: "Course Payment Flow - Checkout Session Creation"
+    implemented: true
+    working: true
+    file: "/app/backend/payments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "Initial test failed due to circular import between server.py and payments.py"
+        - working: true
+          agent: "testing"
+          comment: "Fixed circular import issue by initializing database connection directly in payments.py. Checkout sessions now creating successfully with proper Stripe URLs"
+
+  - task: "Payment Status Checking"
+    implemented: true
+    working: true
+    file: "/app/backend/payments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Payment status endpoint working correctly, returning status and payment_status fields as expected"
+
+  - task: "Database Transaction Storage"
+    implemented: true
+    working: true
+    file: "/app/backend/payments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "Initial test failed due to MongoDB ObjectId serialization issues causing 500 errors"
+        - working: true
+          agent: "testing"
+          comment: "Fixed ObjectId serialization by excluding _id field from MongoDB queries. Transactions now storing and retrieving correctly with proper course_id and amount validation"
+
+  - task: "Course Package Configuration"
+    implemented: true
+    working: true
+    file: "/app/backend/payments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Fixed pricing correctly enforced at $97.00 for sleep-optimization course. Backend prevents price manipulation by using server-side COURSE_PACKAGES configuration"
+
+  - task: "Error Handling - Invalid Course ID"
+    implemented: true
+    working: true
+    file: "/app/backend/payments.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Properly rejects invalid course IDs with 400 status and appropriate error message"
+
+  - task: "Error Handling - Missing Parameters"
+    implemented: true
+    working: true
+    file: "/app/backend/payments.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "FastAPI validation correctly handles missing required parameters with 422 status"
+
+  - task: "Error Handling - Invalid Session ID"
+    implemented: true
+    working: true
+    file: "/app/backend/payments.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Properly handles invalid session IDs with 404 status and 'Transaction not found' message"
+
+  - task: "Stripe Integration - Webhook Endpoint"
+    implemented: true
+    working: true
+    file: "/app/backend/payments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Webhook endpoint properly validates Stripe signature and rejects requests without proper signature with 400 status"
+
+  - task: "Transaction List Endpoint"
+    implemented: true
+    working: true
+    file: "/app/backend/payments.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Transactions list endpoint working correctly, returning proper JSON array of transactions"
+
+frontend:
+  # Frontend testing not performed as per instructions
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Complete backend payment flow testing completed successfully"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "testing"
+      message: "Completed comprehensive backend testing of Muscle-Meta Matrix payment flow. Fixed critical circular import issue and MongoDB ObjectId serialization problems. All 10 backend tests now passing with 100% success rate. Payment security patterns working correctly with fixed server-side pricing at $97.00 for sleep-optimization course. Stripe integration functioning properly with emergentintegrations library."
