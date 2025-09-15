@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { Heart, Activity, Calendar, ArrowRight, Users, TrendingUp } from 'lucide-react';
+import { Heart, Activity, Calendar, ArrowRight, Users, TrendingUp, Book } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const NewsletterHub = () => {
@@ -16,7 +16,7 @@ const NewsletterHub = () => {
       topics: ["Metabolic Nutrition", "Exercise Protocols", "Recovery & Sleep"],
       icon: Heart,
       color: "emerald",
-      route: "/",
+      route: "/muscle-metabolic-health",
       featured: false
     },
     {
@@ -84,6 +84,21 @@ const NewsletterHub = () => {
           </div>
         </div>
       </header>
+
+      {/* Navigation */}
+      <nav className="bg-white border-b">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-center justify-center space-x-8 py-4">
+            <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors border-b-2 border-indigo-600 pb-2">
+              Newsletter Hub
+            </Link>
+            <Link to="/courses" className="text-gray-600 hover:text-gray-900 font-medium transition-colors flex items-center space-x-1">
+              <Book className="w-4 h-4" />
+              <span>Courses</span>
+            </Link>
+          </div>
+        </div>
+      </nav>
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-6 py-12">

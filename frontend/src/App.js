@@ -5,6 +5,10 @@ import axios from "axios";
 import Newsletter from "./components/Newsletter";
 import HIITNewsletter from "./components/HIITNewsletter";
 import NewsletterHub from "./components/NewsletterHub";
+import CoursesPage from "./components/CoursesPage";
+import SleepCourse from "./components/SleepCourse";
+import CourseSuccess from "./components/CourseSuccess";
+import { Toaster } from "./components/ui/toaster";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -34,7 +38,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/muscle-metabolic-health" element={<Newsletter />} />
           <Route path="/hiit-longevity" element={<HIITNewsletter />} />
+          <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/courses/sleep-optimization" element={<SleepCourse />} />
+          <Route path="/courses/sleep-optimization/success" element={<CourseSuccess />} />
         </Routes>
+        <Toaster />
       </BrowserRouter>
     </div>
   );
