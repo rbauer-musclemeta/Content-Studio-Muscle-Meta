@@ -8,6 +8,7 @@ import NewsletterHub from "./components/NewsletterHub";
 import CoursesPage from "./components/CoursesPage";
 import SleepCourse from "./components/SleepCourse";
 import PickleballCourse from "./components/PickleballCourse";
+import PickleballCourseStyled from "./components/PickleballCourseStyled";
 import CourseSuccess from "./components/CourseSuccess";
 import AdminDashboard from "./components/AdminDashboard";
 import CourseEditor from "./components/CourseEditor";
