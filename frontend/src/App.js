@@ -10,6 +10,7 @@ import SleepCourse from "./components/SleepCourse";
 import CourseSuccess from "./components/CourseSuccess";
 import AdminDashboard from "./components/AdminDashboard";
 import CourseEditor from "./components/CourseEditor";
+import AdminTest from "./components/AdminTest";
 import { Toaster } from "./components/ui/toaster";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
