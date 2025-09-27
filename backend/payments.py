@@ -29,6 +29,11 @@ COURSE_PACKAGES = {
         "title": "The 4-Week Sleep Optimization Blueprint",
         "price": 97.00,
         "instructor": "Randy Bauer, PT"
+    },
+    "pickleball-3p-system": {
+        "title": "The Science Behind the 3P System",
+        "price": 197.00,
+        "instructor": "Randy Bauer, PT"
     }
 }
 
