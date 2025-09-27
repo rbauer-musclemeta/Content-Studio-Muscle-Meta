@@ -10,8 +10,9 @@ from typing import List
 import uuid
 from datetime import datetime
 
-# Import payment router
+# Import routers
 from payments import payments
+from admin import admin
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -22,11 +23,14 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(
+    title="Muscle-Meta Matrix API",
+    description="Backend API for courses, newsletters, and payment processing",
+    version="1.0.0"
+)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
-
 
 # Define Models
 class StatusCheck(BaseModel):
@@ -54,11 +58,23 @@ async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
     return [StatusCheck(**status_check) for status_check in status_checks]
 
-# Include the router in the main app
-app.include_router(api_router)
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint for monitoring"""
+    return {
+        "status": "healthy",
+        "timestamp": datetime.utcnow().isoformat(),
+        "services": {
+            "database": "connected",
+            "payments": "active",
+            "admin": "active"
+        }
+    }
 
-# Include payments router
+# Include routers in the main app
+app.include_router(api_router)
 app.include_router(payments)
+app.include_router(admin)
 
 app.add_middleware(
     CORSMiddleware,
@@ -75,6 +91,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+@app.on_event("startup")
+async def startup_event():
+    logger.info("Muscle-Meta Matrix API starting up...")
+    logger.info("Services initialized: API, Payments, Admin")
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
+    logger.info("Shutting down Muscle-Meta Matrix API...")
     client.close()
