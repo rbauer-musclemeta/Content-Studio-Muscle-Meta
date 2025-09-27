@@ -98,6 +98,82 @@ const CourseAgent = ({ onTemplateApply, courseData, onContentUpdate }) => {
   };
 
   const htmlTemplates = {
+    'interactive-course-full': {
+      name: 'Full Interactive Course Template',
+      html: `<!-- Complete Interactive Course Template -->
+<div class="course-container">
+  <section class="hero">
+    <h1>{COURSE_TITLE}</h1>
+    <p>{COURSE_DESCRIPTION}</p>
+    <button class="hero__cta-button">Begin Your Journey</button>
+  </section>
+
+  <section class="stats">
+    <div class="stat-card">
+      <span class="stat-card__number">{MODULE_COUNT}</span>
+      <span class="stat-card__label">Modules</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__number">{LESSON_COUNT}</span>
+      <span class="stat-card__label">Lessons</span>
+    </div>
+  </section>
+
+  <section class="modules">
+    <h2>Course Modules</h2>
+    
+    <div class="module-card">
+      <div class="module-card__header" data-module="1" tabindex="0" role="button">
+        <div class="module-card__info">
+          <h3>Week 1: {MODULE_1_TITLE}</h3>
+          <p>{MODULE_1_SUBTITLE}</p>
+        </div>
+        <svg class="module-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <polyline points="6,9 12,15 18,9"></polyline>
+        </svg>
+      </div>
+      <div class="module-card__content" data-content="1">
+        <div class="module-content">
+          <p>{MODULE_1_DESCRIPTION}</p>
+          <ul class="lesson-list">
+            <li class="lesson-item">
+              <div class="lesson-info">
+                <h4>{LESSON_1_1_TITLE}</h4>
+                <div class="lesson-meta">
+                  <span>{LESSON_1_1_DURATION}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+:root {
+  --color-primary: #4f46e5;
+  --color-surface: #ffffff;
+  --color-border: #d1d5db;
+  --color-text: #111827;
+  --radius-base: 8px;
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.course-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 40px; border-radius: 8px; margin-bottom: 40px; text-align: center; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+.stat-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+.module-card { background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; overflow: hidden; }
+.module-card__header { padding: 25px 30px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.module-card__content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+</style>
+
+<script>
+// Your JavaScript functionality will be automatically included
+</script>`
+    },
     'lesson-interactive': {
       name: 'Interactive Lesson Template',
       html: `<div class="lesson-container">
