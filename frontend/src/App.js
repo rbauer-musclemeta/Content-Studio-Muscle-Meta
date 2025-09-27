@@ -45,7 +45,9 @@ function App() {
           <Route path="/hiit-longevity" element={<HIITNewsletter />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/sleep-optimization" element={<SleepCourse />} />
+          <Route path="/courses/pickleball-3p-system" element={<PickleballCourse />} />
           <Route path="/courses/sleep-optimization/success" element={<CourseSuccess />} />
+          <Route path="/courses/pickleball-3p-system/success" element={<CourseSuccess />} />
           
           {/* Admin Routes */}
           <Route path="/admin-test" element={<AdminTest />} />
