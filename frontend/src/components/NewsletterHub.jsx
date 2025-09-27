@@ -307,6 +307,7 @@ const NewsletterHub = () => {
               <a href="#" className="text-gray-600 hover:text-gray-900">Archive</a>
               <a href="#" className="text-gray-600 hover:text-gray-900">Subscribe</a>
               <a href="#" className="text-gray-600 hover:text-gray-900">Contact</a>
+              <Link to="/admin" className="text-red-600 hover:text-red-700 font-medium">🔧 Admin</Link>
             </div>
           </div>
         </footer>
