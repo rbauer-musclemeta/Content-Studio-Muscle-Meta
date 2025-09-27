@@ -47,6 +47,7 @@ function App() {
           <Route path="/courses/sleep-optimization/success" element={<CourseSuccess />} />
           
           {/* Admin Routes */}
+          <Route path="/admin-test" element={<AdminTest />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/courses/create" element={<CourseEditor />} />
           <Route path="/admin/courses/edit/:courseId" element={<CourseEditor />} />
