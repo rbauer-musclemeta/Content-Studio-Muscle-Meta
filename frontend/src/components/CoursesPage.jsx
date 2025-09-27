@@ -21,7 +21,7 @@ const CoursesPage = () => {
       students: 1247,
       rating: 4.9,
       level: 'All Levels',
-      featured: true,
+      featured: false,
       pillars: ['Recovery', 'Brain Health', 'Stress Management'],
       outcomes: [
         'Fall asleep within 15 minutes consistently',
@@ -57,6 +57,56 @@ const CoursesPage = () => {
         }
       ],
       route: '/courses/sleep-optimization'
+    },
+    {
+      id: 'pickleball-3p-system',
+      title: 'The Science Behind the 3P System',
+      subtitle: 'Preparation, Prevention, and Performance for Pickleball Excellence',
+      instructor: 'Randy Bauer, PT',
+      description: 'Revolutionary Evidence-Based Approach to Pickleball Training. This comprehensive framework addresses the sport\'s unique challenges through three interconnected pillars, built on cutting-edge research in muscle-metabolic health, injury prevention science, and performance optimization.',
+      price: 197.00,
+      originalPrice: 297.00,
+      duration: '4 modules',
+      lessons: 16,
+      students: 2847,
+      rating: 4.9,
+      level: 'All Levels',
+      featured: true,
+      pillars: ['Movement', 'Performance', 'Prevention'],
+      outcomes: [
+        '70% injury reduction guarantee',
+        '25-40% performance improvement',
+        'Complete movement assessment mastery',
+        'Sport-specific training protocols',
+        'Competition preparation strategies'
+      ],
+      modules: [
+        {
+          week: 1,
+          title: 'Foundation Assessment & The Muscle-Meta Matrix',
+          subtitle: 'Master the comprehensive assessment framework',
+          lessons: 4
+        },
+        {
+          week: 2,
+          title: 'PREPARATION - Building Your Foundation',
+          subtitle: '4-6 week systematic preparation protocols',
+          lessons: 4
+        },
+        {
+          week: 3,
+          title: 'PREVENTION - Your Insurance Policy',
+          subtitle: 'Smart load management and movement quality protocols',
+          lessons: 4
+        },
+        {
+          week: 4,
+          title: 'PERFORMANCE - Optimizing Your Game',
+          subtitle: 'Sport-specific training protocols for competitive excellence',
+          lessons: 4
+        }
+      ],
+      route: '/courses/pickleball-3p-system'
     }
   ];
 
