@@ -16,6 +16,8 @@ import AdminTest from "./components/AdminTest";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import UserProfile from "./components/UserProfile";
+import OnboardingSurvey from "./components/OnboardingSurvey";
+import PersonalizedDashboard from "./components/PersonalizedDashboard";
 import { Toaster } from "./components/ui/toaster";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -59,6 +61,10 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<UserProfile />} />
+
+            {/* Assessment & Dashboard Routes */}
+            <Route path="/onboarding" element={<OnboardingSurvey />} />
+            <Route path="/dashboard" element={<PersonalizedDashboard />} />
 
             {/* Admin Routes */}
             <Route path="/admin-test" element={<AdminTest />} />
