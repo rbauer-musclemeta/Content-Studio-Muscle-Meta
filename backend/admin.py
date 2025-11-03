@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 from fastapi.responses import JSONResponse
-from models import Course, CourseCreate, Newsletter, NewsletterCreate
+from models import Course, CourseCreate, Newsletter, NewsletterCreate, User
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
@@ -8,6 +8,9 @@ from datetime import datetime
 from typing import List, Optional
 import uuid
 import json
+
+# Import authentication dependencies
+from auth import get_current_admin_user
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -67,8 +70,11 @@ async def get_course(course_id: str):
         raise HTTPException(status_code=500, detail="Failed to fetch course")
 
 @admin.post("/courses", response_model=Course)
-async def create_course(course_data: CourseCreate):
-    """Create a new course"""
+async def create_course(
+    course_data: CourseCreate,
+    current_user: User = Depends(get_current_admin_user)
+):
+    """Create a new course (admin only)"""
     try:
         # Create course with generated ID
         course_dict = course_data.dict()
@@ -89,8 +95,12 @@ async def create_course(course_data: CourseCreate):
         raise HTTPException(status_code=500, detail="Failed to create course")
 
 @admin.put("/courses/{course_id}", response_model=Course)
-async def update_course(course_id: str, course_data: CourseCreate):
-    """Update an existing course"""
+async def update_course(
+    course_id: str,
+    course_data: CourseCreate,
+    current_user: User = Depends(get_current_admin_user)
+):
+    """Update an existing course (admin only)"""
     try:
         # Check if course exists
         existing_course = await db.courses.find_one({"id": course_id})
@@ -123,8 +133,11 @@ async def update_course(course_id: str, course_data: CourseCreate):
         raise HTTPException(status_code=500, detail="Failed to update course")
 
 @admin.delete("/courses/{course_id}")
-async def delete_course(course_id: str):
-    """Delete a course"""
+async def delete_course(
+    course_id: str,
+    current_user: User = Depends(get_current_admin_user)
+):
+    """Delete a course (admin only)"""
     try:
         result = await db.courses.delete_one({"id": course_id})
         if result.deleted_count == 0:
@@ -166,8 +179,11 @@ async def get_newsletter(newsletter_id: str):
         raise HTTPException(status_code=500, detail="Failed to fetch newsletter")
 
 @admin.post("/newsletters", response_model=Newsletter)
-async def create_newsletter(newsletter_data: NewsletterCreate):
-    """Create a new newsletter"""
+async def create_newsletter(
+    newsletter_data: NewsletterCreate,
+    current_user: User = Depends(get_current_admin_user)
+):
+    """Create a new newsletter (admin only)"""
     try:
         # Create newsletter with generated ID
         newsletter_dict = newsletter_data.dict()
@@ -188,8 +204,12 @@ async def create_newsletter(newsletter_data: NewsletterCreate):
         raise HTTPException(status_code=500, detail="Failed to create newsletter")
 
 @admin.put("/newsletters/{newsletter_id}", response_model=Newsletter)
-async def update_newsletter(newsletter_id: str, newsletter_data: NewsletterCreate):
-    """Update an existing newsletter"""
+async def update_newsletter(
+    newsletter_id: str,
+    newsletter_data: NewsletterCreate,
+    current_user: User = Depends(get_current_admin_user)
+):
+    """Update an existing newsletter (admin only)"""
     try:
         # Check if newsletter exists
         existing_newsletter = await db.newsletters.find_one({"id": newsletter_id})

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, EmailStr
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import uuid
@@ -51,6 +51,7 @@ class PaymentTransaction(BaseModel):
     session_id: str
     payment_id: Optional[str] = None
     course_id: Optional[str] = None
+    user_id: Optional[str] = None  # Linked user account
     user_email: Optional[str] = None
     amount: float
     currency: str = "usd"
@@ -63,6 +64,7 @@ class PaymentTransaction(BaseModel):
 class PaymentTransactionCreate(BaseModel):
     session_id: str
     course_id: Optional[str] = None
+    user_id: Optional[str] = None
     user_email: Optional[str] = None
     amount: float
     currency: str = "usd"
@@ -123,3 +125,40 @@ class UserEngagementCreate(BaseModel):
     course_id: Optional[str] = None
     action: str
     metadata: Dict[str, Any] = {}
+
+
+# User authentication models
+class User(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    full_name: str
+    is_active: bool = True
+    is_admin: bool = False
+    enrolled_courses: List[str] = []  # List of course IDs
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class UserInDB(User):
+    hashed_password: str
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+    full_name: str
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: User
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
+
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None

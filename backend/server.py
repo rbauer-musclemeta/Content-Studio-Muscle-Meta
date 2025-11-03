@@ -13,6 +13,7 @@ from datetime import datetime
 # Import routers
 from payments import payments
 from admin import admin
+from auth_routes import auth_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -73,6 +74,7 @@ async def health_check():
 
 # Include routers in the main app
 app.include_router(api_router)
+app.include_router(auth_router)
 app.include_router(payments)
 app.include_router(admin)
 
