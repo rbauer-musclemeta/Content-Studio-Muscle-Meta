@@ -1,0 +1,43 @@
+services:
+  # Backend Service (FastAPI)
+  - type: web
+    name: muscle-meta-backend
+    runtime: python
+    region: oregon
+    plan: free
+    branch: claude/phase-2-enhancement-planning-011CUmPBNrMcjZTkHyfQ5F8D
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: muscle_meta_db
+      - key: STRIPE_API_KEY
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
+  # Frontend Service (React)
+  - type: web
+    name: muscle-meta-frontend
+    runtime: node
+    region: oregon
+    plan: free
+    branch: claude/phase-2-enhancement-planning-011CUmPBNrMcjZTkHyfQ5F8D
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npx serve -s build -l $PORT
+    healthCheckPath: /
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        fromService:
+          type: web
+          name: muscle-meta-backend
+          property: url
+      - key: NODE_VERSION
+        value: 18.17.0
