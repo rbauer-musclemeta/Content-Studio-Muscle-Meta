@@ -1,12 +1,15 @@
 from fastapi import APIRouter, HTTPException, Request, Depends
 from fastapi.responses import JSONResponse
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
-from models import PaymentTransaction, PaymentTransactionCreate, CheckoutRequest
+from models import PaymentTransaction, PaymentTransactionCreate, CheckoutRequest, User
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, Optional
+
+# Import authentication dependency
+from auth import get_current_active_user
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -42,13 +45,88 @@ async def get_stripe_checkout() -> StripeCheckout:
     api_key = os.environ.get('STRIPE_API_KEY')
     if not api_key:
         raise HTTPException(status_code=500, detail="Stripe API key not configured")
-    
+
     # Note: webhook_url will be set dynamically per request
     return StripeCheckout(api_key=api_key, webhook_url="")
 
+
+async def enroll_user_in_course(user_id: str, course_id: str) -> bool:
+    """
+    Enroll a user in a course by adding it to their enrolled_courses list
+
+    Args:
+        user_id: User ID to enroll
+        course_id: Course ID to enroll in
+
+    Returns:
+        True if enrollment was successful, False otherwise
+    """
+    try:
+        # Check if already enrolled
+        user = await db.users.find_one({"_id": user_id})
+        if not user:
+            logger.warning(f"User {user_id} not found for enrollment")
+            return False
+
+        enrolled_courses = user.get("enrolled_courses", [])
+        if course_id in enrolled_courses:
+            logger.info(f"User {user_id} already enrolled in course {course_id}")
+            return True
+
+        # Add course to enrolled_courses
+        result = await db.users.update_one(
+            {"_id": user_id},
+            {
+                "$addToSet": {"enrolled_courses": course_id},
+                "$set": {"updated_at": datetime.utcnow()}
+            }
+        )
+
+        if result.modified_count > 0:
+            logger.info(f"Successfully enrolled user {user_id} in course {course_id}")
+            return True
+        else:
+            logger.warning(f"Failed to enroll user {user_id} in course {course_id}")
+            return False
+
+    except Exception as e:
+        logger.error(f"Error enrolling user {user_id} in course {course_id}: {str(e)}")
+        return False
+
+async def get_optional_current_user(
+    authorization: Optional[str] = None
+) -> Optional[User]:
+    """Get current user if authorization header is provided, otherwise return None"""
+    if not authorization or not authorization.startswith("Bearer "):
+        return None
+
+    try:
+        token = authorization.replace("Bearer ", "")
+        from auth import verify_token
+        token_data = verify_token(token)
+
+        if token_data is None or token_data.email is None:
+            return None
+
+        # Get user from database
+        user_doc = await db.users.find_one({"email": token_data.email})
+        if user_doc is None:
+            return None
+
+        user_doc.pop("hashed_password", None)
+        user_doc["id"] = str(user_doc.pop("_id", user_doc.get("id")))
+        return User(**user_doc)
+    except Exception:
+        return None
+
+
 @payments.post("/checkout/session", response_model=CheckoutSessionResponse)
-async def create_checkout_session(request: CheckoutRequest, http_request: Request):
-    """Create a Stripe checkout session for course enrollment"""
+async def create_checkout_session(
+    request: CheckoutRequest,
+    http_request: Request,
+    authorization: Optional[str] = None
+):
+    """Create a Stripe checkout session for course enrollment (supports both authenticated and guest users)"""
     try:
         # Validate course exists and get fixed price
         if request.course_id not in COURSE_PACKAGES:
@@ -83,11 +161,16 @@ async def create_checkout_session(request: CheckoutRequest, http_request: Reques
         
         # Create checkout session
         session = await stripe_checkout.create_checkout_session(checkout_request)
-        
+
+        # Get optional authenticated user
+        current_user = await get_optional_current_user(authorization)
+
         # Store payment transaction record
         payment_data = PaymentTransactionCreate(
             session_id=session.session_id,
             course_id=request.course_id,
+            user_id=current_user.id if current_user else None,
+            user_email=current_user.email if current_user else None,
             amount=amount,
             currency="usd",
             metadata={
@@ -141,15 +224,19 @@ async def get_checkout_status(session_id: str):
                 {"$set": update_data}
             )
             
-            # Log successful payment
+            # Log successful payment and enroll user
             if status_response.payment_status == "paid" and transaction.get("payment_status") != "paid":
                 logger.info(f"Payment successful for session {session_id}, course {transaction.get('course_id')}")
-                
-                # Here you could trigger additional actions like:
-                # - Send enrollment confirmation email
-                # - Grant course access
-                # - Update user records
-                # - Analytics tracking
+
+                # Enroll user in course if user_id is present
+                user_id = transaction.get("user_id")
+                course_id = transaction.get("course_id")
+                if user_id and course_id:
+                    await enroll_user_in_course(user_id, course_id)
+
+                # Additional actions to trigger:
+                # - Send enrollment confirmation email (TODO)
+                # - Analytics tracking (TODO)
         
         return status_response
         
@@ -200,11 +287,16 @@ async def stripe_webhook(request: Request):
                 transaction = await db.payment_transactions.find_one({"session_id": webhook_response.session_id})
                 if transaction:
                     logger.info(f"Webhook confirmed payment for course {transaction.get('course_id')}")
-                    
+
+                    # Enroll user in course if user_id is present
+                    user_id = transaction.get("user_id")
+                    course_id = transaction.get("course_id")
+                    if user_id and course_id:
+                        await enroll_user_in_course(user_id, course_id)
+
                     # Additional post-payment processing can be added here
-                    # - Course access provisioning
-                    # - Email notifications
-                    # - Analytics events
+                    # - Email notifications (TODO)
+                    # - Analytics events (TODO)
         
         return {"status": "success", "event_id": webhook_response.event_id}
         

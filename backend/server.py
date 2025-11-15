@@ -13,6 +13,8 @@ from datetime import datetime
 # Import routers
 from payments import payments
 from admin import admin
+from auth_routes import auth_router
+from assessment_routes import assessment_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -73,6 +75,8 @@ async def health_check():
 
 # Include routers in the main app
 app.include_router(api_router)
+app.include_router(auth_router)
+app.include_router(assessment_router)
 app.include_router(payments)
 app.include_router(admin)
 
@@ -94,7 +98,7 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 async def startup_event():
     logger.info("Muscle-Meta Matrix API starting up...")
-    logger.info("Services initialized: API, Payments, Admin")
+    logger.info("Services initialized: API, Authentication, Assessment, Payments, Admin")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
