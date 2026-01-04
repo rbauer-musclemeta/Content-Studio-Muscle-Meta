@@ -1,0 +1,497 @@
+{
+  "id": "CRA",
+  "version": "3.0",
+  "title": "Catabolic Risk Assessment",
+  "description": "30-question assessment to evaluate your risk for muscle loss and functional decline. Takes approximately 8-10 minutes to complete.",
+  "totalQuestions": 30,
+  "maxScore": 400,
+  "sections": [
+    {
+      "id": "weight_loss",
+      "title": "Weight Loss & Body Composition",
+      "description": "Questions about recent changes in your weight and body composition",
+      "maxScore": 85,
+      "questions": [
+        {
+          "id": "CRA-A-01",
+          "type": "select",
+          "required": true,
+          "text": "Have you experienced unintentional weight loss in the past 6 months?",
+          "helpText": "Unintentional means you were not trying to lose weight through diet or exercise",
+          "options": [
+            { "value": "no_loss", "label": "No weight loss or intentional loss only", "score": 0 },
+            { "value": "minor_loss", "label": "Yes, 5-10 pounds unintentionally", "score": 10 },
+            { "value": "moderate_loss", "label": "Yes, 10-20 pounds unintentionally", "score": 20 },
+            { "value": "significant_loss", "label": "Yes, more than 20 pounds unintentionally", "score": 25 }
+          ]
+        },
+        {
+          "id": "CRA-A-02",
+          "type": "select",
+          "required": true,
+          "text": "Over what time period did this weight loss occur?",
+          "conditionalRules": [
+            {
+              "type": "show_if",
+              "conditions": [{ "questionId": "CRA-A-01", "operator": "!=", "value": "no_loss" }],
+              "logic": "AND"
+            }
+          ],
+          "options": [
+            { "value": "over_6_months", "label": "Over 6 months or more (gradual)", "score": 0 },
+            { "value": "3_to_6_months", "label": "3-6 months", "score": 5 },
+            { "value": "1_to_3_months", "label": "1-3 months", "score": 10 },
+            { "value": "under_1_month", "label": "Less than 1 month (rapid)", "score": 15 }
+          ]
+        },
+        {
+          "id": "CRA-A-03",
+          "type": "select",
+          "required": true,
+          "text": "How would you describe your current weight status?",
+          "options": [
+            { "value": "stable", "label": "Stable - maintaining current weight", "score": 0 },
+            { "value": "gaining", "label": "Gaining weight appropriately", "score": 0 },
+            { "value": "slow_loss", "label": "Continued gradual loss", "score": 10 },
+            { "value": "rapid_loss", "label": "Continued rapid loss", "score": 20 }
+          ]
+        },
+        {
+          "id": "CRA-A-04",
+          "type": "select",
+          "required": true,
+          "text": "Have you noticed a decrease in your muscle size or strength?",
+          "options": [
+            { "value": "no", "label": "No noticeable changes", "score": 0 },
+            { "value": "slight", "label": "Slight decrease in some areas", "score": 10 },
+            { "value": "moderate", "label": "Noticeable decrease in multiple areas", "score": 15 },
+            { "value": "significant", "label": "Significant decrease throughout body", "score": 20 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "functional_capacity",
+      "title": "Functional Capacity",
+      "description": "Questions about your ability to perform daily activities",
+      "maxScore": 85,
+      "questions": [
+        {
+          "id": "CRA-B-01",
+          "type": "select",
+          "required": true,
+          "text": "Do you have difficulty rising from a chair without using your arms?",
+          "options": [
+            { "value": "no_difficulty", "label": "No difficulty", "score": 0 },
+            { "value": "some_difficulty", "label": "Sometimes need to use arms", "score": 10 },
+            { "value": "always_arms", "label": "Always need to use arms", "score": 15 },
+            { "value": "unable", "label": "Unable to rise without assistance", "score": 20 }
+          ]
+        },
+        {
+          "id": "CRA-B-02",
+          "type": "select",
+          "required": true,
+          "text": "How is your walking speed compared to a year ago?",
+          "options": [
+            { "value": "same_faster", "label": "Same or faster", "score": 0 },
+            { "value": "slightly_slower", "label": "Slightly slower", "score": 5 },
+            { "value": "noticeably_slower", "label": "Noticeably slower", "score": 15 },
+            { "value": "much_slower", "label": "Much slower or need assistance", "score": 20 }
+          ]
+        },
+        {
+          "id": "CRA-B-03",
+          "type": "select",
+          "required": true,
+          "text": "Can you climb a flight of stairs (10-12 steps) without resting?",
+          "options": [
+            { "value": "easily", "label": "Yes, easily", "score": 0 },
+            { "value": "with_effort", "label": "Yes, but with some effort", "score": 5 },
+            { "value": "need_rest", "label": "Need to rest partway", "score": 15 },
+            { "value": "cannot", "label": "Cannot climb stairs safely", "score": 20 }
+          ]
+        },
+        {
+          "id": "CRA-B-04",
+          "type": "checkbox_multiple",
+          "required": true,
+          "text": "Select all daily activities you find challenging:",
+          "helpText": "Select all that apply",
+          "options": [
+            { "value": "none", "label": "None - I can do all daily activities easily", "score": 0 },
+            { "value": "groceries", "label": "Carrying groceries or laundry", "score": 5 },
+            { "value": "reaching", "label": "Reaching overhead (cabinets, shelves)", "score": 5 },
+            { "value": "balance", "label": "Maintaining balance when walking", "score": 10 },
+            { "value": "getting_up", "label": "Getting up from floor or low position", "score": 10 },
+            { "value": "bathing", "label": "Bathing or dressing without assistance", "score": 15 }
+          ]
+        },
+        {
+          "id": "CRA-B-05",
+          "type": "select",
+          "required": true,
+          "text": "Have you experienced any falls in the past year?",
+          "options": [
+            { "value": "no_falls", "label": "No falls", "score": 0 },
+            { "value": "one_fall", "label": "One fall, no injury", "score": 5 },
+            { "value": "multiple_no_injury", "label": "Multiple falls, no serious injury", "score": 15 },
+            { "value": "fall_with_injury", "label": "Fall(s) resulting in injury", "score": 20 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bone_health",
+      "title": "Bone Health",
+      "description": "Questions about your bone health history",
+      "maxScore": 75,
+      "questions": [
+        {
+          "id": "CRA-C-01",
+          "type": "select",
+          "required": true,
+          "text": "Have you been diagnosed with osteoporosis or osteopenia?",
+          "options": [
+            { "value": "no", "label": "No", "score": 0 },
+            { "value": "osteopenia", "label": "Yes, osteopenia (low bone density)", "score": 10 },
+            { "value": "osteoporosis", "label": "Yes, osteoporosis", "score": 20 },
+            { "value": "severe_osteoporosis", "label": "Yes, severe osteoporosis with fractures", "score": 25 }
+          ]
+        },
+        {
+          "id": "CRA-C-02",
+          "type": "select",
+          "required": true,
+          "text": "Have you had any fractures after age 50 from minor trauma?",
+          "helpText": "Minor trauma means a fall from standing height or less",
+          "options": [
+            { "value": "no", "label": "No fractures", "score": 0 },
+            { "value": "one", "label": "One fracture", "score": 15 },
+            { "value": "multiple", "label": "Multiple fractures", "score": 25 }
+          ]
+        },
+        {
+          "id": "CRA-C-03",
+          "type": "select",
+          "required": true,
+          "text": "Are you currently taking calcium and Vitamin D supplements?",
+          "options": [
+            { "value": "both_regular", "label": "Yes, both regularly", "score": 0 },
+            { "value": "sometimes", "label": "Sometimes or one supplement only", "score": 5 },
+            { "value": "no", "label": "No supplements", "score": 10 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "medications",
+      "title": "Medications & Medical Conditions",
+      "description": "Questions about medications and conditions that may affect muscle health",
+      "maxScore": 95,
+      "questions": [
+        {
+          "id": "CRA-D-01",
+          "type": "select",
+          "required": true,
+          "text": "How many prescription medications do you currently take?",
+          "options": [
+            { "value": "0_2", "label": "0-2 medications", "score": 0 },
+            { "value": "3_5", "label": "3-5 medications", "score": 5 },
+            { "value": "6_9", "label": "6-9 medications", "score": 10 },
+            { "value": "10_plus", "label": "10 or more medications", "score": 15 }
+          ]
+        },
+        {
+          "id": "CRA-D-02",
+          "type": "checkbox_multiple",
+          "required": true,
+          "text": "Are you currently taking any of these medications?",
+          "helpText": "Select all that apply",
+          "options": [
+            { "value": "none", "label": "None of these", "score": 0 },
+            { "value": "steroids", "label": "Corticosteroids (prednisone, etc.) for 3+ months", "score": 15 },
+            { "value": "proton_pump", "label": "Proton pump inhibitors (Prilosec, Nexium, etc.)", "score": 5 },
+            { "value": "statins", "label": "Statin medications (for cholesterol)", "score": 5 },
+            { "value": "blood_thinners", "label": "Blood thinners (Warfarin, Eliquis, etc.)", "score": 3 },
+            { "value": "diuretics", "label": "Diuretics (water pills)", "score": 5 }
+          ]
+        },
+        {
+          "id": "CRA-D-03",
+          "type": "checkbox_multiple",
+          "required": true,
+          "text": "Have you been diagnosed with any of these conditions?",
+          "helpText": "Select all that apply",
+          "options": [
+            { "value": "none", "label": "None of these", "score": 0 },
+            { "value": "diabetes", "label": "Type 2 Diabetes", "score": 10 },
+            { "value": "kidney_disease", "label": "Chronic kidney disease", "score": 15 },
+            { "value": "copd", "label": "COPD or chronic lung disease", "score": 10 },
+            { "value": "heart_failure", "label": "Heart failure", "score": 15 },
+            { "value": "cancer", "label": "Cancer (current or recent treatment)", "score": 20 },
+            { "value": "autoimmune", "label": "Autoimmune disease (RA, lupus, etc.)", "score": 10 }
+          ]
+        },
+        {
+          "id": "CRA-D-04",
+          "type": "select",
+          "required": true,
+          "text": "Have you been hospitalized in the past 12 months?",
+          "options": [
+            { "value": "no", "label": "No hospitalizations", "score": 0 },
+            { "value": "once_short", "label": "Yes, once (less than 3 days)", "score": 10 },
+            { "value": "once_long", "label": "Yes, once (3+ days)", "score": 20 },
+            { "value": "multiple", "label": "Yes, multiple hospitalizations", "score": 25 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hormones",
+      "title": "Hormonal Health",
+      "description": "Questions about hormones that affect muscle and bone",
+      "maxScore": 65,
+      "questions": [
+        {
+          "id": "CRA-E-01",
+          "type": "select",
+          "required": true,
+          "text": "What is your biological sex?",
+          "options": [
+            { "value": "male", "label": "Male", "score": 0 },
+            { "value": "female", "label": "Female", "score": 0 }
+          ]
+        },
+        {
+          "id": "CRA-E-02",
+          "type": "select",
+          "required": true,
+          "text": "Have you experienced menopause?",
+          "conditionalRules": [
+            {
+              "type": "show_if",
+              "conditions": [{ "questionId": "CRA-E-01", "operator": "==", "value": "female" }],
+              "logic": "AND"
+            }
+          ],
+          "options": [
+            { "value": "pre", "label": "No, still premenopausal", "score": 0 },
+            { "value": "peri", "label": "Currently in perimenopause", "score": 5 },
+            { "value": "post_recent", "label": "Yes, within the last 5 years", "score": 10 },
+            { "value": "post_long", "label": "Yes, more than 5 years ago", "score": 5 }
+          ]
+        },
+        {
+          "id": "CRA-E-03",
+          "type": "select",
+          "required": true,
+          "text": "Are you on hormone replacement therapy (HRT/TRT)?",
+          "options": [
+            { "value": "yes", "label": "Yes, currently on hormone therapy", "score": -8 },
+            { "value": "previously", "label": "Previously, but stopped", "score": 0 },
+            { "value": "no", "label": "No", "score": 0 },
+            { "value": "not_applicable", "label": "Not applicable", "score": 0 }
+          ]
+        },
+        {
+          "id": "CRA-E-04",
+          "type": "select",
+          "required": true,
+          "text": "Have you been diagnosed with low testosterone (males)?",
+          "conditionalRules": [
+            {
+              "type": "show_if",
+              "conditions": [{ "questionId": "CRA-E-01", "operator": "==", "value": "male" }],
+              "logic": "AND"
+            }
+          ],
+          "options": [
+            { "value": "no", "label": "No / Never tested", "score": 0 },
+            { "value": "borderline", "label": "Borderline low", "score": 5 },
+            { "value": "yes_untreated", "label": "Yes, not currently treating", "score": 15 },
+            { "value": "yes_treated", "label": "Yes, currently on TRT", "score": -8 }
+          ]
+        },
+        {
+          "id": "CRA-E-05",
+          "type": "select",
+          "required": true,
+          "text": "Are you currently taking a GLP-1 medication?",
+          "helpText": "Examples: Ozempic, Wegovy, Mounjaro, Zepbound",
+          "options": [
+            { "value": "no", "label": "No", "score": 0 },
+            { "value": "less_3_months", "label": "Yes, for less than 3 months", "score": 5 },
+            { "value": "3_to_6_months", "label": "Yes, for 3-6 months", "score": 10 },
+            { "value": "over_6_months", "label": "Yes, for more than 6 months", "score": 15 }
+          ]
+        },
+        {
+          "id": "CRA-E-06",
+          "type": "select",
+          "required": true,
+          "text": "How much weight have you lost on GLP-1 medication?",
+          "conditionalRules": [
+            {
+              "type": "show_if",
+              "conditions": [{ "questionId": "CRA-E-05", "operator": "!=", "value": "no" }],
+              "logic": "AND"
+            }
+          ],
+          "options": [
+            { "value": "under_10", "label": "Less than 10 pounds", "score": 0 },
+            { "value": "10_to_20", "label": "10-20 pounds", "score": 5 },
+            { "value": "20_to_40", "label": "20-40 pounds", "score": 10 },
+            { "value": "over_40", "label": "More than 40 pounds", "score": 15 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lifestyle",
+      "title": "Lifestyle & Activity",
+      "description": "Questions about your physical activity and lifestyle habits",
+      "maxScore": 75,
+      "questions": [
+        {
+          "id": "CRA-F-01",
+          "type": "select",
+          "required": true,
+          "text": "How often do you do resistance/strength training?",
+          "helpText": "Includes weights, resistance bands, bodyweight exercises",
+          "options": [
+            { "value": "3_plus", "label": "3 or more times per week", "score": -5 },
+            { "value": "1_2_times", "label": "1-2 times per week", "score": 0 },
+            { "value": "occasionally", "label": "Occasionally (less than weekly)", "score": 10 },
+            { "value": "never", "label": "Rarely or never", "score": 20 }
+          ]
+        },
+        {
+          "id": "CRA-F-02",
+          "type": "select",
+          "required": true,
+          "text": "How many hours per day do you spend sitting or sedentary?",
+          "options": [
+            { "value": "under_4", "label": "Less than 4 hours", "score": 0 },
+            { "value": "4_to_8", "label": "4-8 hours", "score": 5 },
+            { "value": "8_to_12", "label": "8-12 hours", "score": 10 },
+            { "value": "over_12", "label": "More than 12 hours", "score": 15 }
+          ]
+        },
+        {
+          "id": "CRA-F-03",
+          "type": "select",
+          "required": true,
+          "text": "How would you rate your current activity level?",
+          "options": [
+            { "value": "very_active", "label": "Very active (exercise most days)", "score": 0 },
+            { "value": "moderately_active", "label": "Moderately active (some exercise)", "score": 5 },
+            { "value": "lightly_active", "label": "Lightly active (occasional walks)", "score": 10 },
+            { "value": "sedentary", "label": "Sedentary (limited activity)", "score": 20 }
+          ]
+        },
+        {
+          "id": "CRA-F-04",
+          "type": "select",
+          "required": true,
+          "text": "How would you rate your sleep quality?",
+          "options": [
+            { "value": "excellent", "label": "Excellent (7-9 hours, restful)", "score": 0 },
+            { "value": "good", "label": "Good (mostly restful)", "score": 5 },
+            { "value": "fair", "label": "Fair (some sleep issues)", "score": 10 },
+            { "value": "poor", "label": "Poor (frequent sleep problems)", "score": 15 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nutrition",
+      "title": "Nutrition",
+      "description": "Questions about your dietary habits and protein intake",
+      "maxScore": 60,
+      "questions": [
+        {
+          "id": "CRA-G-01",
+          "type": "select",
+          "required": true,
+          "text": "How many meals containing protein do you eat per day?",
+          "helpText": "Protein sources: meat, fish, eggs, dairy, beans, tofu",
+          "options": [
+            { "value": "3_plus", "label": "3 or more meals with protein", "score": 0 },
+            { "value": "2_meals", "label": "2 meals with protein", "score": 5 },
+            { "value": "1_meal", "label": "1 meal with protein", "score": 15 },
+            { "value": "less_than_1", "label": "Less than 1 meal with protein daily", "score": 20 }
+          ]
+        },
+        {
+          "id": "CRA-G-02",
+          "type": "select",
+          "required": true,
+          "text": "How would you estimate your daily protein intake?",
+          "helpText": "Recommended: 0.7-1g per pound of body weight",
+          "options": [
+            { "value": "high", "label": "High (100+ grams or I track it)", "score": 0 },
+            { "value": "moderate", "label": "Moderate (60-100 grams)", "score": 5 },
+            { "value": "low", "label": "Low (30-60 grams)", "score": 10 },
+            { "value": "very_low", "label": "Very low (under 30 grams or unsure)", "score": 15 }
+          ]
+        },
+        {
+          "id": "CRA-G-03",
+          "type": "checkbox_multiple",
+          "required": true,
+          "text": "Do you take any of these supplements?",
+          "helpText": "Select all that apply",
+          "options": [
+            { "value": "none", "label": "None of these", "score": 0 },
+            { "value": "protein", "label": "Protein supplement (whey, plant-based)", "score": -3 },
+            { "value": "creatine", "label": "Creatine monohydrate", "score": -3 },
+            { "value": "hmb", "label": "HMB (beta-hydroxy-beta-methylbutyrate)", "score": -3 },
+            { "value": "vitamin_d", "label": "Vitamin D", "score": 0 },
+            { "value": "omega_3", "label": "Fish oil / Omega-3", "score": 0 }
+          ]
+        },
+        {
+          "id": "CRA-G-04",
+          "type": "select",
+          "required": true,
+          "text": "How is your appetite compared to 6 months ago?",
+          "options": [
+            { "value": "same_better", "label": "Same or better", "score": 0 },
+            { "value": "slightly_decreased", "label": "Slightly decreased", "score": 5 },
+            { "value": "moderately_decreased", "label": "Moderately decreased", "score": 10 },
+            { "value": "significantly_decreased", "label": "Significantly decreased", "score": 15 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "demographics",
+      "title": "Demographics",
+      "description": "Basic information for personalized recommendations",
+      "maxScore": 0,
+      "questions": [
+        {
+          "id": "CRA-H-01",
+          "type": "select",
+          "required": true,
+          "text": "What is your age range?",
+          "options": [
+            { "value": "under_50", "label": "Under 50", "score": 0 },
+            { "value": "50_59", "label": "50-59", "score": 5 },
+            { "value": "60_69", "label": "60-69", "score": 10 },
+            { "value": "70_79", "label": "70-79", "score": 15 },
+            { "value": "80_plus", "label": "80 or older", "score": 20 }
+          ]
+        },
+        {
+          "id": "CRA-H-02",
+          "type": "text",
+          "required": false,
+          "text": "Is there anything else about your health situation you'd like us to know?",
+          "helpText": "Optional - any additional context that might be relevant"
+        }
+      ]
+    }
+  ]
+}

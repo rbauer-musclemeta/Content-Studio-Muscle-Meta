@@ -1,0 +1,238 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ================================
+// User & Authentication Models
+// ================================
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password          String
+  name              String
+  role              UserRole  @default(USER)
+  age               Int?
+  gender            Gender?
+  tags              String[]  @default([])
+  subscriptionTier  String?   @default("founding_member")
+  subscriptionStatus String?  @default("active")
+  paymentMethod     String?   @default("external")
+  emailVerified     DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  lastLoginAt       DateTime?
+
+  // Relations
+  assessments       Assessment[]
+  notes             UserNote[]
+  activityLogs      ActivityLog[]
+  emailLogs         EmailLog[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+// ================================
+// Assessment Models
+// ================================
+
+model AssessmentType {
+  id              String    @id @default(cuid())
+  code            String    @unique  // CRA, 4P-MMA, GLP1, PICKLEBALL
+  name            String
+  description     String?
+  version         String    @default("1.0")
+  estimatedTime   String    @default("8-10 minutes")
+  totalQuestions  Int       @default(30)
+  maxScore        Int       @default(400)
+  isActive        Boolean   @default(true)
+  configuration   Json      // Full assessment configuration JSON
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  assessments     Assessment[]
+
+  @@map("assessment_types")
+}
+
+model Assessment {
+  id                    String           @id @default(cuid())
+  userId                String
+  assessmentTypeId      String
+  status                AssessmentStatus @default(NOT_STARTED)
+  invitationToken       String?          @unique
+  invitationSentAt      DateTime?
+  startedAt             DateTime?
+  completedAt           DateTime?
+  currentQuestionIndex  Int              @default(0)
+  timeSpentSeconds      Int              @default(0)
+  lastSavedAt           DateTime?
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  // Relations
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assessmentType        AssessmentType   @relation(fields: [assessmentTypeId], references: [id])
+  responses             AssessmentResponse[]
+  scoring               ScoringResult?
+
+  @@map("assessments")
+}
+
+enum AssessmentStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+model AssessmentResponse {
+  id            String     @id @default(cuid())
+  assessmentId  String
+  questionId    String
+  sectionId     String
+  questionType  String     // select, checkbox_multiple, numeric_input, date, text
+  value         Json       // Can be string, string[], number, or date
+  score         Int        @default(0)
+  answeredAt    DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Relations
+  assessment    Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@unique([assessmentId, questionId])
+  @@map("assessment_responses")
+}
+
+model ScoringResult {
+  id                String     @id @default(cuid())
+  assessmentId      String     @unique
+  totalScore        Int
+  maxScore          Int        @default(400)
+  percentScore      Float
+  riskTier          RiskTier
+  sectionScores     Json       // Record<string, SectionScore>
+  criticalFlags     String[]   @default([])
+  highFlags         String[]   @default([])
+  protectiveFactors String[]   @default([])
+  recommendations   Json?      // Personalized recommendations
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  // Relations
+  assessment        Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@map("scoring_results")
+}
+
+enum RiskTier {
+  MINIMAL
+  LOW
+  MODERATE
+  HIGH
+  CRITICAL
+}
+
+// ================================
+// Admin & Tracking Models
+// ================================
+
+model UserNote {
+  id        String   @id @default(cuid())
+  userId    String
+  authorId  String?  // Admin who wrote the note (null for system notes)
+  content   String
+  noteType  NoteType @default(MANUAL)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_notes")
+}
+
+enum NoteType {
+  MANUAL
+  SYSTEM
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String   // registered, logged_in, started_assessment, completed_assessment, etc.
+  details   Json?    // Additional context
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("activity_logs")
+}
+
+model EmailLog {
+  id          String      @id @default(cuid())
+  userId      String
+  templateId  String?
+  subject     String
+  sentAt      DateTime    @default(now())
+  status      EmailStatus @default(PENDING)
+  provider    String?     // resend, sendgrid
+  externalId  String?     // Provider's message ID
+  error       String?
+  metadata    Json?
+
+  // Relations
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("email_logs")
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+  BOUNCED
+}
+
+// ================================
+// Report Models
+// ================================
+
+model Report {
+  id           String   @id @default(cuid())
+  assessmentId String
+  userId       String
+  reportType   String   @default("CRA_REPORT")
+  fileName     String
+  fileUrl      String?
+  fileSize     Int?
+  generatedAt  DateTime @default(now())
+  downloadedAt DateTime?
+
+  @@map("reports")
+}
