@@ -1,4 +1,4 @@
-# Muscle-Meta Matrix
+# Muscle-Meta Assessment Suite
 
 A Progressive Web App (PWA) for muscle-metabolic health optimization, featuring the Catabolic Risk Assessment (CRA) tool.
 
@@ -20,10 +20,10 @@ A Progressive Web App (PWA) for muscle-metabolic health optimization, featuring 
 
 ### Installation
 
-1. Clone the repository and navigate to the muscle-meta-matrix directory:
+1. Clone the repository and navigate to the muscle-meta-assessment-suite directory:
 
 ```bash
-cd muscle-meta-matrix
+cd muscle-meta-assessment-suite
 npm install
 ```
 
@@ -55,7 +55,7 @@ npm run dev
 ## Project Structure
 
 ```
-muscle-meta-matrix/
+muscle-meta-assessment-suite/
 ├── src/
 │   ├── app/                  # Next.js App Router pages
 │   │   ├── (auth)/          # Authentication pages
