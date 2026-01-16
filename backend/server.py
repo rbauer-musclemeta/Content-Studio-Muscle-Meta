@@ -13,6 +13,7 @@ from datetime import datetime
 # Import routers
 from payments import payments
 from admin import admin
+from assessment import assessment
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -75,6 +76,7 @@ async def health_check():
 app.include_router(api_router)
 app.include_router(payments)
 app.include_router(admin)
+app.include_router(assessment)
 
 app.add_middleware(
     CORSMiddleware,
@@ -94,7 +96,7 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 async def startup_event():
     logger.info("Muscle-Meta Matrix API starting up...")
-    logger.info("Services initialized: API, Payments, Admin")
+    logger.info("Services initialized: API, Payments, Admin, Assessment")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

@@ -13,6 +13,7 @@ import CourseSuccess from "./components/CourseSuccess";
 import AdminDashboard from "./components/AdminDashboard";
 import CourseEditor from "./components/CourseEditor";
 import AdminTest from "./components/AdminTest";
+import AssessmentResults from "./components/AssessmentResults";
 import { Toaster } from "./components/ui/toaster";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -49,7 +50,11 @@ function App() {
           <Route path="/courses/pickleball-3p-system" element={<PickleballCourse />} />
           <Route path="/courses/sleep-optimization/success" element={<CourseSuccess />} />
           <Route path="/courses/pickleball-3p-system/success" element={<CourseSuccess />} />
-          
+
+          {/* Assessment Results Dashboard */}
+          <Route path="/assessment/results" element={<AssessmentResults />} />
+          <Route path="/assessment/results/:assessmentId" element={<AssessmentResults />} />
+
           {/* Admin Routes */}
           <Route path="/admin-test" element={<AdminTest />} />
           <Route path="/admin" element={<AdminDashboard />} />
