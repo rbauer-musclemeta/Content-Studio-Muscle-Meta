@@ -13,6 +13,7 @@ import CourseSuccess from "./components/CourseSuccess";
 import AdminDashboard from "./components/AdminDashboard";
 import CourseEditor from "./components/CourseEditor";
 import AdminTest from "./components/AdminTest";
+import LandingPage from "./components/LandingPage";
 import { Toaster } from "./components/ui/toaster";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -32,7 +33,7 @@ const Home = () => {
     helloWorldApi();
   }, []);
 
-  return <NewsletterHub />;
+  return <LandingPage />;
 };
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/newsletter-hub" element={<NewsletterHub />} />
           <Route path="/muscle-metabolic-health" element={<Newsletter />} />
           <Route path="/hiit-longevity" element={<HIITNewsletter />} />
           <Route path="/courses" element={<CoursesPage />} />
