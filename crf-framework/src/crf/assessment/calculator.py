@@ -5,7 +5,7 @@ from typing import Optional
 from crf.models.patient import Patient, ActivityLevel
 from crf.models.risk_factors import RiskFactors
 from crf.models.biomarkers import Biomarkers, BiomarkerStatus
-from crf.assessment.scoring import RiskScore, ScoringEngine
+from crf.assessment.scoring import DISCLAIMER, RiskScore, ScoringEngine
 
 
 class CatabolicRiskCalculator:
@@ -88,9 +88,33 @@ class CatabolicRiskCalculator:
             all_factors,
             biomarker_penalty,
             biomarkers_assessed=biomarkers is not None,
+            confidence=self._data_completeness(patient, biomarkers),
         )
 
         return score
+
+    @staticmethod
+    def _data_completeness(
+        patient: Patient, biomarkers: Optional[Biomarkers]
+    ) -> float:
+        """Estimate confidence as the fraction of key inputs actually provided.
+
+        Demographics are always present, so this scores the optional lifestyle
+        inputs and biomarkers — the data that, when missing, leaves the score
+        guessing. A low value flags the numeric score as unreliable rather than
+        silently presenting a falsely low result.
+        """
+        optional_inputs = [
+            patient.protein_intake_g_per_kg,
+            patient.caloric_intake_kcal,
+            patient.sleep_hours,
+            patient.stress_level,
+            patient.recent_weight_loss_kg,
+        ]
+        provided = sum(1 for value in optional_inputs if value is not None)
+        provided += 1 if biomarkers is not None else 0
+        total = len(optional_inputs) + 1  # + biomarkers
+        return round(provided / total, 2)
 
     def _evaluate_patient_factors(
         self, patient: Patient, risk_factors: RiskFactors
@@ -297,12 +321,30 @@ class CatabolicRiskCalculator:
         """
         score = self.assess_patient(patient)
 
-        return {
-            "risk_level": score.risk_level.value,
-            "risk_percentage": score.percentage,
+        result = {
+            "screening_signal": score.risk_level.screening_label,
             "top_concerns": score.top_risk_factors[:3],
-            "recommendation": self._get_quick_recommendation(score.risk_level),
+            "confidence": score.confidence,
+            "reliable": score.is_reliable,
+            "validation_status": score.validation_status,
+            "disclaimer": DISCLAIMER,
         }
+
+        # Suppress the numeric/level output when too little was provided to
+        # trust it; surfacing a falsely low number is the dangerous failure.
+        if score.is_reliable:
+            result["risk_level"] = score.risk_level.value
+            result["risk_percentage"] = score.percentage
+            result["recommendation"] = self._get_quick_recommendation(score.risk_level)
+        else:
+            result["risk_level"] = None
+            result["risk_percentage"] = None
+            result["recommendation"] = (
+                "Insufficient data for a reliable screen. Provide more inputs "
+                "(diet, sleep, stress, labs) and consult a healthcare provider."
+            )
+
+        return result
 
     def _get_quick_recommendation(self, risk_level) -> str:
         """Get a quick recommendation based on risk level."""

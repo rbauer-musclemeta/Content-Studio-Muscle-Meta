@@ -7,14 +7,47 @@ from pydantic import BaseModel, Field
 
 from crf.models.risk_factors import RiskCategory, RiskFactor
 
+# Calibration/validation status carried on every score. This tool has NOT been
+# validated against clinical outcomes; its weights and thresholds are
+# expert-judgment placeholders, not data-derived cutoffs.
+VALIDATION_STATUS = "unvalidated_v1"
+
+# Below this confidence (fraction of key inputs provided), the numeric score is
+# considered unreliable and should be suppressed in favor of "insufficient data".
+LOW_CONFIDENCE_THRESHOLD = 0.5
+
+# Single source of truth for the safety disclaimer, reused across all surfaces.
+DISCLAIMER = (
+    "EDUCATIONAL SCREENING AID — NOT A MEDICAL DEVICE. This output is not "
+    "validated against clinical outcomes and must not be used to diagnose, "
+    "treat, or rule out any condition. Factor weights are expert-judgment "
+    "placeholders, not validated cutoffs. Discuss any concerns with a "
+    "qualified healthcare professional."
+)
+
 
 class RiskLevel(str, Enum):
-    """Risk level classification."""
+    """Ordinal screening signal (internal ordering; not a clinical diagnosis)."""
 
     LOW = "low"
     MODERATE = "moderate"
     HIGH = "high"
     SEVERE = "severe"
+
+    @property
+    def screening_label(self) -> str:
+        """User-facing screening language for this level.
+
+        Deliberately avoids clinical-sounding verdicts ("severe risk"), since
+        the bands are not validated cutoffs. Frames output as the number of
+        flags worth discussing rather than a measured level of risk.
+        """
+        return {
+            RiskLevel.LOW: "Few flags identified",
+            RiskLevel.MODERATE: "Several flags identified",
+            RiskLevel.HIGH: "Many flags identified",
+            RiskLevel.SEVERE: "Numerous flags identified",
+        }[self]
 
 
 class CategoryScore(BaseModel):
@@ -48,6 +81,15 @@ class RiskScore(BaseModel):
     confidence: float = Field(
         ge=0, le=1, default=1.0, description="Confidence in the assessment (0-1)"
     )
+    validation_status: str = Field(
+        default=VALIDATION_STATUS,
+        description="Calibration/validation status of this score",
+    )
+
+    @property
+    def is_reliable(self) -> bool:
+        """Whether enough input was provided to trust the numeric score."""
+        return self.confidence >= LOW_CONFIDENCE_THRESHOLD
 
     @classmethod
     def calculate_risk_level(cls, percentage: float) -> RiskLevel:
@@ -156,6 +198,7 @@ class ScoringEngine:
         factors: list[RiskFactor],
         biomarker_penalty: float = 0.0,
         biomarkers_assessed: bool = False,
+        confidence: Optional[float] = None,
     ) -> RiskScore:
         """Calculate complete risk score from all factors.
 
@@ -171,6 +214,10 @@ class ScoringEngine:
             biomarkers_assessed: Whether biomarkers were measured. Only then is
                 biomarker headroom included in the reference burden, so patients
                 without lab work are not penalized with an inflated denominator.
+            confidence: Optional caller-supplied data-completeness confidence
+                (0-1). When omitted, a crude internal estimate is used. Callers
+                with access to the raw inputs (e.g. the calculator) should pass
+                a meaningful value so low-data scores can be flagged unreliable.
         """
         # Calculate category scores
         category_scores = []
@@ -200,10 +247,11 @@ class ScoringEngine:
         sorted_factors = sorted(present_factors, key=lambda x: x.contribution, reverse=True)
         top_factors = [f.name for f in sorted_factors[:5]]
 
-        # Calculate confidence based on data completeness
-        # More data = higher confidence
-        measured_factors = len([f for f in factors if f.present or f.severity == 0])
-        confidence = min(1.0, measured_factors / len(factors)) if factors else 0.5
+        # Prefer the caller-supplied data-completeness confidence. Fall back to a
+        # crude internal estimate only when none is provided.
+        if confidence is None:
+            measured_factors = len([f for f in factors if f.present or f.severity == 0])
+            confidence = min(1.0, measured_factors / len(factors)) if factors else 0.5
 
         return RiskScore(
             total_score=round(total_score, 2),

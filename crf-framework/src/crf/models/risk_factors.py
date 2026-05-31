@@ -30,6 +30,14 @@ class RiskFactor(BaseModel):
         default=0.0, ge=0, le=1, description="Severity if present (0-1)"
     )
     description: Optional[str] = Field(default=None, description="Description of the risk factor")
+    basis: str = Field(
+        default="expert-judgment placeholder",
+        description=(
+            "Provenance of this factor's weight: a citation/source where the "
+            "weight is literature-derived, or 'expert-judgment placeholder' "
+            "where it has not yet been validated against data."
+        ),
+    )
 
     @property
     def contribution(self) -> float:

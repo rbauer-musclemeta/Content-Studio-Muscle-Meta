@@ -1,8 +1,9 @@
 """Helper functions for calculations and formatting."""
 
+import textwrap
 from typing import Literal
 
-from crf.assessment.scoring import RiskScore
+from crf.assessment.scoring import DISCLAIMER, RiskScore
 from crf.assessment.recommendations import InterventionPlan
 
 
@@ -90,19 +91,31 @@ def format_risk_report(
     """
     lines = []
     lines.append("=" * 60)
-    lines.append("CATABOLIC RISK ASSESSMENT REPORT")
+    lines.append("CATABOLIC RISK SCREENING REPORT")
     lines.append("=" * 60)
     lines.append("")
 
-    # Risk Summary
-    lines.append("RISK SUMMARY")
+    # Disclaimer up top — not buried at the bottom.
+    for line in textwrap.wrap(DISCLAIMER, width=58):
+        lines.append(line)
+    lines.append(f"Status: {risk_score.validation_status}")
+    lines.append("")
+
+    # Screening Summary
+    lines.append("SCREENING SUMMARY")
     lines.append("-" * 40)
-    lines.append(f"Overall Risk Level: {risk_score.risk_level.value.upper()}")
-    lines.append(
-        f"Catabolic Burden: {risk_score.total_score:.1f} / {risk_score.max_possible_score:.1f} (reference)"
-    )
-    lines.append(f"Risk Percentage: {risk_score.percentage:.1f}%")
-    lines.append(f"Assessment Confidence: {risk_score.confidence * 100:.0f}%")
+    lines.append(f"Screening Signal: {risk_score.risk_level.screening_label}")
+    if risk_score.is_reliable:
+        lines.append(
+            f"Catabolic Burden: {risk_score.total_score:.1f} / "
+            f"{risk_score.max_possible_score:.1f} (reference)"
+        )
+        lines.append(f"Relative Score: {risk_score.percentage:.1f}%")
+    else:
+        lines.append(
+            "Relative Score: not shown — insufficient data for a reliable result"
+        )
+    lines.append(f"Data Completeness: {risk_score.confidence * 100:.0f}%")
     lines.append("")
 
     # Top Risk Factors
@@ -158,8 +171,8 @@ def format_risk_report(
                         lines.append("")
 
     lines.append("=" * 60)
-    lines.append("This assessment is for informational purposes only.")
-    lines.append("Consult healthcare providers for medical decisions.")
+    for line in textwrap.wrap(DISCLAIMER, width=58):
+        lines.append(line)
     lines.append("=" * 60)
 
     return "\n".join(lines)
