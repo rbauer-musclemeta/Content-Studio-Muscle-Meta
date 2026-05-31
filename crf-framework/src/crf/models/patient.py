@@ -6,6 +6,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator
 
+from crf.models.measurements import ClinicalContext, SarcFResponses
+
 
 class Sex(str, Enum):
     """Biological sex for risk calculations."""
@@ -84,6 +86,28 @@ class Patient(BaseModel):
     stress_level: Optional[int] = Field(
         default=None, ge=1, le=10, description="Perceived stress level (1-10)"
     )
+    sarcf: Optional[SarcFResponses] = Field(
+        default=None, description="SARC-F questionnaire responses, if administered"
+    )
+    clinical_context: ClinicalContext = Field(
+        default_factory=ClinicalContext,
+        description="Acute clinical context for malnutrition screening",
+    )
+
+    @property
+    def weight_loss_percent(self) -> Optional[float]:
+        """Unintentional weight loss as a percentage of pre-loss body weight.
+
+        Returns None when weight-loss history was not provided (unknown), which
+        is distinct from a known zero loss.
+        """
+        loss = self.recent_weight_loss_kg
+        if loss is None:
+            return None
+        previous_weight = self.profile.weight_kg + loss
+        if previous_weight <= 0:
+            return None
+        return round(loss / previous_weight * 100, 1)
 
     @property
     def estimated_caloric_needs(self) -> int:

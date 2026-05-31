@@ -6,6 +6,7 @@ from crf.models.patient import Patient, ActivityLevel
 from crf.models.risk_factors import RiskFactors
 from crf.models.biomarkers import Biomarkers, BiomarkerStatus
 from crf.assessment.scoring import DISCLAIMER, RiskScore, ScoringEngine
+from crf.instruments.base import InstrumentResult, ScreeningPanel
 
 
 class CatabolicRiskCalculator:
@@ -53,6 +54,17 @@ class CatabolicRiskCalculator:
     def __init__(self):
         """Initialize the calculator."""
         self.scoring_engine = ScoringEngine()
+        self.screening_panel = ScreeningPanel()
+
+    def run_validated_screens(self, patient: Patient) -> list[InstrumentResult]:
+        """Run the panel of validated screening instruments (SARC-F, MUST).
+
+        These are reported separately from the heuristic composite score: each
+        result carries its own validated category and citation, and instruments
+        whose inputs are missing are returned marked not-applicable rather than
+        guessed.
+        """
+        return self.screening_panel.run(patient)
 
     def assess_patient(
         self,
