@@ -14,6 +14,7 @@ from crf.instruments.base import (
 )
 from crf.instruments.sarcf import SarcF
 from crf.instruments.must import Must
+from crf.instruments.ewgsop2 import Ewgsop2
 
 __all__ = [
     "BaseInstrument",
@@ -22,4 +23,5 @@ __all__ = [
     "default_instruments",
     "SarcF",
     "Must",
+    "Ewgsop2",
 ]

@@ -90,9 +90,10 @@ class ScreeningPanel:
 
 
 def default_instruments() -> list[BaseInstrument]:
-    """The default panel of license-clear, validated instruments (Phase 2)."""
+    """The default panel of license-clear, validated instruments."""
     # Imported lazily to avoid a circular import at module load.
+    from crf.instruments.ewgsop2 import Ewgsop2
     from crf.instruments.must import Must
     from crf.instruments.sarcf import SarcF
 
-    return [SarcF(), Must()]
+    return [SarcF(), Ewgsop2(), Must()]

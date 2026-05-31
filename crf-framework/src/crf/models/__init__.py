@@ -3,7 +3,11 @@
 from crf.models.patient import Patient, PatientProfile
 from crf.models.risk_factors import RiskFactors, RiskCategory
 from crf.models.biomarkers import Biomarkers
-from crf.models.measurements import ClinicalContext, SarcFResponses
+from crf.models.measurements import (
+    ClinicalContext,
+    PhysicalMeasurements,
+    SarcFResponses,
+)
 
 __all__ = [
     "Patient",
@@ -12,5 +16,6 @@ __all__ = [
     "RiskCategory",
     "Biomarkers",
     "ClinicalContext",
+    "PhysicalMeasurements",
     "SarcFResponses",
 ]

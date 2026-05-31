@@ -6,6 +6,8 @@ callers are unaffected. Phase 2 covers SARC-F and MUST; later phases will add
 physical measurements (grip strength, gait speed, chair-stand time, etc.) here.
 """
 
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -44,6 +46,33 @@ class SarcFResponses(BaseModel):
             + self.climbing_stairs
             + self.falls
         )
+
+
+class PhysicalMeasurements(BaseModel):
+    """Objective physical measurements used by the EWGSOP2 sarcopenia algorithm.
+
+    All fields are optional and default to None, which drives the staged
+    algorithm: missing strength measures make the instrument not assessable,
+    while missing muscle-mass or performance measures simply stop the algorithm
+    at an earlier (less severe) stage rather than assuming the best case.
+
+    Reference: Cruz-Jentoft et al., EWGSOP2, Age Ageing 2019;48(1):16-31.
+    """
+
+    grip_strength_kg: Optional[float] = Field(
+        default=None, ge=0, description="Maximum handgrip strength (kg)"
+    )
+    chair_stand_5_sec: Optional[float] = Field(
+        default=None, ge=0, description="Time to complete 5 chair rises (seconds)"
+    )
+    gait_speed_m_s: Optional[float] = Field(
+        default=None, ge=0, description="Usual 4 m gait speed (m/s)"
+    )
+    appendicular_skeletal_muscle_kg: Optional[float] = Field(
+        default=None,
+        ge=0,
+        description="Appendicular skeletal muscle mass from DXA/BIA (kg)",
+    )
 
 
 class ClinicalContext(BaseModel):

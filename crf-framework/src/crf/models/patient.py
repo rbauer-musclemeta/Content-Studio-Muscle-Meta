@@ -6,7 +6,11 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator
 
-from crf.models.measurements import ClinicalContext, SarcFResponses
+from crf.models.measurements import (
+    ClinicalContext,
+    PhysicalMeasurements,
+    SarcFResponses,
+)
 
 
 class Sex(str, Enum):
@@ -92,6 +96,10 @@ class Patient(BaseModel):
     clinical_context: ClinicalContext = Field(
         default_factory=ClinicalContext,
         description="Acute clinical context for malnutrition screening",
+    )
+    physical: PhysicalMeasurements = Field(
+        default_factory=PhysicalMeasurements,
+        description="Objective physical measurements for sarcopenia assessment",
     )
 
     @property
