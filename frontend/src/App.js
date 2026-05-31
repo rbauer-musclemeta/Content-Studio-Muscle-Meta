@@ -13,6 +13,9 @@ import CourseSuccess from "./components/CourseSuccess";
 import AdminDashboard from "./components/AdminDashboard";
 import CourseEditor from "./components/CourseEditor";
 import AdminTest from "./components/AdminTest";
+import KnowledgeBase from "./components/KnowledgeBase";
+import KnowledgeBaseEditor from "./components/KnowledgeBaseEditor";
+import KnowledgeBaseChat from "./components/KnowledgeBaseChat";
 import { Toaster } from "./components/ui/toaster";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -55,6 +58,13 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/courses/create" element={<CourseEditor />} />
           <Route path="/admin/courses/edit/:courseId" element={<CourseEditor />} />
+
+          {/* Knowledge Base Routes */}
+          <Route path="/admin/kb" element={<KnowledgeBase />} />
+          <Route path="/admin/kb/create" element={<KnowledgeBaseEditor />} />
+          <Route path="/admin/kb/upload" element={<KnowledgeBaseEditor uploadMode={true} />} />
+          <Route path="/admin/kb/edit/:articleId" element={<KnowledgeBaseEditor />} />
+          <Route path="/admin/kb/ask" element={<KnowledgeBaseChat />} />
         </Routes>
         <Toaster />
       </BrowserRouter>

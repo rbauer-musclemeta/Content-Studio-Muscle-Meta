@@ -13,6 +13,7 @@ from datetime import datetime
 # Import routers
 from payments import payments
 from admin import admin
+from knowledge_base import kb
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -75,6 +76,7 @@ async def health_check():
 app.include_router(api_router)
 app.include_router(payments)
 app.include_router(admin)
+app.include_router(kb)
 
 app.add_middleware(
     CORSMiddleware,

@@ -7,10 +7,10 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Separator } from './ui/separator';
-import { 
-  BookOpen, Users, DollarSign, FileText, Plus, Edit, Eye, Trash2, 
+import {
+  BookOpen, Users, DollarSign, FileText, Plus, Edit, Eye, Trash2,
   Upload, Play, Pause, Volume2, Download, Settings, BarChart3,
-  ChevronDown, ChevronRight, Save, X
+  ChevronDown, ChevronRight, Save, X, Brain
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -82,6 +82,10 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Link to="/admin/kb" className="flex items-center space-x-1.5 text-emerald-600 hover:text-emerald-800 font-medium">
+                <Brain className="w-4 h-4" />
+                <span>Knowledge Base</span>
+              </Link>
               <Link to="/" className="text-gray-600 hover:text-gray-900">← Back to Site</Link>
               <Badge className="bg-green-100 text-green-700">Admin Mode</Badge>
             </div>

@@ -123,3 +123,43 @@ class UserEngagementCreate(BaseModel):
     course_id: Optional[str] = None
     action: str
     metadata: Dict[str, Any] = {}
+
+
+# Knowledge Base models
+KB_CATEGORIES = [
+    "muscle-strength",
+    "metabolic-health",
+    "sleep-recovery",
+    "sport-performance",
+    "physical-therapy",
+    "exercise-science",
+    "evidence-based",
+    "general"
+]
+
+class KnowledgeArticle(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    content: str
+    summary: Optional[str] = None
+    category: str = "general"
+    tags: List[str] = []
+    source_type: str = "manual"  # manual, upload, newsletter
+    source_reference: Optional[str] = None
+    word_count: int = 0
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class KnowledgeArticleCreate(BaseModel):
+    title: str
+    content: str
+    summary: Optional[str] = None
+    category: str = "general"
+    tags: List[str] = []
+    source_type: str = "manual"
+    source_reference: Optional[str] = None
+
+class KBQuery(BaseModel):
+    question: str
+    category: Optional[str] = None
+    max_context_articles: int = 5
