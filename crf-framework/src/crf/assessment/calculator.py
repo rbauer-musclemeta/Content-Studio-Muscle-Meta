@@ -84,7 +84,11 @@ class CatabolicRiskCalculator:
 
         # Calculate final score
         all_factors = risk_factors.get_all_factors()
-        score = self.scoring_engine.calculate_total_score(all_factors, biomarker_penalty)
+        score = self.scoring_engine.calculate_total_score(
+            all_factors,
+            biomarker_penalty,
+            biomarkers_assessed=biomarkers is not None,
+        )
 
         return score
 

@@ -98,7 +98,9 @@ def format_risk_report(
     lines.append("RISK SUMMARY")
     lines.append("-" * 40)
     lines.append(f"Overall Risk Level: {risk_score.risk_level.value.upper()}")
-    lines.append(f"Risk Score: {risk_score.total_score:.1f} / {risk_score.max_possible_score:.1f}")
+    lines.append(
+        f"Catabolic Burden: {risk_score.total_score:.1f} / {risk_score.max_possible_score:.1f} (reference)"
+    )
     lines.append(f"Risk Percentage: {risk_score.percentage:.1f}%")
     lines.append(f"Assessment Confidence: {risk_score.confidence * 100:.0f}%")
     lines.append("")
