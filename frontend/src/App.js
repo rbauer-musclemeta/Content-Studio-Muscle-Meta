@@ -16,6 +16,7 @@ import AdminTest from "./components/AdminTest";
 import KnowledgeBase from "./components/KnowledgeBase";
 import KnowledgeBaseEditor from "./components/KnowledgeBaseEditor";
 import KnowledgeBaseChat from "./components/KnowledgeBaseChat";
+import KnowledgeTelos from "./components/KnowledgeTelos";
 import { Toaster } from "./components/ui/toaster";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -65,6 +66,7 @@ function App() {
           <Route path="/admin/kb/upload" element={<KnowledgeBaseEditor uploadMode={true} />} />
           <Route path="/admin/kb/edit/:articleId" element={<KnowledgeBaseEditor />} />
           <Route path="/admin/kb/ask" element={<KnowledgeBaseChat />} />
+          <Route path="/admin/kb/telos" element={<KnowledgeTelos />} />
         </Routes>
         <Toaster />
       </BrowserRouter>

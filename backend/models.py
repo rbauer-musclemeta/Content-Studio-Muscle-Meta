@@ -137,6 +137,11 @@ KB_CATEGORIES = [
     "general"
 ]
 
+class ArticleRelationship(BaseModel):
+    target_id: str
+    target_title: str
+    relation_type: str  # supports | contradicts | extends | part-of | instance-of | related
+
 class KnowledgeArticle(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str
@@ -147,8 +152,15 @@ class KnowledgeArticle(BaseModel):
     source_type: str = "manual"  # manual, upload, newsletter
     source_reference: Optional[str] = None
     word_count: int = 0
+    # PAI-inspired workflow fields
+    status: str = "draft"  # draft | pending_review | verified | approved
+    extracted_insights: Optional[List[str]] = None
+    insights_approved: bool = False
+    relationships: List[ArticleRelationship] = []
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+    verified_at: Optional[datetime] = None
+    approved_at: Optional[datetime] = None
 
 class KnowledgeArticleCreate(BaseModel):
     title: str
@@ -159,7 +171,25 @@ class KnowledgeArticleCreate(BaseModel):
     source_type: str = "manual"
     source_reference: Optional[str] = None
 
+class KBStatusUpdate(BaseModel):
+    status: str  # draft | pending_review | verified | approved
+
+class ArticleRelationshipCreate(BaseModel):
+    target_id: str
+    target_title: str
+    relation_type: str
+
 class KBQuery(BaseModel):
     question: str
     category: Optional[str] = None
     max_context_articles: int = 5
+
+# Randy's Telos — clinical identity and mission (PAI-inspired)
+class RandyTelos(BaseModel):
+    mission: str = ""
+    clinical_philosophy: str = ""
+    expertise_domains: List[str] = []
+    professional_goals: List[str] = []
+    evidence_principles: List[str] = []
+    content_guidelines: str = ""
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
