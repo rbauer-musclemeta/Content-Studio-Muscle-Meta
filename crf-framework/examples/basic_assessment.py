@@ -125,19 +125,34 @@ def main():
     print("FULL ASSESSMENT REPORT")
     print("=" * 60 + "\n")
 
-    report = format_risk_report(risk_score, plan)
+    # Run validated instruments and include them in the report.
+    instrument_results = calculator.run_validated_screens(patient)
+    report = format_risk_report(risk_score, plan, instrument_results)
     print(report)
 
-    # Quick screening example
+    # Quick screening example — panel-first output.
     print("\n" + "=" * 60)
     print("QUICK SCREENING EXAMPLE")
     print("=" * 60 + "\n")
 
     quick_result = calculator.quick_screen(patient)
-    print(f"Risk Level: {quick_result['risk_level']}")
-    print(f"Risk Percentage: {quick_result['risk_percentage']}%")
-    print(f"Top Concerns: {', '.join(quick_result['top_concerns'])}")
-    print(f"Recommendation: {quick_result['recommendation']}")
+
+    # Validated instruments are the headline.
+    print("VALIDATED INSTRUMENTS:")
+    for inst in quick_result["validated_instruments"]:
+        status = inst["category"] if inst["applicable"] else "Not assessable"
+        print(f"  {inst['instrument']}: {status}")
+
+    print(f"\nValidated Summary: {quick_result['validated_summary']}")
+
+    # Exploratory composite is secondary.
+    composite = quick_result["exploratory_composite"]
+    print(f"\nEXPLORATORY COMPOSITE (unvalidated):")
+    print(f"  Risk Level: {composite['risk_level']}")
+    print(f"  Risk Percentage: {composite['risk_percentage']}%")
+    print(f"  Top Concerns: {', '.join(composite['top_concerns'])}")
+
+    print(f"\nRecommendation: {quick_result['recommendation']}")
 
 
 if __name__ == "__main__":

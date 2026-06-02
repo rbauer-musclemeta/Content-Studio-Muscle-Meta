@@ -329,34 +329,121 @@ class CatabolicRiskCalculator:
         """Perform a quick screening without detailed biomarkers.
 
         Returns:
-            Dictionary with quick assessment results
+            Dictionary with quick assessment results. Validated instrument
+            results are the headline; the heuristic composite is secondary.
         """
+        # Run validated screening instruments first — these are the headline.
+        instrument_results = self.run_validated_screens(patient)
+        validated_findings = self._summarize_validated_findings(instrument_results)
+
         score = self.assess_patient(patient)
 
         result = {
-            "screening_signal": score.risk_level.screening_label,
-            "top_concerns": score.top_risk_factors[:3],
-            "confidence": score.confidence,
-            "reliable": score.is_reliable,
-            "validation_status": score.validation_status,
+            # Validated instruments are the primary output.
+            "validated_instruments": [
+                {
+                    "instrument": r.instrument,
+                    "applicable": r.applicable,
+                    "category": r.category,
+                    "raw_score": r.raw_score,
+                    "interpretation": r.interpretation,
+                    "citation": r.citation,
+                }
+                for r in instrument_results
+            ],
+            "validated_summary": validated_findings,
+            # Exploratory composite is secondary.
+            "exploratory_composite": {
+                "screening_signal": score.risk_level.screening_label,
+                "top_concerns": score.top_risk_factors[:3],
+                "confidence": score.confidence,
+                "reliable": score.is_reliable,
+                "validation_status": score.validation_status,
+                "risk_level": score.risk_level.value if score.is_reliable else None,
+                "risk_percentage": score.percentage if score.is_reliable else None,
+            },
+            "recommendation": self._build_recommendation(
+                validated_findings, score
+            ),
             "disclaimer": DISCLAIMER,
         }
 
-        # Suppress the numeric/level output when too little was provided to
-        # trust it; surfacing a falsely low number is the dangerous failure.
-        if score.is_reliable:
-            result["risk_level"] = score.risk_level.value
-            result["risk_percentage"] = score.percentage
-            result["recommendation"] = self._get_quick_recommendation(score.risk_level)
-        else:
-            result["risk_level"] = None
-            result["risk_percentage"] = None
-            result["recommendation"] = (
-                "Insufficient data for a reliable screen. Provide more inputs "
-                "(diet, sleep, stress, labs) and consult a healthcare provider."
+        return result
+
+    def _summarize_validated_findings(
+        self, results: list[InstrumentResult]
+    ) -> dict:
+        """Summarize validated instrument findings into actionable categories."""
+        summary = {
+            "sarcopenia_screen": None,
+            "sarcopenia_confirmed": None,
+            "malnutrition_risk": None,
+            "any_positive": False,
+        }
+
+        for r in results:
+            if not r.applicable:
+                continue
+
+            if r.instrument == "SARC-F":
+                summary["sarcopenia_screen"] = r.category
+                if r.category and "positive" in r.category.lower():
+                    summary["any_positive"] = True
+
+            elif r.instrument == "EWGSOP2":
+                summary["sarcopenia_confirmed"] = r.category
+                if r.category and r.category not in ["No sarcopenia", "Probable sarcopenia"]:
+                    summary["any_positive"] = True
+
+            elif r.instrument == "MUST":
+                summary["malnutrition_risk"] = r.category
+                if r.category in ["Medium risk", "High risk"]:
+                    summary["any_positive"] = True
+
+        return summary
+
+    def _build_recommendation(
+        self, validated: dict, score
+    ) -> str:
+        """Build recommendation prioritizing validated instrument findings."""
+        parts = []
+
+        # Prioritize validated instrument findings.
+        if validated.get("sarcopenia_confirmed") in [
+            "Confirmed sarcopenia",
+            "Severe sarcopenia",
+        ]:
+            parts.append(
+                "EWGSOP2 confirms sarcopenia — refer for muscle-focused intervention "
+                "(resistance training, protein optimization, possible specialist referral)."
+            )
+        elif validated.get("sarcopenia_screen") and "positive" in validated["sarcopenia_screen"].lower():
+            parts.append(
+                "SARC-F positive — conduct confirmatory assessment (grip strength, "
+                "chair-stand, DXA) per EWGSOP2 pathway."
             )
 
-        return result
+        if validated.get("malnutrition_risk") == "High risk":
+            parts.append(
+                "MUST high risk — initiate nutritional support (dietitian referral, "
+                "oral nutritional supplements, local malnutrition protocol)."
+            )
+        elif validated.get("malnutrition_risk") == "Medium risk":
+            parts.append(
+                "MUST medium risk — document dietary intake, observe, repeat screen."
+            )
+
+        # Fall back to heuristic if no validated finding and heuristic is reliable.
+        if not parts:
+            if score.is_reliable:
+                parts.append(self._get_quick_recommendation(score.risk_level))
+            else:
+                parts.append(
+                    "Insufficient data for a reliable screen. Provide more inputs "
+                    "(diet, sleep, stress, labs) and consult a healthcare provider."
+                )
+
+        return " ".join(parts)
 
     def _get_quick_recommendation(self, risk_level) -> str:
         """Get a quick recommendation based on risk level."""

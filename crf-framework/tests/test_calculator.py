@@ -185,14 +185,24 @@ class TestCatabolicRiskCalculator:
         assert abnormal_score.biomarker_penalty > normal_score.biomarker_penalty
 
     def test_quick_screen(self, calculator, high_risk_patient):
-        """Test quick screening function."""
+        """Test quick screening function — panel-first output structure."""
         result = calculator.quick_screen(high_risk_patient)
 
-        assert "risk_level" in result
-        assert "risk_percentage" in result
-        assert "top_concerns" in result
+        # Validated instruments are the headline.
+        assert "validated_instruments" in result
+        assert "validated_summary" in result
+        assert isinstance(result["validated_instruments"], list)
+
+        # Exploratory composite is secondary.
+        assert "exploratory_composite" in result
+        composite = result["exploratory_composite"]
+        assert "risk_level" in composite
+        assert "risk_percentage" in composite
+        assert "top_concerns" in composite
+        assert composite["risk_level"] in ["low", "moderate", "high", "severe", None]
+
+        # Recommendation at top level.
         assert "recommendation" in result
-        assert result["risk_level"] in ["low", "moderate", "high", "severe"]
 
     def test_category_scores_present(self, calculator, high_risk_patient):
         """Test that category scores are calculated."""

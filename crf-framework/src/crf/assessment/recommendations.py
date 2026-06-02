@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 from crf.models.patient import Patient, ActivityLevel
 from crf.models.risk_factors import RiskCategory
 from crf.assessment.scoring import RiskScore, RiskLevel
+from crf.instruments.base import InstrumentResult
 
 
 class RecommendationPriority(str, Enum):
@@ -61,19 +62,27 @@ class RecommendationEngine:
         self,
         patient: Patient,
         risk_score: RiskScore,
+        instrument_results: list[InstrumentResult] | None = None,
     ) -> InterventionPlan:
         """Generate a complete intervention plan based on assessment.
 
         Args:
             patient: Patient data
             risk_score: Calculated risk score
+            instrument_results: Optional validated screening instrument results
 
         Returns:
             Complete intervention plan with recommendations
         """
         recommendations = []
 
-        # Generate recommendations based on risk factors
+        # Validated instrument recommendations come first — they are the headline.
+        if instrument_results:
+            recommendations.extend(
+                self._instrument_recommendations(instrument_results)
+            )
+
+        # Generate recommendations based on risk factors (heuristic, secondary).
         recommendations.extend(self._nutrition_recommendations(patient, risk_score))
         recommendations.extend(self._exercise_recommendations(patient, risk_score))
         recommendations.extend(self._lifestyle_recommendations(patient, risk_score))
@@ -106,6 +115,121 @@ class RecommendationEngine:
         )
 
         return plan
+
+    def _instrument_recommendations(
+        self, results: list[InstrumentResult]
+    ) -> list[Recommendation]:
+        """Generate recommendations keyed to validated instrument findings.
+
+        These appear first in the plan because they come from peer-reviewed,
+        validated tools — not heuristic scoring.
+        """
+        recs = []
+
+        for result in results:
+            if not result.applicable:
+                continue
+
+            if result.instrument == "SARC-F":
+                if result.category and "positive" in result.category.lower():
+                    recs.append(
+                        Recommendation(
+                            title="SARC-F Positive — Confirmatory Assessment",
+                            description=(
+                                "SARC-F screening is positive, suggesting possible sarcopenia. "
+                                "Proceed with confirmatory assessment per EWGSOP2: measure grip strength "
+                                "or chair-stand time; if low, confirm with DXA/BIA for muscle mass; "
+                                "if confirmed, assess gait speed to grade severity."
+                            ),
+                            category=RecommendationCategory.MEDICAL,
+                            priority=RecommendationPriority.HIGH,
+                            rationale=f"Validated screening tool. Citation: {result.citation}",
+                            target_factors=["Sarcopenia screening"],
+                        )
+                    )
+
+            elif result.instrument == "EWGSOP2":
+                if result.category == "Severe sarcopenia":
+                    recs.append(
+                        Recommendation(
+                            title="Severe Sarcopenia Confirmed — Multimodal Intervention",
+                            description=(
+                                "EWGSOP2 confirms severe sarcopenia (low muscle strength, low muscle "
+                                "mass, and low physical performance). Implement structured resistance "
+                                "training 2-3×/week, optimize protein to 1.2-1.5 g/kg/day distributed "
+                                "across meals, and consider geriatrics/physiatry referral."
+                            ),
+                            category=RecommendationCategory.MEDICAL,
+                            priority=RecommendationPriority.CRITICAL,
+                            rationale=f"Validated diagnostic algorithm. Citation: {result.citation}",
+                            target_factors=["Confirmed sarcopenia", "Severe sarcopenia"],
+                        )
+                    )
+                elif result.category == "Confirmed sarcopenia":
+                    recs.append(
+                        Recommendation(
+                            title="Sarcopenia Confirmed — Muscle Preservation",
+                            description=(
+                                "EWGSOP2 confirms sarcopenia (low muscle strength + low muscle mass). "
+                                "Begin progressive resistance exercise 2-3×/week, ensure protein intake "
+                                "≥1.0-1.2 g/kg/day, and reassess in 3 months. Physical therapy referral "
+                                "recommended for exercise prescription."
+                            ),
+                            category=RecommendationCategory.MEDICAL,
+                            priority=RecommendationPriority.HIGH,
+                            rationale=f"Validated diagnostic algorithm. Citation: {result.citation}",
+                            target_factors=["Confirmed sarcopenia"],
+                        )
+                    )
+                elif result.category == "Probable sarcopenia":
+                    recs.append(
+                        Recommendation(
+                            title="Probable Sarcopenia — Confirm with Muscle Mass",
+                            description=(
+                                "EWGSOP2 finds probable sarcopenia (low muscle strength). Measure "
+                                "appendicular skeletal muscle mass (DXA or BIA) to confirm or rule out "
+                                "sarcopenia. Meanwhile, initiate resistance training and optimize protein."
+                            ),
+                            category=RecommendationCategory.MEDICAL,
+                            priority=RecommendationPriority.HIGH,
+                            rationale=f"Validated diagnostic algorithm. Citation: {result.citation}",
+                            target_factors=["Probable sarcopenia"],
+                        )
+                    )
+
+            elif result.instrument == "MUST":
+                if result.category == "High risk":
+                    recs.append(
+                        Recommendation(
+                            title="MUST High Risk — Nutritional Intervention",
+                            description=(
+                                "MUST identifies high malnutrition risk. Refer to dietitian, initiate "
+                                "oral nutritional supplements, and follow local malnutrition care pathway. "
+                                "Monitor weight weekly. Address underlying cause of weight loss or low BMI."
+                            ),
+                            category=RecommendationCategory.NUTRITION,
+                            priority=RecommendationPriority.CRITICAL,
+                            rationale=f"Validated screening tool. Citation: {result.citation}",
+                            target_factors=["Malnutrition risk"],
+                        )
+                    )
+                elif result.category == "Medium risk":
+                    recs.append(
+                        Recommendation(
+                            title="MUST Medium Risk — Dietary Observation",
+                            description=(
+                                "MUST identifies medium malnutrition risk. Document dietary intake for "
+                                "3 days, observe clinical progress, and repeat MUST in 1-2 weeks. "
+                                "If intake inadequate, escalate to high-risk pathway."
+                            ),
+                            category=RecommendationCategory.NUTRITION,
+                            priority=RecommendationPriority.HIGH,
+                            rationale=f"Validated screening tool. Citation: {result.citation}",
+                            target_factors=["Malnutrition risk"],
+                        )
+                    )
+
+        return recs
 
     def _nutrition_recommendations(
         self, patient: Patient, risk_score: RiskScore

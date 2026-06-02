@@ -5,6 +5,7 @@ from typing import Literal
 
 from crf.assessment.scoring import DISCLAIMER, RiskScore
 from crf.assessment.recommendations import InterventionPlan
+from crf.instruments.base import InstrumentResult
 
 
 def calculate_bmi(weight_kg: float, height_cm: float) -> float:
@@ -79,12 +80,14 @@ def calculate_bmr(
 def format_risk_report(
     risk_score: RiskScore,
     intervention_plan: InterventionPlan | None = None,
+    instrument_results: list[InstrumentResult] | None = None,
 ) -> str:
     """Format a complete risk assessment report.
 
     Args:
         risk_score: Calculated risk score
         intervention_plan: Optional intervention plan
+        instrument_results: Optional validated screening instrument results
 
     Returns:
         Formatted report string
@@ -98,12 +101,41 @@ def format_risk_report(
     # Disclaimer up top — not buried at the bottom.
     for line in textwrap.wrap(DISCLAIMER, width=58):
         lines.append(line)
-    lines.append(f"Status: {risk_score.validation_status}")
     lines.append("")
 
-    # Screening Summary
-    lines.append("SCREENING SUMMARY")
+    # VALIDATED INSTRUMENTS — the headline section
+    if instrument_results:
+        lines.append("VALIDATED SCREENING INSTRUMENTS")
+        lines.append("-" * 40)
+        lines.append("These results reproduce published, peer-reviewed instruments.")
+        lines.append("")
+
+        for result in instrument_results:
+            if result.applicable:
+                lines.append(f"  {result.instrument}")
+                lines.append(f"    Result: {result.category}")
+                if result.raw_score is not None:
+                    lines.append(f"    Score: {result.raw_score}")
+                if result.interpretation:
+                    for iline in textwrap.wrap(result.interpretation, width=50):
+                        lines.append(f"    {iline}")
+                lines.append(f"    Citation: {result.citation}")
+                lines.append("")
+            else:
+                lines.append(f"  {result.instrument}")
+                lines.append("    Result: Not assessable")
+                lines.append(f"    Missing: {', '.join(result.missing_inputs)}")
+                lines.append("")
+
+        lines.append("")
+
+    # EXPLORATORY COMPOSITE — demoted, secondary
+    lines.append("EXPLORATORY COMPOSITE INDEX (unvalidated)")
     lines.append("-" * 40)
+    lines.append("This heuristic index aggregates risk factors but has NOT been")
+    lines.append("validated against clinical outcomes. Use only as a secondary signal.")
+    lines.append(f"Status: {risk_score.validation_status}")
+    lines.append("")
     lines.append(f"Screening Signal: {risk_score.risk_level.screening_label}")
     if risk_score.is_reliable:
         lines.append(
