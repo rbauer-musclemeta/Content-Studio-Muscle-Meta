@@ -2,6 +2,10 @@
 pydantic>=2.0
 numpy>=1.24
 
+# PDF parsing (for lab upload parser)
+pdfplumber>=0.10.0
+PyMuPDF>=1.23.0  # Optional fallback for PDF extraction
+
 # API dependencies
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
