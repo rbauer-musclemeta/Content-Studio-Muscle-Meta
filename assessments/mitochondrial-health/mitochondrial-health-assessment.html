@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mitochondrial Health Assessment — Muscle-Meta Matrix™</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================================
+       MUSCLE-META MATRIX™  •  BRAND TOKENS
+       Clinical Intelligence for Active Aging
+       ========================================================= */
+    :root {
+      --teal:          #009090;
+      --teal-dark:     #006b6b;
+      --teal-light:    #00b3b3;
+      --teal-muted:    #e6f5f5;
+      --teal-tint:     #f0f9f9;
+      --gold:          #D4AF37;
+      --gold-dark:     #B5952F;
+      --gold-light:    #e3c56a;
+      --gold-muted:    #faf6e8;
+      --purple:        #7c3aed;
+      --purple-muted:  #f3f0fd;
+      --green:         #16a34a;
+      --green-muted:   #f0fdf4;
+      --ink:           #1a2332;
+      --ink-soft:      #344256;
+      --ink-muted:     #6b7b8f;
+      --ink-faint:     #a8b3c2;
+      --surface:       #f7f6f3;
+      --surface-tint:  #fdfcfa;
+      --border:        #e8e6e1;
+      --border-soft:   #f0eeea;
+      --white:         #ffffff;
+      --tier-1:        #009090;
+      --tier-2:        #3b82f6;
+      --tier-3:        #f59e0b;
+      --tier-4:        #f97316;
+      --tier-5:        #dc2626;
+      --tier-1-muted:  #e6f5f5;
+      --tier-2-muted:  #eff6ff;
+      --tier-3-muted:  #fef3c7;
+      --tier-4-muted:  #ffedd5;
+      --tier-5-muted:  #fee2e2;
+      --font-display:  'Cormorant Garamond', Georgia, serif;
+      --font-body:     'Outfit', 'Helvetica Neue', Arial, sans-serif;
+      --fs-eyebrow: 11px; --tr-eyebrow: 0.18em;
+      --fs-caption: 12px;
+      --fs-micro:   13px;
+      --fs-body:    16px;
+      --fs-lede:    19px;
+      --fs-h4:      22px;
+      --fs-h3:      28px;
+      --fs-h2:      40px;
+      --fs-h1:      56px;
+      --fw-regular: 400; --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
+      --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
+      --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px;
+      --r-1:6px; --r-2:10px; --r-3:14px; --r-4:20px; --r-5:28px; --r-pill:999px;
+      --shadow-xs:  0 1px 2px rgba(26,35,50,0.04);
+      --shadow-sm:  0 2px 8px rgba(26,35,50,0.05);
+      --shadow-md:  0 6px 20px rgba(26,35,50,0.07);
+      --shadow-lg:  0 12px 40px rgba(26,35,50,0.08);
+      --shadow-teal: 0 8px 30px rgba(0,144,144,0.15);
+      --shadow-gold: 0 4px 16px rgba(212,175,55,0.25);
+      --ease-out:  cubic-bezier(0.16,1,0.3,1);
+      --dur-fast:  150ms; --dur-base: 240ms; --dur-slow: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--surface);
+      color: var(--ink-soft);
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.018;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      mix-blend-mode: multiply;
+    }
+
+    h1,h2,h3,h4 { font-family: var(--font-display); color: var(--ink); font-weight: var(--fw-bold); letter-spacing: -0.01em; }
+
+    /* =========================================================
+       PERSISTENT HEADER
+       ========================================================= */
+    #app-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(247,246,243,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--dur-base) var(--ease-out);
+    }
+    #app-header.scrolled { border-color: rgba(0,144,144,0.15); }
+
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s-4);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 32px; height: 32px;
+      background: var(--ink);
+      border-radius: var(--r-2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-mark svg { width: 18px; height: 18px; fill: var(--gold); }
+    .logo-text {
+      font-family: var(--font-body);
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-semi);
+      color: var(--ink);
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+    .logo-text span { color: var(--teal); }
+
+    .header-progress {
+      flex: 1;
+      max-width: 300px;
+      display: none;
+    }
+    .header-progress.visible { display: block; }
+    .progress-label {
+      font-size: var(--fs-caption);
+      color: var(--ink-muted);
+      font-weight: var(--fw-medium);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .progress-track {
+      height: 4px;
+      background: var(--border);
+      border-radius: var(--r-pill);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--purple), var(--teal));
+      border-radius: var(--r-pill);
+      transition: width 0.5s var(--ease-out);
+      width: 0%;
+    }
+
+    .header-pillar-badge {
+      font-family: var(--font-body);
+      font-size: var(--fs-eyebrow);
+      font-weight: var(--fw-semi);
+      letter-spacing: var(--tr-eyebrow);
+      text-transform: uppercase;
+      color: var(--purple);
+      white-space: nowrap;
+    }
+
+    /* =========================================================
+       SCREEN SYSTEM
+       ========================================================= */
+    .screen {
+      min-height: 100vh;
+      padding-top: 60px;
+      display: flex;
+      flex-direction: column;
+    }
+    .screen.hidden { display: none; }
+
+    /* =========================================================
+       WELCOME SCREEN
+       ========================================================= */
+    #screen-welcome {
+      background: linear-gradient(160deg, var(--surface) 0%, var(--purple-muted) 100%);
+    }
+
+    .welcome-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s-7) 20px;
+    }
+
+    .welcome-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-5);
+      padding: var(--s-8) var(--s-7);
+      max-width: 620px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--purple), var(--teal));
+    }
+
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--fs-eyebrow);
+      font-weight: var(--fw-semi);
+      letter-spacing: var(--tr-eyebrow);
+      text-transform: uppercase;
+      color: var(--purple);
+      display: block;
+      margin-bottom: var(--s-3);
+    }
+
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: var(--fs-h1);
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--s-5);
+    }
+
+    .welcome-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--s-5);
+      margin-bottom: var(--s-5);
+      padding-bottom: var(--s-5);
+      border-bottom: 1px solid var(--border-soft);
+      flex-wrap: wrap;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-2);
+      background: var(--purple-muted);
+      color: var(--purple);
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-medium);
+      padding: 5px 12px;
+      border-radius: var(--r-pill);
+    }
+
+    .meta-pill svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    .welcome-desc {
+      color: var(--ink-soft);
+      line-height: 1.7;
+      margin-bottom: var(--s-5);
+      font-size: 15px;
+    }
+
+    .welcome-pillars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-3);
+      margin-bottom: var(--s-6);
+    }
+
+    .pillar-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s-3);
+      padding: var(--s-3) var(--s-4);
+      background: var(--surface);
+      border-radius: var(--r-2);
+      border: 1px solid var(--border-soft);
+    }
+
+    .pillar-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--purple);
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .pillar-item-text {
+      font-size: var(--fs-micro);
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+
+    .pillar-item-text strong {
+      display: block;
+      color: var(--ink-soft);
+      font-weight: var(--fw-medium);
+      font-size: 13px;
+    }
+
+    .welcome-privacy {
+      text-align: center;
+      font-size: var(--fs-caption);
+      color: var(--ink-faint);
+      margin-top: var(--s-4);
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+    .mmm-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: var(--fw-semi);
+      letter-spacing: 0.01em;
+      border-radius: var(--r-pill);
+      padding: 14px 28px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all var(--dur-base) var(--ease-out);
+      text-decoration: none;
+      line-height: 1;
+      width: 100%;
+      justify-content: center;
+    }
+    .mmm-btn-primary {
+      background: var(--purple);
+      color: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+    .mmm-btn-primary:hover {
+      background: var(--ink);
+      border-color: var(--gold);
+      box-shadow: var(--shadow-gold);
+      transform: translateY(-1px);
+    }
+    .mmm-btn-ghost {
+      background: transparent;
+      color: var(--ink-muted);
+      border-color: var(--border);
+    }
+    .mmm-btn-ghost:hover {
+      border-color: var(--purple);
+      color: var(--purple);
+      background: var(--purple-muted);
+    }
+    .mmm-btn-gold {
+      background: var(--gold);
+      color: var(--ink);
+      box-shadow: var(--shadow-gold);
+    }
+    .mmm-btn-gold:hover {
+      background: var(--gold-dark);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+    .mmm-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* =========================================================
+       INTAKE SCREEN
+       ========================================================= */
+    .intake-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s-7) 20px;
+    }
+
+    .intake-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-5);
+      padding: var(--s-7) var(--s-6);
+      max-width: 520px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+    }
+
+    .intake-title {
+      font-family: var(--font-display);
+      font-size: var(--fs-h3);
+      color: var(--ink);
+      font-weight: var(--fw-bold);
+      margin-bottom: var(--s-2);
+    }
+
+    .intake-sub {
+      color: var(--ink-muted);
+      font-size: 15px;
+      margin-bottom: var(--s-6);
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: var(--s-5);
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-semi);
+      color: var(--ink);
+      margin-bottom: var(--s-2);
+      letter-spacing: 0.01em;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-2);
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      color: var(--ink);
+      background: var(--surface);
+      transition: border-color var(--dur-fast) var(--ease-out),
+                  box-shadow var(--dur-fast) var(--ease-out);
+      appearance: none;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px var(--purple-muted);
+      background: var(--white);
+    }
+
+    select.form-input {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7b8f' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 44px;
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       QUESTION SCREEN
+       ========================================================= */
+    .question-body {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: var(--s-6) 20px var(--s-8);
+    }
+
+    .question-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-5);
+      padding: var(--s-6) var(--s-6) var(--s-5);
+      max-width: 640px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .question-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--purple), var(--teal));
+    }
+
+    .q-domain {
+      font-family: var(--font-body);
+      font-size: var(--fs-eyebrow);
+      font-weight: var(--fw-semi);
+      letter-spacing: var(--tr-eyebrow);
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: var(--s-3);
+    }
+
+    .q-text {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: var(--s-5);
+      letter-spacing: -0.01em;
+    }
+
+    .q-instruction {
+      font-size: var(--fs-micro);
+      color: var(--ink-muted);
+      margin-bottom: var(--s-4);
+      font-style: italic;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-3);
+      margin-bottom: var(--s-5);
+    }
+
+    .option-item {
+      position: relative;
+    }
+
+    .option-item input[type="radio"],
+    .option-item input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s-4);
+      padding: var(--s-4) var(--s-5);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-3);
+      cursor: pointer;
+      transition: all var(--dur-fast) var(--ease-out);
+      background: var(--surface);
+      min-height: 52px;
+    }
+
+    .option-label:hover {
+      border-color: var(--purple);
+      background: var(--purple-muted);
+    }
+
+    .option-indicator {
+      width: 20px; height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: all var(--dur-fast) var(--ease-out);
+      display: flex; align-items: center; justify-content: center;
+      background: var(--white);
+    }
+
+    .option-check .option-indicator { border-radius: var(--r-1); }
+
+    .option-item input:checked + .option-label {
+      border-color: var(--purple);
+      background: var(--purple-muted);
+    }
+
+    .option-item input:checked + .option-label .option-indicator {
+      background: var(--purple);
+      border-color: var(--purple);
+    }
+
+    .option-item input:checked + .option-label .option-indicator::after {
+      content: "";
+      display: block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .option-item.option-check input:checked + .option-label .option-indicator::after {
+      width: 5px; height: 8px;
+      border-radius: 0;
+      border: 2px solid var(--white);
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+      background: transparent;
+    }
+
+    .option-item.risk-high input:checked + .option-label {
+      border-color: var(--tier-4);
+      background: var(--tier-4-muted);
+    }
+    .option-item.risk-high input:checked + .option-label .option-indicator {
+      background: var(--tier-4);
+      border-color: var(--tier-4);
+    }
+
+    .option-text {
+      flex: 1;
+      font-size: 15px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .option-text strong { color: var(--ink); font-weight: var(--fw-medium); }
+
+    .option-none .option-label { border-style: dashed; }
+    .option-none input:checked + .option-label { border-style: solid; }
+
+    .q-flag-tip {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s-3);
+      background: var(--purple-muted);
+      border-radius: var(--r-2);
+      padding: var(--s-3) var(--s-4);
+      margin-bottom: var(--s-5);
+      font-size: var(--fs-micro);
+      color: var(--purple);
+      line-height: 1.5;
+    }
+
+    .q-flag-tip svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+
+    .q-nav {
+      display: flex;
+      gap: var(--s-3);
+      align-items: center;
+    }
+
+    .q-nav .mmm-btn { width: auto; flex: 1; }
+    .q-nav .mmm-btn.back-btn { flex: 0 0 auto; padding: 14px 20px; }
+
+    .q-error {
+      font-size: var(--fs-micro);
+      color: var(--tier-5);
+      margin-bottom: var(--s-3);
+      display: none;
+      font-weight: var(--fw-medium);
+    }
+    .q-error.visible { display: block; }
+
+    /* =========================================================
+       RESULTS SCREEN
+       ========================================================= */
+    #screen-results {
+      background: linear-gradient(160deg, var(--surface) 0%, var(--purple-muted) 60%, var(--surface) 100%);
+    }
+
+    .results-body {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: var(--s-7) 20px var(--s-9);
+      width: 100%;
+    }
+
+    .results-greeting {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      margin-bottom: var(--s-2);
+    }
+
+    .results-sub {
+      color: var(--ink-muted);
+      font-size: 15px;
+      margin-bottom: var(--s-6);
+    }
+
+    .score-hero {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-5);
+      padding: var(--s-7) var(--s-6);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: var(--s-5);
+      display: flex;
+      gap: var(--s-7);
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .score-hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--tier-color, var(--purple));
+    }
+
+    .score-ring-wrap {
+      flex-shrink: 0;
+    }
+
+    .score-ring {
+      position: relative;
+      width: 120px; height: 120px;
+    }
+
+    .score-ring svg {
+      width: 120px; height: 120px;
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg { fill: none; stroke: var(--border); stroke-width: 8; }
+    .ring-fill {
+      fill: none;
+      stroke: var(--tier-color, var(--purple));
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 314;
+      stroke-dashoffset: 314;
+      transition: stroke-dashoffset 1.4s var(--ease-out) 0.3s;
+    }
+
+    .score-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-pct {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .score-pct-label {
+      font-size: var(--fs-caption);
+      color: var(--ink-muted);
+      font-weight: var(--fw-medium);
+    }
+
+    .score-meta { flex: 1; }
+
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-2);
+      padding: 6px 14px;
+      border-radius: var(--r-pill);
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-semi);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: var(--s-3);
+    }
+
+    .tier-badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.8;
+    }
+
+    .tier-name {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      margin-bottom: var(--s-2);
+      line-height: 1.2;
+    }
+
+    .tier-track {
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-semi);
+      color: var(--purple);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: var(--s-3);
+    }
+
+    .tier-desc {
+      font-size: 14px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    .age-adjust-note {
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+      font-size: var(--fs-caption);
+      color: var(--ink-muted);
+      margin-top: var(--s-3);
+      padding-top: var(--s-3);
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .age-adjust-note svg { width: 13px; height: 13px; color: var(--gold-dark); flex-shrink: 0; }
+
+    .results-section-head {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      margin-bottom: var(--s-4);
+      margin-top: var(--s-6);
+    }
+
+    .results-section-head h3 {
+      font-family: var(--font-display);
+      font-size: var(--fs-h4);
+      color: var(--ink);
+      font-weight: var(--fw-bold);
+    }
+
+    .domains-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-4);
+      padding: var(--s-5) var(--s-6);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--s-5);
+    }
+
+    .domain-row {
+      display: grid;
+      grid-template-columns: 160px 1fr 36px;
+      align-items: center;
+      gap: var(--s-4);
+      padding: var(--s-3) 0;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .domain-row:last-child { border-bottom: none; }
+
+    .domain-label {
+      font-size: var(--fs-micro);
+      color: var(--ink-soft);
+      font-weight: var(--fw-medium);
+      line-height: 1.3;
+    }
+
+    .domain-bar-track {
+      height: 8px;
+      background: var(--surface);
+      border-radius: var(--r-pill);
+      overflow: hidden;
+    }
+
+    .domain-bar-fill {
+      height: 100%;
+      border-radius: var(--r-pill);
+      transition: width 1s var(--ease-out) 0.6s;
+      width: 0%;
+    }
+
+    .domain-score-label {
+      font-size: var(--fs-caption);
+      color: var(--ink-muted);
+      font-weight: var(--fw-semi);
+      text-align: right;
+    }
+
+    .flags-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-3);
+      margin-bottom: var(--s-5);
+    }
+
+    .flag-card {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s-4);
+      padding: var(--s-4) var(--s-5);
+      border-radius: var(--r-3);
+      border: 1px solid;
+    }
+
+    .flag-card.flag-urgent {
+      background: var(--tier-5-muted);
+      border-color: rgba(220,38,38,0.25);
+      color: #991b1b;
+    }
+
+    .flag-card.flag-warning {
+      background: var(--tier-4-muted);
+      border-color: rgba(249,115,22,0.25);
+      color: #9a3412;
+    }
+
+    .flag-card.flag-info {
+      background: var(--purple-muted);
+      border-color: rgba(124,58,237,0.2);
+      color: var(--purple);
+    }
+
+    .flag-icon { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    .flag-text {
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .crossref-card {
+      background: var(--white);
+      border: 2px solid var(--teal);
+      border-radius: var(--r-4);
+      padding: var(--s-5) var(--s-6);
+      box-shadow: var(--shadow-teal);
+      margin-bottom: var(--s-5);
+      display: flex;
+      gap: var(--s-5);
+      align-items: flex-start;
+    }
+
+    .crossref-icon {
+      width: 44px; height: 44px;
+      background: var(--teal-muted);
+      border-radius: var(--r-3);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .crossref-icon svg { width: 22px; height: 22px; color: var(--teal); }
+
+    .crossref-body { flex: 1; }
+
+    .crossref-body h4 {
+      font-family: var(--font-display);
+      font-size: var(--fs-h4);
+      color: var(--ink);
+      margin-bottom: var(--s-2);
+    }
+
+    .crossref-body p {
+      font-size: 14px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      margin-bottom: var(--s-4);
+    }
+
+    .track-cta {
+      background: var(--ink);
+      border-radius: var(--r-4);
+      padding: var(--s-6);
+      color: var(--white);
+      margin-bottom: var(--s-5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .track-cta::before {
+      content: "";
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(124,58,237,0.12);
+    }
+
+    .track-eyebrow {
+      font-size: var(--fs-eyebrow);
+      font-weight: var(--fw-semi);
+      letter-spacing: var(--tr-eyebrow);
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: var(--s-2);
+    }
+
+    .track-cta h3 {
+      font-family: var(--font-display);
+      font-size: var(--fs-h3);
+      color: var(--white);
+      font-weight: var(--fw-bold);
+      margin-bottom: var(--s-3);
+      line-height: 1.2;
+    }
+
+    .track-cta p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      margin-bottom: var(--s-5);
+      max-width: 440px;
+    }
+
+    .track-cta .mmm-btn { width: auto; }
+
+    .results-restart {
+      text-align: center;
+      padding-top: var(--s-5);
+    }
+
+    .restart-link {
+      font-size: var(--fs-micro);
+      color: var(--ink-faint);
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      font-family: var(--font-body);
+      transition: color var(--dur-fast) var(--ease-out);
+    }
+
+    .restart-link:hover { color: var(--ink-muted); }
+
+    .score-tag-0, .score-tag-1 { color: var(--tier-1); }
+    .score-tag-2 { color: var(--tier-3); }
+    .score-tag-3 { color: var(--tier-4); }
+    .score-tag-4 { color: var(--tier-5); }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in { transition: none; opacity: 1; transform: none; }
+      .ring-fill { transition: none; }
+      .domain-bar-fill { transition: none; }
+    }
+
+    @media (max-width: 600px) {
+      .welcome-card { padding: var(--s-6) var(--s-5); }
+      .welcome-title { font-size: 36px; }
+      .welcome-pillars { grid-template-columns: 1fr; }
+      .welcome-meta { flex-wrap: wrap; gap: var(--s-3); }
+      .score-hero { flex-direction: column; align-items: flex-start; gap: var(--s-5); }
+      .score-ring { margin: 0 auto; }
+      .domain-row { grid-template-columns: 130px 1fr 30px; gap: var(--s-3); }
+      .domain-label { font-size: 11px; }
+      .crossref-card { flex-direction: column; }
+      .q-text { font-size: 22px; }
+      .results-greeting { font-size: 28px; }
+    }
+
+    @media (max-width: 420px) {
+      .domain-row { grid-template-columns: 1fr; gap: var(--s-2); }
+      .domain-score-label { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       PERSISTENT HEADER
+       ============================================================ -->
+  <header id="app-header">
+    <div class="header-inner">
+      <a class="header-logo" href="#">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+        </div>
+        <div class="logo-text">Muscle-Meta <span>Matrix™</span></div>
+      </a>
+      <div class="header-progress" id="header-progress">
+        <div class="progress-label">
+          <span id="progress-text">Question 1 of 12</span>
+          <span id="progress-pct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+      <div class="header-pillar-badge">Recovery &amp; Resilience</div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       SCREEN 0: WELCOME
+       ============================================================ -->
+  <div id="screen-welcome" class="screen">
+    <div class="welcome-body">
+      <div class="welcome-card">
+        <span class="eyebrow">Mitochondrial Health Assessment</span>
+        <h1 class="welcome-title">How well are your cellular powerhouses performing?</h1>
+
+        <div class="welcome-meta">
+          <div class="meta-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            6 – 8 minutes
+          </div>
+          <div class="meta-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+            12 questions
+          </div>
+          <div class="meta-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Private &amp; secure
+          </div>
+        </div>
+
+        <p class="welcome-desc">
+          Mitochondria are your cells' energy factories — producing ATP that powers every function in your body. After 50, mitochondrial efficiency naturally declines, contributing to fatigue, slower recovery, reduced endurance, and accelerated aging. This assessment evaluates your mitochondrial function markers and builds a personalized optimization roadmap.
+        </p>
+
+        <div class="welcome-pillars">
+          <div class="pillar-item">
+            <div class="pillar-dot"></div>
+            <div class="pillar-item-text">
+              <strong>ATP production capacity</strong>
+              How efficiently does your body generate cellular energy?
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-dot" style="background:var(--teal)"></div>
+            <div class="pillar-item-text">
+              <strong>Fat oxidation</strong>
+              Can your mitochondria effectively burn fat for fuel?
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-dot" style="background:var(--gold)"></div>
+            <div class="pillar-item-text">
+              <strong>Recovery &amp; repair</strong>
+              How quickly do you bounce back from exertion?
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-dot" style="background:var(--green)"></div>
+            <div class="pillar-item-text">
+              <strong>Oxidative stress load</strong>
+              Are free radicals overwhelming your defenses?
+            </div>
+          </div>
+        </div>
+
+        <button class="mmm-btn mmm-btn-primary" onclick="showScreen('intake')">
+          Begin your assessment
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+
+        <p class="welcome-privacy">Your responses are used only to personalize your results and are not stored beyond this session.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 1: INTAKE (Name + Age)
+       ============================================================ -->
+  <div id="screen-intake" class="screen hidden">
+    <div class="intake-body">
+      <div class="intake-card">
+        <span class="eyebrow">Your profile</span>
+        <h2 class="intake-title">Let's personalize your results</h2>
+        <p class="intake-sub">Your name and age allow us to tailor your risk tier and content recommendations. Mitochondrial function benchmarks shift significantly with age.</p>
+
+        <div class="form-group">
+          <label class="form-label" for="field-name">Full name</label>
+          <input class="form-input" type="text" id="field-name" placeholder="e.g. Randy Bauer" autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="field-age">Age range</label>
+          <select class="form-input" id="field-age">
+            <option value="">Select your age range</option>
+            <option value="under50">Under 50</option>
+            <option value="50-59">50 – 59</option>
+            <option value="60-69">60 – 69</option>
+            <option value="70-79">70 – 79</option>
+            <option value="80plus">80 and older</option>
+          </select>
+        </div>
+
+        <div class="q-error" id="intake-error">Please enter your name and select an age range to continue.</div>
+
+        <button class="mmm-btn mmm-btn-primary" onclick="submitIntake()">
+          Continue to assessment
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 2–13: QUESTIONS (dynamically rendered)
+       ============================================================ -->
+  <div id="screen-question" class="screen hidden">
+    <div class="question-body">
+      <div class="question-card" id="question-card">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 14: RESULTS
+       ============================================================ -->
+  <div id="screen-results" class="screen hidden">
+    <div class="results-body">
+
+      <div class="fade-in" id="results-header">
+        <p class="results-sub">Recovery &amp; Resilience Pillar &nbsp;·&nbsp; Mitochondrial Health</p>
+        <h1 class="results-greeting" id="results-greeting">Your results are ready</h1>
+      </div>
+
+      <div class="score-hero fade-in" id="score-hero" style="--tier-color: var(--purple);">
+        <div class="score-ring-wrap">
+          <div class="score-ring">
+            <svg viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="50"/>
+              <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="50"/>
+            </svg>
+            <div class="score-center">
+              <div class="score-pct" id="score-pct">0%</div>
+              <div class="score-pct-label">risk score</div>
+            </div>
+          </div>
+        </div>
+        <div class="score-meta">
+          <div class="tier-badge" id="tier-badge">
+            <div class="tier-badge-dot"></div>
+            <span id="tier-badge-text">Tier 1</span>
+          </div>
+          <div class="tier-name" id="tier-name">Optimal mitochondrial function</div>
+          <div class="tier-track" id="tier-track">Optimization &amp; performance</div>
+          <div class="tier-desc" id="tier-desc">Your results description will appear here.</div>
+          <div class="age-adjust-note" id="age-adjust-note" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="age-adjust-text"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="flags-section" style="display:none;">
+        <div class="results-section-head fade-in">
+          <h3>Important clinical notes</h3>
+        </div>
+        <div class="flags-stack fade-in" id="flags-stack"></div>
+      </div>
+
+      <div class="crossref-card fade-in" id="crossref-metflex" style="display:none;">
+        <div class="crossref-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="crossref-body">
+          <h4>Metabolic flexibility connection</h4>
+          <p>Mitochondrial dysfunction and metabolic inflexibility are deeply interconnected. If your mitochondria struggle to burn fat efficiently, your metabolic flexibility will suffer. We recommend also completing the Metabolic Flexibility Assessment for a complete picture of your fuel-switching capacity.</p>
+          <button class="mmm-btn mmm-btn-primary" style="width:auto; font-size:13px; padding:10px 20px;" onclick="alert('Metabolic Flexibility Assessment — check your dashboard.')">
+            Take the Metabolic Flexibility Assessment
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="results-section-head fade-in">
+        <h3>Your mitochondrial health profile</h3>
+      </div>
+      <div class="domains-card fade-in" id="domains-card"></div>
+
+      <div class="track-cta fade-in" id="track-cta">
+        <span class="track-eyebrow">Your personalized path</span>
+        <h3 id="track-title">Optimization &amp; performance track</h3>
+        <p id="track-body">Your recommended next step will appear here.</p>
+        <button class="mmm-btn mmm-btn-gold" style="width:auto;" onclick="alert('Loading your personalized module — connect your dashboard to begin.')">
+          Begin your module
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="results-restart fade-in">
+        <button class="restart-link" onclick="restartAssessment()">Retake assessment from the beginning</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT — ASSESSMENT ENGINE
+       ============================================================ -->
+  <script>
+  // ================================================================
+  // ASSESSMENT METADATA
+  // ================================================================
+  const ASSESSMENT_META = {
+    id: 'mitochondrial-health-v1',
+    name: 'Mitochondrial Health Assessment',
+    pillar: 'recovery_resilience',
+    category: 'mitochondrial_health',
+    version: '1.0',
+    questions: 12,
+    duration_minutes: 7,
+  };
+
+  // ================================================================
+  // DATA: ASSESSMENT QUESTIONS
+  // ================================================================
+  const QUESTIONS = [
+    // Q1 — Medical History (screener, checkbox)
+    {
+      id: 'medical-history',
+      domain: 'Medical history screener',
+      text: 'Have you been diagnosed with any of the following conditions that affect cellular energy?',
+      instruction: 'Select all that apply. Select "None of the above" if none apply.',
+      type: 'checkbox',
+      tip: 'These conditions directly impact mitochondrial function and help us place you in the safest content track.',
+      options: [
+        { value: 'chronic-fatigue',    label: 'Chronic Fatigue Syndrome (ME/CFS)',                    points: 4 },
+        { value: 'fibromyalgia',       label: 'Fibromyalgia',                                          points: 3 },
+        { value: 'parkinsons',         label: 'Parkinson\'s Disease',                                  points: 4 },
+        { value: 'heart-failure',      label: 'Heart Failure or Cardiomyopathy',                       points: 4 },
+        { value: 'diabetes',           label: 'Type 2 Diabetes',                                       points: 3 },
+        { value: 'hypothyroidism',     label: 'Hypothyroidism or Hashimoto\'s',                        points: 2 },
+        { value: 'long-covid',         label: 'Long COVID / Post-Viral Fatigue',                       points: 3 },
+        { value: 'none',               label: 'None of the above',                                     points: 0, isNone: true },
+      ],
+      cap: 4,
+    },
+
+    // Q2 — Medications (screener, checkbox)
+    {
+      id: 'medications',
+      domain: 'Current medications',
+      text: 'Are you currently taking any of the following medications known to affect mitochondrial function?',
+      instruction: 'Select all that apply. Select "None of the above" if none apply.',
+      type: 'checkbox',
+      tip: 'Certain medications impair mitochondrial function or deplete critical cofactors like CoQ10.',
+      options: [
+        { value: 'statins',          label: 'Statin medication (atorvastatin/Lipitor, rosuvastatin/Crestor, simvastatin)',  points: 3 },
+        { value: 'metformin',        label: 'Metformin (Glucophage)',                                                        points: 2 },
+        { value: 'beta-blockers',    label: 'Beta-blocker (metoprolol, atenolol, propranolol, carvedilol)',                 points: 2 },
+        { value: 'fluoroquinolones', label: 'Fluoroquinolone antibiotic in past year (Cipro, Levaquin, Avelox)',            points: 3 },
+        { value: 'antidepressants',  label: 'Antidepressant (SSRI, SNRI, tricyclic)',                                       points: 1 },
+        { value: 'anticonvulsants',  label: 'Anticonvulsant / anti-seizure medication',                                     points: 2 },
+        { value: 'chemotherapy',     label: 'Chemotherapy (current or within past 2 years)',                                points: 4 },
+        { value: 'none',             label: 'None of the above',                                                             points: 0, isNone: true },
+      ],
+      cap: 4,
+    },
+
+    // Q3 — Baseline Energy Level
+    {
+      id: 'baseline-energy',
+      domain: 'ATP production capacity',
+      text: 'How would you describe your overall daily energy level compared to 5–10 years ago?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'Severely diminished — I struggle to complete basic daily activities', riskHigh: true },
+        { value: 3, label: 'Significantly reduced — I fatigue easily and need frequent rest' },
+        { value: 2, label: 'Moderately reduced — noticeable decline in stamina and endurance' },
+        { value: 1, label: 'Slightly reduced — minor decline but still functional' },
+        { value: 0, label: 'Stable or improved — my energy is consistent and reliable' },
+      ],
+    },
+
+    // Q4 — Exercise Recovery Time
+    {
+      id: 'exercise-recovery',
+      domain: 'Recovery capacity',
+      text: 'After moderate exercise (30-minute brisk walk, light gym session), how long does it take you to feel fully recovered?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'More than 48 hours — I may feel worse for days (post-exertional malaise)', riskHigh: true },
+        { value: 3, label: '24–48 hours — significant fatigue the next day' },
+        { value: 2, label: '12–24 hours — tired until the next morning' },
+        { value: 1, label: '4–12 hours — recovered by evening or next morning' },
+        { value: 0, label: 'Less than 4 hours — I recover quickly and feel energized' },
+      ],
+    },
+
+    // Q5 — Mental Clarity / Brain Fog
+    {
+      id: 'brain-fog',
+      domain: 'Cognitive energy',
+      text: 'How often do you experience brain fog, difficulty concentrating, or mental fatigue?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'Constantly — it significantly impairs my daily function' },
+        { value: 3, label: 'Frequently — most days I struggle with mental clarity' },
+        { value: 2, label: 'Sometimes — several times per week' },
+        { value: 1, label: 'Occasionally — once or twice a week' },
+        { value: 0, label: 'Rarely or never — my thinking is clear and sharp' },
+      ],
+    },
+
+    // Q6 — Cold Tolerance (Thermogenesis)
+    {
+      id: 'cold-tolerance',
+      domain: 'Thermogenic capacity',
+      text: 'How well do you tolerate cold environments compared to others?',
+      type: 'radio',
+      tip: 'Mitochondria generate body heat through thermogenesis. Poor cold tolerance can indicate reduced mitochondrial activity.',
+      options: [
+        { value: 4, label: 'Very poorly — I\'m always cold, need multiple layers, hands/feet often cold' },
+        { value: 3, label: 'Poorly — I get cold easily and take a long time to warm up' },
+        { value: 2, label: 'Moderately — I\'m more cold-sensitive than average' },
+        { value: 1, label: 'Adequately — normal cold tolerance' },
+        { value: 0, label: 'Well — I tolerate cold easily and generate heat efficiently' },
+      ],
+    },
+
+    // Q7 — Muscle Endurance
+    {
+      id: 'muscle-endurance',
+      domain: 'Muscular ATP capacity',
+      text: 'During sustained physical activity (climbing stairs, carrying groceries, yard work), how quickly do your muscles fatigue?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'Very quickly — within 1–2 minutes of sustained effort' },
+        { value: 3, label: 'Quickly — noticeable weakness after 5–10 minutes' },
+        { value: 2, label: 'Moderately — fatigue sets in after 15–20 minutes' },
+        { value: 1, label: 'Slowly — I can sustain activity for 30+ minutes' },
+        { value: 0, label: 'Very slowly — I have excellent muscular endurance' },
+      ],
+    },
+
+    // Q8 — Sleep Quality & Restoration
+    {
+      id: 'sleep-restoration',
+      domain: 'Sleep-based repair',
+      text: 'How refreshed do you feel upon waking after a full night\'s sleep?',
+      type: 'radio',
+      tip: 'Mitochondrial repair and biogenesis occur primarily during sleep. Waking unrefreshed may indicate impaired cellular restoration.',
+      options: [
+        { value: 4, label: 'Exhausted — I wake as tired as when I went to bed, regardless of sleep duration' },
+        { value: 3, label: 'Poorly rested — significant fatigue despite 7+ hours sleep' },
+        { value: 2, label: 'Somewhat rested — takes 1–2 hours to feel alert' },
+        { value: 1, label: 'Mostly rested — feel reasonably good within 30 minutes' },
+        { value: 0, label: 'Fully refreshed — I wake alert and energized' },
+      ],
+    },
+
+    // Q9 — Exercise Intolerance
+    {
+      id: 'exercise-intolerance',
+      domain: 'Aerobic capacity',
+      text: 'How do you respond to increasing exercise intensity (walking faster, climbing, or light jogging)?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'I cannot increase intensity — even light activity causes severe symptoms', riskHigh: true },
+        { value: 3, label: 'Very difficult — I become breathless, dizzy, or need to stop quickly' },
+        { value: 2, label: 'Challenging — I can increase intensity briefly but fatigue rapidly' },
+        { value: 1, label: 'Manageable — I can sustain moderate intensity for reasonable periods' },
+        { value: 0, label: 'Good — I can comfortably increase and sustain higher intensity' },
+      ],
+    },
+
+    // Q10 — Oxidative Stress Markers (Lifestyle)
+    {
+      id: 'oxidative-stress',
+      domain: 'Oxidative load',
+      text: 'How many of the following oxidative stress factors apply to you?',
+      instruction: 'Select all that apply.',
+      type: 'checkbox',
+      options: [
+        { value: 'smoking',           label: 'Current or recent smoker (within 5 years)',               points: 2 },
+        { value: 'alcohol',           label: 'Alcohol consumption: 7+ drinks per week',                 points: 1 },
+        { value: 'processed-food',    label: 'Diet high in processed foods, sugar, or fried foods',     points: 2 },
+        { value: 'air-pollution',     label: 'Live/work in area with high air pollution',               points: 1 },
+        { value: 'chronic-stress',    label: 'High chronic stress (work, caregiving, financial)',       points: 2 },
+        { value: 'poor-sleep',        label: 'Regularly sleep less than 6 hours',                       points: 2 },
+        { value: 'sedentary',         label: 'Sedentary lifestyle (less than 30 min activity/day)',     points: 2 },
+        { value: 'none',              label: 'None of the above',                                       points: 0, isNone: true },
+      ],
+      cap: 4,
+    },
+
+    // Q11 — Mitochondrial Support (Protective)
+    {
+      id: 'mito-support',
+      domain: 'Protective factors',
+      text: 'Which of the following mitochondrial support strategies do you currently practice?',
+      instruction: 'Select all that apply. These are protective factors that may improve your score.',
+      type: 'checkbox',
+      options: [
+        { value: 'coq10',             label: 'CoQ10 / Ubiquinol supplementation (100+ mg/day)',         points: -1 },
+        { value: 'nad-precursors',    label: 'NAD+ precursors (NMN, NR, niacin)',                       points: -1 },
+        { value: 'creatine',          label: 'Creatine monohydrate (3–5g/day)',                         points: -1 },
+        { value: 'cold-exposure',     label: 'Regular cold exposure (cold showers, cold plunge)',       points: -1 },
+        { value: 'hiit',              label: 'High-intensity interval training (2+ times/week)',        points: -1 },
+        { value: 'time-restricted',   label: 'Time-restricted eating (12+ hour overnight fast)',        points: -1 },
+        { value: 'antioxidants',      label: 'Antioxidant-rich diet (berries, greens, colorful veg)',   points: -1 },
+        { value: 'none',              label: 'None of the above',                                       points: 0, isNone: true },
+      ],
+      cap: -4, // Protective cap (reduces score)
+    },
+
+    // Q12 — Post-Exertional Malaise (Critical Screening)
+    {
+      id: 'post-exertional-malaise',
+      domain: 'Post-exertional response',
+      text: 'After physical or mental exertion, do you experience a delayed crash (12–72 hours later) with worsening fatigue, pain, or cognitive symptoms?',
+      type: 'radio',
+      tip: 'Post-exertional malaise (PEM) is a hallmark of severe mitochondrial dysfunction and chronic fatigue conditions. Answer honestly — this is clinically important.',
+      options: [
+        { value: 4, label: 'Yes, frequently — this is a major pattern that limits my activity', riskHigh: true },
+        { value: 3, label: 'Yes, sometimes — I\'ve noticed delayed crashes after pushing myself' },
+        { value: 2, label: 'Occasionally — mild delayed effects if I significantly overdo it' },
+        { value: 1, label: 'Rarely — I may feel tired the next day but nothing severe' },
+        { value: 0, label: 'Never — I recover predictably without delayed crashes' },
+      ],
+    },
+  ];
+
+  // ================================================================
+  // DATA: TIER DEFINITIONS
+  // ================================================================
+  const TIERS = {
+    1: {
+      label: 'Optimal mitochondrial function',
+      track: 'Optimization & performance track',
+      color: '#009090',
+      muted: '#e6f5f5',
+      badgeText: 'Tier 1 — Optimal',
+      desc: 'Your mitochondria are performing well. You have good energy production, recover efficiently from exertion, and show minimal signs of cellular energy decline. Your program focuses on maintaining and optimizing your mitochondrial health — advanced strategies for peak cellular performance.',
+      cta: 'Begin Module 2: Advanced mitochondrial optimization',
+      ctaBody: 'You\'re already performing well at the cellular level. Your personalized roadmap focuses on optimization strategies: mitochondrial biogenesis protocols, strategic cold exposure, NAD+ support, and sustaining peak cellular energy as you age.',
+    },
+    2: {
+      label: 'Mild mitochondrial stress',
+      track: 'Prevention & support track',
+      color: '#3b82f6',
+      muted: '#eff6ff',
+      badgeText: 'Tier 2 — Functional',
+      desc: 'You show early signs of mitochondrial stress — some energy fluctuations, mild recovery delays, or subtle fatigue patterns. Your program focuses on proactive support: foundational supplements (CoQ10, creatine), sleep optimization, and building mitochondrial resilience before decline accelerates.',
+      cta: 'Begin Module 1: Mitochondrial foundations',
+      ctaBody: 'Your foundation is solid with some opportunities for improvement. Your roadmap begins with mitochondrial support fundamentals — CoQ10 optimization, sleep-based repair protocols, and building your body\'s cellular energy reserves.',
+    },
+    3: {
+      label: 'Moderate mitochondrial decline',
+      track: 'Structured intervention track',
+      color: '#f59e0b',
+      muted: '#fef3c7',
+      badgeText: 'Tier 3 — Declining',
+      desc: 'Your results indicate moderate mitochondrial dysfunction — noticeable energy decline, slower recovery, cognitive fog, or reduced exercise capacity. Your program provides structured guidance on restoring mitochondrial function through targeted supplementation, metabolic strategies, and gradual exercise protocols.',
+      cta: 'Begin Module 1: Restoring cellular energy',
+      ctaBody: 'Your results point to meaningful mitochondrial decline that\'s affecting your daily energy and function. Your roadmap uses a structured approach — starting with foundational repair and progressing to full mitochondrial restoration.',
+    },
+    4: {
+      label: 'Significant mitochondrial dysfunction',
+      track: 'Intensive support track',
+      color: '#f97316',
+      muted: '#ffedd5',
+      badgeText: 'Tier 4 — At Risk',
+      desc: 'Your results indicate significant mitochondrial dysfunction affecting multiple domains — severe fatigue, poor recovery, exercise intolerance, or post-exertional malaise. Your program prioritizes gentle, safe interventions with careful pacing. Medical consultation is strongly recommended.',
+      cta: 'Begin Module 1: Safe energy restoration',
+      ctaBody: 'Your roadmap prioritizes safety and gentle restoration. We strongly recommend reviewing any clinical notes with your healthcare provider before beginning. Your content is pacing-focused and designed to avoid triggering crashes.',
+    },
+    5: {
+      label: 'Severe mitochondrial impairment',
+      track: 'Medical co-management track',
+      color: '#dc2626',
+      muted: '#fee2e2',
+      badgeText: 'Tier 5 — Critical',
+      desc: 'Your results indicate severe mitochondrial impairment that requires medical co-management. Conditions like ME/CFS, post-viral fatigue, or medication-related mitochondrial toxicity may be present. Please share these results with your healthcare provider before beginning any intervention.',
+      cta: 'Download your results to share with your provider',
+      ctaBody: 'Your health and safety come first. We strongly recommend presenting these results to your healthcare team before beginning any supplements or exercise changes. When you have medical clearance, your personalized safe-start roadmap will be ready.',
+    },
+  };
+
+  // Domain labels for the breakdown chart
+  const DOMAIN_LABELS = [
+    'ATP production',
+    'Recovery capacity',
+    'Cognitive energy',
+    'Thermogenesis',
+    'Muscle endurance',
+    'Sleep restoration',
+    'Aerobic capacity',
+    'Post-exertional response',
+  ];
+
+  // ================================================================
+  // STATE
+  // ================================================================
+  let currentQ   = 0;
+  let answers    = {};
+  let userData   = { name: '', age: '' };
+
+  // ================================================================
+  // NAVIGATION
+  // ================================================================
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById('screen-' + id).classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const showProgress = (id === 'question');
+    document.getElementById('header-progress').classList.toggle('visible', showProgress);
+  }
+
+  // ================================================================
+  // INTAKE SUBMIT
+  // ================================================================
+  function submitIntake() {
+    const nameVal = document.getElementById('field-name').value.trim();
+    const ageVal  = document.getElementById('field-age').value;
+    const errEl   = document.getElementById('intake-error');
+
+    if (!nameVal || !ageVal) {
+      errEl.classList.add('visible');
+      return;
+    }
+    errEl.classList.remove('visible');
+
+    userData.name = nameVal;
+    userData.age  = ageVal;
+
+    currentQ = 0;
+    renderQuestion();
+    showScreen('question');
+  }
+
+  // ================================================================
+  // QUESTION RENDER
+  // ================================================================
+  function renderQuestion() {
+    const q    = QUESTIONS[currentQ];
+    const card = document.getElementById('question-card');
+
+    const pct = Math.round(((currentQ) / QUESTIONS.length) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent =
+      'Question ' + (currentQ + 1) + ' of ' + QUESTIONS.length;
+    document.getElementById('progress-pct').textContent = pct + '%';
+
+    let optionsHTML = '';
+
+    if (q.type === 'radio') {
+      q.options.forEach((opt, i) => {
+        const checked = answers[q.id] === opt.value ? 'checked' : '';
+        const riskClass = opt.riskHigh ? 'risk-high' : '';
+        optionsHTML += `
+          <div class="option-item ${riskClass}">
+            <input type="radio" name="q_${q.id}" id="opt_${q.id}_${i}" value="${opt.value}" ${checked}>
+            <label class="option-label" for="opt_${q.id}_${i}">
+              <span class="option-indicator"></span>
+              <span class="option-text">${opt.label}</span>
+            </label>
+          </div>`;
+      });
+    } else {
+      const savedArr = answers[q.id] || [];
+      q.options.forEach((opt, i) => {
+        const checked = savedArr.includes(opt.value) ? 'checked' : '';
+        const noneClass = opt.isNone ? 'option-none option-check' : 'option-check';
+        optionsHTML += `
+          <div class="option-item ${noneClass}">
+            <input type="checkbox" name="q_${q.id}" id="opt_${q.id}_${i}" value="${opt.value}" data-is-none="${!!opt.isNone}" ${checked}>
+            <label class="option-label" for="opt_${q.id}_${i}">
+              <span class="option-indicator"></span>
+              <span class="option-text">${opt.label}</span>
+            </label>
+          </div>`;
+      });
+    }
+
+    const tipHTML = q.tip ? `
+      <div class="q-flag-tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        ${q.tip}
+      </div>` : '';
+
+    const instructHTML = q.instruction
+      ? `<p class="q-instruction">${q.instruction}</p>` : '';
+
+    const backBtn = currentQ > 0
+      ? `<button class="mmm-btn mmm-btn-ghost back-btn" onclick="goBack()">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+           Back
+         </button>`
+      : '';
+
+    const isLast = currentQ === QUESTIONS.length - 1;
+    const nextLabel = isLast ? 'See my results' : 'Continue';
+    const nextIcon  = isLast
+      ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+
+    card.innerHTML = `
+      <div class="q-domain">${q.domain}</div>
+      <div class="q-text">${q.text}</div>
+      ${instructHTML}
+      ${tipHTML}
+      <div class="options-list">${optionsHTML}</div>
+      <div class="q-error" id="q-error">Please make a selection before continuing.</div>
+      <div class="q-nav">
+        ${backBtn}
+        <button class="mmm-btn mmm-btn-primary" onclick="goNext()">
+          ${nextLabel} ${nextIcon}
+        </button>
+      </div>`;
+
+    if (q.type === 'checkbox') {
+      card.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', function () {
+          const isNone = this.dataset.isNone === 'true';
+          const allCbs = card.querySelectorAll('input[type="checkbox"]');
+          if (isNone && this.checked) {
+            allCbs.forEach(c => { if (c !== this) c.checked = false; });
+          } else if (this.checked) {
+            allCbs.forEach(c => { if (c.dataset.isNone === 'true') c.checked = false; });
+          }
+        });
+      });
+    }
+  }
+
+  // ================================================================
+  // NAVIGATION: NEXT / BACK
+  // ================================================================
+  function goNext() {
+    const q     = QUESTIONS[currentQ];
+    const errEl = document.getElementById('q-error');
+
+    if (q.type === 'radio') {
+      const sel = document.querySelector(`input[name="q_${q.id}"]:checked`);
+      if (!sel) { errEl.classList.add('visible'); return; }
+      answers[q.id] = parseInt(sel.value);
+    } else {
+      const checked = [...document.querySelectorAll(`input[name="q_${q.id}"]:checked`)]
+        .map(c => c.value);
+      if (checked.length === 0) { errEl.classList.add('visible'); return; }
+      answers[q.id] = checked;
+    }
+
+    errEl.classList.remove('visible');
+
+    if (currentQ < QUESTIONS.length - 1) {
+      currentQ++;
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      showResults();
+    }
+  }
+
+  function goBack() {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      showScreen('intake');
+    }
+  }
+
+  // ================================================================
+  // SCORING ENGINE
+  // ================================================================
+  function calculateScore() {
+    // Build point maps from question options
+    const q1Options = QUESTIONS[0].options.reduce((m, o) => { m[o.value] = o.points; return m; }, {});
+    const q2Options = QUESTIONS[1].options.reduce((m, o) => { m[o.value] = o.points; return m; }, {});
+    const q10Options = QUESTIONS[9].options.reduce((m, o) => { m[o.value] = o.points; return m; }, {});
+    const q11Options = QUESTIONS[10].options.reduce((m, o) => { m[o.value] = o.points; return m; }, {});
+
+    // Q1 — Medical History
+    const q1Vals = answers['medical-history'] || [];
+    let q1Raw = q1Vals.reduce((sum, v) => sum + (q1Options[v] || 0), 0);
+    let q1Score = Math.min(q1Raw, 4);
+    const q1Flags = q1Vals.filter(v => v !== 'none');
+
+    // Q2 — Medications
+    const q2Vals = answers['medications'] || [];
+    let q2Raw = q2Vals.reduce((sum, v) => sum + (q2Options[v] || 0), 0);
+    let q2Score = Math.min(q2Raw, 4);
+    const q2Flags = q2Vals.filter(v => v !== 'none');
+
+    // Q3-Q9 Core (7 questions, indices 2-8)
+    const coreIds = [
+      'baseline-energy', 'exercise-recovery', 'brain-fog', 'cold-tolerance',
+      'muscle-endurance', 'sleep-restoration', 'exercise-intolerance'
+    ];
+    const coreScores = coreIds.map(id => answers[id] || 0);
+    const coreTotal  = coreScores.reduce((a, b) => a + b, 0);
+
+    // Q10 — Oxidative Stress
+    const q10Vals = answers['oxidative-stress'] || [];
+    let q10Raw = q10Vals.reduce((sum, v) => sum + (q10Options[v] || 0), 0);
+    let q10Score = Math.min(q10Raw, 4);
+
+    // Q11 — Protective Factors (negative points)
+    const q11Vals = answers['mito-support'] || [];
+    let q11Raw = q11Vals.reduce((sum, v) => sum + (q11Options[v] || 0), 0);
+    let q11Score = Math.max(q11Raw, -4); // Cap at -4 reduction
+
+    // Q12 — Post-Exertional Malaise
+    const pemScore = answers['post-exertional-malaise'] || 0;
+    coreScores.push(pemScore); // Add to core for domain display
+
+    const totalRaw  = Math.max(0, q1Score + q2Score + coreTotal + pemScore + q10Score + q11Score);
+    const maxRaw    = 4 + 4 + (8 * 4) + 4; // 44 max (without protective reduction)
+    const riskPct   = Math.round((totalRaw / maxRaw) * 100);
+
+    // Base tier
+    let baseTier;
+    if (riskPct >= 81) baseTier = 5;
+    else if (riskPct >= 61) baseTier = 4;
+    else if (riskPct >= 41) baseTier = 3;
+    else if (riskPct >= 21) baseTier = 2;
+    else baseTier = 1;
+
+    // Age modifier
+    const AGE_MODIFIERS = {
+      'under50': -1, '50-59': 0, '60-69': 1, '70-79': 2, '80plus': 2
+    };
+    const ageMod = AGE_MODIFIERS[userData.age] || 0;
+    let adjustedTier = Math.max(1, Math.min(5, baseTier + ageMod));
+    const ageAdjusted = adjustedTier !== baseTier;
+
+    // Clinical overrides
+    if (q1Flags.includes('chronic-fatigue') || q1Flags.includes('long-covid'))
+      adjustedTier = Math.max(adjustedTier, 4);
+    if (q1Flags.includes('parkinsons') || q1Flags.includes('heart-failure'))
+      adjustedTier = Math.max(adjustedTier, 4);
+    if (q2Flags.includes('chemotherapy'))
+      adjustedTier = Math.max(adjustedTier, 4);
+    if (pemScore === 4)
+      adjustedTier = Math.max(adjustedTier, 4);
+    if ((answers['baseline-energy'] || 0) === 4 && (answers['exercise-recovery'] || 0) >= 3)
+      adjustedTier = Math.max(adjustedTier, 4);
+    if ((answers['exercise-intolerance'] || 0) === 4)
+      adjustedTier = Math.max(adjustedTier, 4);
+
+    // Build clinical flags
+    const clinicalFlags = [];
+    if (q1Flags.includes('chronic-fatigue') || q1Flags.includes('long-covid')) {
+      clinicalFlags.push({ type: 'urgent', text: 'ME/CFS or Long COVID detected. These conditions involve significant mitochondrial dysfunction. Exercise protocols must follow strict pacing guidelines to avoid post-exertional malaise. Consult with a provider experienced in these conditions before beginning any new interventions.' });
+    }
+    if (pemScore >= 3) {
+      clinicalFlags.push({ type: 'urgent', text: 'Post-exertional malaise (PEM) pattern detected. This is a hallmark of mitochondrial dysfunction. You must avoid "pushing through" fatigue — this can cause lasting setbacks. All exercise and activity recommendations will be pacing-focused.' });
+    }
+    if (q2Flags.includes('statins')) {
+      clinicalFlags.push({ type: 'warning', text: 'Statin medications deplete CoQ10 — a critical mitochondrial cofactor. Discuss CoQ10/Ubiquinol supplementation (100–200 mg/day) with your physician. This is one of the most important interventions for statin users concerned about energy and muscle function.' });
+    }
+    if (q2Flags.includes('metformin')) {
+      clinicalFlags.push({ type: 'info', text: 'Metformin can deplete B12 and affect mitochondrial complex I. Consider B12 monitoring and discuss mitochondrial support strategies with your provider. Metformin\'s benefits often outweigh these effects, but awareness helps optimization.' });
+    }
+    if (q2Flags.includes('fluoroquinolones')) {
+      clinicalFlags.push({ type: 'warning', text: 'Fluoroquinolone antibiotics (Cipro, Levaquin) are known to cause mitochondrial toxicity that can persist long after the medication is stopped. Mitochondrial support supplementation may be particularly valuable for you.' });
+    }
+    if (q1Flags.includes('fibromyalgia')) {
+      clinicalFlags.push({ type: 'info', text: 'Fibromyalgia is associated with mitochondrial dysfunction in muscle tissue. Gentle, progressive exercise combined with CoQ10 and D-ribose supplementation may be helpful. Avoid high-intensity protocols that could trigger flares.' });
+    }
+    if (userData.age === '80plus') {
+      clinicalFlags.push({ type: 'info', text: 'At 80 and older, mitochondrial interventions should be gentle and medically supervised. We recommend sharing your results with your healthcare team before beginning new supplements or exercise protocols.' });
+    }
+
+    // Cross-referral flags
+    const showMetFlexCrossref = (
+      adjustedTier >= 3 ||
+      (answers['baseline-energy'] || 0) >= 3 ||
+      coreScores.filter(s => s >= 3).length >= 2
+    );
+
+    return {
+      totalRaw, riskPct, baseTier, adjustedTier, ageAdjusted, ageMod,
+      q1Flags, q2Flags, coreScores, clinicalFlags,
+      showMetFlexCrossref,
+      hasProtectiveFactors: q11Vals.filter(v => v !== 'none').length > 0,
+    };
+  }
+
+  // ================================================================
+  // RESULTS RENDER
+  // ================================================================
+  function showResults() {
+    const result = calculateScore();
+    const tier   = TIERS[result.adjustedTier];
+
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('progress-text').textContent = 'Assessment complete';
+    document.getElementById('progress-pct').textContent = '100%';
+
+    showScreen('results');
+
+    const firstName = userData.name.split(' ')[0];
+    document.getElementById('results-greeting').textContent =
+      firstName ? `${firstName}, here are your results` : 'Your results are ready';
+
+    const hero = document.getElementById('score-hero');
+    hero.style.setProperty('--tier-color', tier.color);
+
+    const ringFill = document.getElementById('ring-fill');
+    ringFill.style.stroke = tier.color;
+    setTimeout(() => {
+      const offset = 314 - (314 * result.riskPct / 100);
+      ringFill.style.strokeDashoffset = offset;
+    }, 200);
+
+    animateNumber('score-pct', 0, result.riskPct, 1200, v => v + '%');
+
+    const badge = document.getElementById('tier-badge');
+    badge.style.background = tier.muted;
+    badge.style.color       = tier.color;
+    document.getElementById('tier-badge-text').textContent = tier.badgeText;
+
+    document.getElementById('tier-name').textContent  = tier.label;
+    document.getElementById('tier-track').textContent = tier.track;
+    document.getElementById('tier-desc').textContent  = tier.desc;
+
+    if (result.ageAdjusted) {
+      const note = document.getElementById('age-adjust-note');
+      note.style.display = 'flex';
+      const direction = result.ageMod > 0 ? 'adjusted upward' : 'adjusted downward';
+      document.getElementById('age-adjust-text').textContent =
+        `Risk tier ${direction} from Tier ${result.baseTier} to Tier ${result.adjustedTier} based on your age (${userData.age.replace('plus','+')} years). Mitochondrial function naturally declines with age.`;
+    }
+
+    if (result.clinicalFlags.length > 0) {
+      document.getElementById('flags-section').style.display = 'block';
+      const stack = document.getElementById('flags-stack');
+      stack.innerHTML = result.clinicalFlags.map(f => {
+        const icons = {
+          urgent:  `<svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+          warning: `<svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+          info:    `<svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+        };
+        return `<div class="flag-card flag-${f.type}">${icons[f.type]}<div class="flag-text">${f.text}</div></div>`;
+      }).join('');
+    }
+
+    if (result.showMetFlexCrossref) {
+      document.getElementById('crossref-metflex').style.display = 'flex';
+    }
+
+    const domainColors = ['#009090','#3b82f6','#f59e0b','#f97316','#dc2626'];
+    const domainsCard = document.getElementById('domains-card');
+    domainsCard.innerHTML = result.coreScores.map((score, i) => {
+      const pct   = (score / 4) * 100;
+      const color = score <= 1 ? domainColors[0] : score === 2 ? domainColors[2] : score === 3 ? domainColors[3] : domainColors[4];
+      const label = score === 0 ? 'Optimal' : score === 1 ? 'Good' : score === 2 ? 'Fair' : score === 3 ? 'Poor' : 'Critical';
+      return `
+        <div class="domain-row">
+          <div class="domain-label">${DOMAIN_LABELS[i]}</div>
+          <div class="domain-bar-track">
+            <div class="domain-bar-fill" style="width:0%; background:${color};" data-target="${pct}"></div>
+          </div>
+          <div class="domain-score-label score-tag-${score}">${label}</div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('track-title').textContent = tier.track;
+    document.getElementById('track-body').textContent  = tier.ctaBody;
+
+    setTimeout(() => {
+      domainsCard.querySelectorAll('.domain-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.target + '%';
+      });
+    }, 400);
+
+    setTimeout(() => {
+      document.querySelectorAll('.fade-in').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 100);
+      });
+    }, 100);
+  }
+
+  // ================================================================
+  // UTILITY: Animate number
+  // ================================================================
+  function animateNumber(elId, from, to, duration, format) {
+    const el    = document.getElementById(elId);
+    const start = performance.now();
+    function step(now) {
+      const t   = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      el.textContent = format(Math.round(from + (to - from) * ease));
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ================================================================
+  // RESTART
+  // ================================================================
+  function restartAssessment() {
+    answers  = {};
+    userData = { name: '', age: '' };
+    currentQ = 0;
+    document.getElementById('field-name').value = '';
+    document.getElementById('field-age').value  = '';
+    document.getElementById('flags-section').style.display = 'none';
+    document.getElementById('crossref-metflex').style.display = 'none';
+    document.getElementById('age-adjust-note').style.display = 'none';
+    document.getElementById('header-progress').classList.remove('visible');
+    document.querySelectorAll('.fade-in').forEach(el => el.classList.remove('visible'));
+    showScreen('welcome');
+  }
+
+  // ================================================================
+  // SCROLL HEADER BORDER
+  // ================================================================
+  window.addEventListener('scroll', () => {
+    document.getElementById('app-header').classList.toggle('scrolled', window.scrollY > 10);
+  });
+  </script>
+</body>
+</html>
