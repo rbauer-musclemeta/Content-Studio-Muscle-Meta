@@ -14,6 +14,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import CourseEditor from "./components/CourseEditor";
 import AdminTest from "./components/AdminTest";
 import { Toaster } from "./components/ui/toaster";
+import { CatabolicRiskAssessment } from "./components/assessment";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -44,6 +45,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/muscle-metabolic-health" element={<Newsletter />} />
           <Route path="/hiit-longevity" element={<HIITNewsletter />} />
+
+          {/* Assessment Routes */}
+          <Route path="/assessment/catabolic-risk" element={<CatabolicRiskAssessment />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/sleep-optimization" element={<SleepCourse />} />
           <Route path="/courses/pickleball-3p-system" element={<PickleballCourse />} />
