@@ -83,6 +83,103 @@ Certain conditions force minimum tier regardless of score:
 
 ---
 
+## Frontend ↔ API Score Reconciliation
+
+The CRF backend and the `muscle-meta-design` skill use **opposite scoring directions**.
+This section defines the authoritative mapping so both stay aligned.
+
+### Scoring Direction
+
+| System | Convention | Example |
+|--------|------------|---------|
+| **CRF API** (`/api/crf/*`) | **Risk %** — higher = worse | `67%` = high risk |
+| **Design Skill** (frontend) | **Wellness Score** — higher = better | `33` = struggling |
+
+**Conversion formula:**
+```javascript
+// API → Frontend
+const wellnessScore = 100 - riskPercentage;
+
+// Frontend → API (if needed)
+const riskPercentage = 100 - wellnessScore;
+```
+
+### Tier Mapping (Inverted but Equivalent)
+
+| CRF API (risk %) | Design Skill (wellness) | Label | Color |
+|------------------|-------------------------|-------|-------|
+| 0–20% risk | 80–100 wellness | Tier 1: Optimized | `#009090` teal |
+| 21–40% risk | 60–79 wellness | Tier 2: Functional | `#3b82f6` blue |
+| 41–60% risk | 40–59 wellness | Tier 3: Declining | `#f59e0b` amber |
+| 61–80% risk | 20–39 wellness | Tier 4: At Risk | `#f97316` orange |
+| 81–100% risk | 0–19 wellness | Tier 5: Critical | `#dc2626` red |
+
+**Frontend tier function** (use design skill's high-good convention):
+```javascript
+function tierForWellness(wellnessScore) {
+  if (wellnessScore >= 80) return { tier: 1, label: 'Optimized', color: '#009090' };
+  if (wellnessScore >= 60) return { tier: 2, label: 'Functional', color: '#3b82f6' };
+  if (wellnessScore >= 40) return { tier: 3, label: 'Declining', color: '#f59e0b' };
+  if (wellnessScore >= 20) return { tier: 4, label: 'At Risk', color: '#f97316' };
+  return { tier: 5, label: 'Critical', color: '#dc2626' };
+}
+
+// Usage with CRF API response:
+const wellnessScore = 100 - apiResponse.risk_score.percentage;
+const tier = tierForWellness(wellnessScore);
+```
+
+### Pillar Name Mapping
+
+The design skill uses consumer-friendly names; CLAUDE.md uses clinical names.
+Both refer to the same 4 pillars.
+
+| Design Skill | CLAUDE.md / CRF | Color |
+|--------------|-----------------|-------|
+| Exercise & Mobility | Exercise & Mobility | `#009090` teal |
+| Nutrition & Metabolism | Nutrition & Metabolism | `#D4AF37` gold |
+| Recovery & Stress | Recovery & Resilience | `#7c3aed` purple |
+| Balance & Brain Health | Medical & Clinical | `#16a34a` green |
+
+**Note:** Pillar 4 has the largest naming divergence. The design skill frames it as
+"Balance & Brain Health" (consumer-facing wellness), while CLAUDE.md frames it as
+"Medical & Clinical" (provider-facing risk). The underlying categories overlap
+(Bone Health, Fall Risk, Comorbidity). Use the design skill name in UI, CLAUDE.md
+name in clinical documentation.
+
+### Category Mapping (12 categories)
+
+| Pillar | Design Skill Category | CLAUDE.md Category |
+|--------|----------------------|-------------------|
+| 1 | Joint Health | Strength & Sarcopenia |
+| 1 | Functional Independence | Functional Capacity |
+| 1 | Strength & Endurance | Balance & Fall Risk |
+| 2 | Metabolic Flexibility | Metabolic Flexibility |
+| 2 | Gut Microbiome | Gut Health |
+| 2 | Nutrient Density | Protein & Anabolic Signaling |
+| 3 | Sleep Quality | Sleep & Circadian |
+| 3 | HRV Baseline | Stress & HPA Axis |
+| 3 | Cortisol Regulation | Mitochondrial Health |
+| 4 | Dual-Task Processing | Bone Health |
+| 4 | Bone Density | Catabolic Risk |
+| 4 | Cognitive Reserve | Comorbidity Management |
+
+### GMMBB Axis (5-axis pentagon)
+
+Both systems agree on the 5 axes. The design skill provides pentagon geometry:
+
+```javascript
+const GMMBB_AXES = [
+  { letter: 'G', name: 'Gut',       angle: -90 },  // top
+  { letter: 'M', name: 'Muscle',    angle: -18 },  // clockwise
+  { letter: 'M', name: 'Metabolic', angle:  54 },
+  { letter: 'B', name: 'Brain',     angle: 126 },
+  { letter: 'B', name: 'Bone',      angle: 198 },
+];
+```
+
+---
+
 ## Assessment Inventory
 
 ### Tier 1: Consumer Self-Assessments
