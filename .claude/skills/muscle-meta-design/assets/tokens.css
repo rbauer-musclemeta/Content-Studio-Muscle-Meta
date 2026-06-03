@@ -1,0 +1,338 @@
+/* =============================================================================
+   MUSCLE-META MATRIX™  •  BRAND TOKENS
+   Clinical Intelligence for Active Aging
+   ========================================================================== */
+
+:root {
+  /* ---------- CORE PALETTE --------------------------------------------------- */
+  --teal:          #009090;
+  --teal-dark:     #006b6b;
+  --teal-light:    #00b3b3;
+  --teal-muted:    #e6f5f5;
+  --teal-tint:     #f0f9f9;
+
+  --gold:          #D4AF37;
+  --gold-dark:     #B5952F;
+  --gold-light:    #e3c56a;
+  --gold-muted:    #faf6e8;
+
+  --purple:        #7c3aed;
+  --purple-dark:   #6d28d9;
+  --purple-muted:  #f3f0fd;
+
+  --green:         #16a34a;
+  --green-dark:    #15803d;
+  --green-muted:   #f0fdf4;
+
+  /* ---------- NEUTRALS ------------------------------------------------------- */
+  --ink:           #1a2332;   /* headlines */
+  --ink-soft:      #344256;   /* body */
+  --ink-muted:     #6b7b8f;   /* captions, eyebrows */
+  --ink-faint:     #a8b3c2;   /* disabled, subtle */
+
+  --surface:       #f7f6f3;   /* warm off-white page bg */
+  --surface-tint:  #fdfcfa;
+  --border:        #e8e6e1;
+  --border-soft:   #f0eeea;
+  --white:         #ffffff;
+
+  /* ---------- SEMANTIC (Risk Tier) ------------------------------------------- */
+  --tier-1: #009090;          /* Optimized (teal) */
+  --tier-2: #3b82f6;          /* Functional (blue) */
+  --tier-3: #f59e0b;          /* Declining (amber) */
+  --tier-4: #f97316;          /* At Risk (orange) */
+  --tier-5: #dc2626;          /* Critical (red) */
+
+  --tier-1-muted: #e6f5f5;
+  --tier-2-muted: #eff6ff;
+  --tier-3-muted: #fef3c7;
+  --tier-4-muted: #ffedd5;
+  --tier-5-muted: #fee2e2;
+
+  /* ---------- TYPOGRAPHY ----------------------------------------------------- */
+  --font-display:  'Cormorant Garamond', 'Cormorant', Georgia, serif;
+  --font-body:     'Outfit', 'Helvetica Neue', Arial, sans-serif;
+
+  --fs-eyebrow: 11px;        --lh-eyebrow: 1.4;     --tr-eyebrow: 0.18em;
+  --fs-caption: 12px;        --lh-caption: 1.5;
+  --fs-micro:   13px;        --lh-micro:   1.55;
+  --fs-body:    16px;        --lh-body:    1.65;
+  --fs-lede:    19px;        --lh-lede:    1.6;
+  --fs-h4:      22px;        --lh-h4:      1.25;
+  --fs-h3:      28px;        --lh-h3:      1.2;
+  --fs-h2:      40px;        --lh-h2:      1.12;
+  --fs-h1:      64px;        --lh-h1:      1.05;
+  --fs-display: 88px;        --lh-display: 1.02;
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semi:    600;
+  --fw-bold:    700;
+
+  /* ---------- SPACING (8pt grid) --------------------------------------------- */
+  --s-1:   4px;
+  --s-2:   8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 128px;
+
+  --content-max: 1200px;
+  --content-narrow: 880px;
+  --gutter: 32px;
+  --gutter-mobile: 20px;
+
+  /* ---------- RADII ---------------------------------------------------------- */
+  --r-1:  6px;
+  --r-2:  10px;
+  --r-3:  14px;
+  --r-4:  20px;
+  --r-5:  28px;
+  --r-pill: 999px;
+
+  /* ---------- SHADOWS (clinical luxury — low and soft) ---------------------- */
+  --shadow-xs:  0 1px 2px rgba(26, 35, 50, 0.04);
+  --shadow-sm:  0 2px 8px rgba(26, 35, 50, 0.05);
+  --shadow-md:  0 6px 20px rgba(26, 35, 50, 0.07);
+  --shadow-lg:  0 12px 40px rgba(26, 35, 50, 0.08);
+  --shadow-teal: 0 8px 30px rgba(0, 144, 144, 0.15);
+  --shadow-gold: 0 4px 16px rgba(212, 175, 55, 0.25);
+
+  /* ---------- MOTION --------------------------------------------------------- */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:    150ms;
+  --dur-base:    240ms;
+  --dur-slow:    420ms;
+  --dur-reveal:  900ms;
+
+  /* ---------- Z ------------------------------------------------------------- */
+  --z-grain: 1;
+  --z-nav:   50;
+  --z-sticky: 60;
+  --z-modal: 100;
+}
+
+/* =============================================================================
+   BASE ELEMENTS
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: var(--fw-regular);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+h1 { font-size: var(--fs-h1); line-height: var(--lh-h1); letter-spacing: -0.02em; }
+h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); letter-spacing: -0.015em; }
+h3 { font-size: var(--fs-h3); line-height: var(--lh-h3); }
+h4 { font-size: var(--fs-h4); line-height: var(--lh-h4); }
+
+p  { margin: 0; color: var(--ink-soft); }
+
+em { font-style: italic; }
+
+a { color: var(--teal); text-decoration: none; transition: color var(--dur-fast) var(--ease-out); }
+a:hover { color: var(--gold-dark); }
+
+button { font-family: var(--font-body); }
+
+::selection { background: var(--teal-muted); color: var(--ink); }
+
+/* =============================================================================
+   TYPE UTILITIES
+   ========================================================================== */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-semi);
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--teal);
+}
+.eyebrow-ink    { color: var(--ink); }
+.eyebrow-gold   { color: var(--gold-dark); }
+.eyebrow-muted  { color: var(--ink-muted); }
+
+.lede {
+  font-family: var(--font-body);
+  font-size: var(--fs-lede);
+  line-height: var(--lh-lede);
+  color: var(--ink-soft);
+  font-weight: var(--fw-regular);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  font-weight: var(--fw-bold);
+}
+
+.serif-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--fw-medium);
+  color: var(--teal);
+}
+
+/* =============================================================================
+   BUTTONS
+   ========================================================================== */
+.mmm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: var(--fw-semi);
+  letter-spacing: 0.01em;
+  border-radius: var(--r-pill);
+  padding: 14px 28px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all var(--dur-base) var(--ease-out);
+  text-decoration: none;
+  line-height: 1;
+}
+.mmm-btn-primary {
+  background: var(--teal);
+  color: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+.mmm-btn-primary:hover {
+  background: var(--ink);
+  border-color: var(--gold);
+  box-shadow: var(--shadow-gold);
+  transform: translateY(-1px);
+}
+.mmm-btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--border);
+}
+.mmm-btn-ghost:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+  background: var(--teal-tint);
+}
+.mmm-btn-gold {
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: var(--shadow-gold);
+}
+.mmm-btn-gold:hover {
+  background: var(--gold-dark);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+.mmm-btn-dark {
+  background: var(--ink);
+  color: var(--white);
+}
+.mmm-btn-dark:hover {
+  background: var(--teal);
+  border-color: var(--gold);
+}
+.mmm-btn-lg { padding: 18px 36px; font-size: 16px; }
+.mmm-btn-sm { padding: 10px 20px; font-size: 13px; }
+
+/* =============================================================================
+   CARDS
+   ========================================================================== */
+.mmm-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3);
+  padding: var(--s-6);
+  transition: all var(--dur-base) var(--ease-out);
+}
+.mmm-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+
+/* =============================================================================
+   GRAIN TEXTURE OVERLAY
+   ========================================================================== */
+.mmm-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-grain);
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode: multiply;
+}
+
+/* =============================================================================
+   SCROLL REVEAL
+   ========================================================================== */
+.mmm-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--dur-reveal) var(--ease-out),
+              transform var(--dur-reveal) var(--ease-out);
+}
+.mmm-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.mmm-reveal-delay-1 { transition-delay: 80ms; }
+.mmm-reveal-delay-2 { transition-delay: 160ms; }
+.mmm-reveal-delay-3 { transition-delay: 240ms; }
+.mmm-reveal-delay-4 { transition-delay: 320ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mmm-reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* =============================================================================
+   LAYOUT HELPERS
+   ========================================================================== */
+.mmm-container {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.mmm-section { padding: var(--s-9) 0; }
+.mmm-section-sm { padding: var(--s-7) 0; }
+
+@media (max-width: 768px) {
+  :root {
+    --fs-h1: 40px;
+    --fs-h2: 30px;
+    --fs-h3: 24px;
+    --fs-display: 56px;
+    --gutter: var(--gutter-mobile);
+    --s-9: 64px;
+  }
+  .mmm-btn { padding: 13px 22px; font-size: 14px; }
+}
