@@ -13,6 +13,7 @@ from datetime import datetime
 # Import routers
 from payments import payments
 from admin import admin
+from crf_integration import crf_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -25,7 +26,20 @@ db = client[os.environ['DB_NAME']]
 # Create the main app without a prefix
 app = FastAPI(
     title="Muscle-Meta Matrix API",
-    description="Backend API for courses, newsletters, and payment processing",
+    description="""
+Backend API for the Muscle-Meta Matrix platform.
+
+## Product Services (MongoDB)
+- Courses, newsletters, Stripe payments
+- User accounts, subscriptions, admin
+
+## Clinical Engine (PostgreSQL)
+- Catabolic Risk Framework (CRF) assessments
+- Validated instruments: SARC-F, MUST, EWGSOP2
+- Risk scoring and intervention recommendations
+
+See /api/crf/ for clinical assessment endpoints.
+""",
     version="1.0.0"
 )
 
@@ -65,9 +79,14 @@ async def health_check():
         "status": "healthy",
         "timestamp": datetime.utcnow().isoformat(),
         "services": {
-            "database": "connected",
+            "mongodb": "connected",
             "payments": "active",
-            "admin": "active"
+            "admin": "active",
+            "crf": "active",
+        },
+        "databases": {
+            "mongodb": "product data (courses, users, payments)",
+            "postgresql": "clinical data (assessments, biomarkers)",
         }
     }
 
@@ -75,6 +94,7 @@ async def health_check():
 app.include_router(api_router)
 app.include_router(payments)
 app.include_router(admin)
+app.include_router(crf_router, prefix="/api")  # CRF at /api/crf/*
 
 app.add_middleware(
     CORSMiddleware,
@@ -94,7 +114,8 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 async def startup_event():
     logger.info("Muscle-Meta Matrix API starting up...")
-    logger.info("Services initialized: API, Payments, Admin")
+    logger.info("Services initialized: API, Payments, Admin, CRF Clinical Engine")
+    logger.info("Databases: MongoDB (product), PostgreSQL (clinical)")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
