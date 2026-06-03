@@ -443,16 +443,13 @@ Frontend routes today: `/` (NewsletterHub), `/muscle-metabolic-health`,
 | Parsers | PDF lab / DEXA biomarker extraction | `crf-framework/src/crf/parsers/` |
 | Standalone assessments | Self-contained HTML/JS | `assessments/*/` |
 
-### ⚠️ Known Architectural Forks (decide before deploy)
-1. **Two databases**: product app = MongoDB; CRF integration = PostgreSQL.
-   Pick one of: (a) keep CRF as a separate Postgres service, (b) port the CRF
-   repos to MongoDB to match the product app, or (c) run both (Mongo for
-   content/commerce, Postgres for clinical data).
-2. **Two FastAPI apps**: `backend/server.py` and `crf-framework/api/main.py`.
-   Either mount CRF as a sub-app/router under the product backend's `/api`, or
-   deploy it as an independent microservice the frontend calls directly.
-3. **Assessments are standalone HTML**, not yet React components consuming the
-   CRF API. The component library (`frontend/src/components/`) is the target home.
+### ✅ Architecture Decisions (Phase A complete)
+1. **Dual databases** (decided): MongoDB for product (courses, users, payments),
+   PostgreSQL for clinical (assessments, biomarkers). Cleaner separation of concerns.
+2. **Unified API** (decided): CRF mounted under product backend at `/api/crf/*`
+   via `backend/crf_integration.py`. Frontend uses single `REACT_APP_BACKEND_URL`.
+3. **Assessments are standalone HTML** — Phase B will port to React components
+   consuming the CRF API. The component library (`frontend/src/components/`) is the target.
 
 ## Development Workflow
 
@@ -504,13 +501,16 @@ Development happens on: `claude/crf-muscle-meta-setup-Us7jA`
 - [x] Fall Risk Assessment (Balance & Fall Risk category, standalone HTML)
 - [x] Mitochondrial Health Assessment (standalone HTML)
 
-### In Progress / Decisions Needed
-- [ ] Resolve DB fork (MongoDB vs PostgreSQL) — see "Known Architectural Forks"
-- [ ] Unify the two FastAPI apps (mount CRF under `/api` or deploy as microservice)
+- [x] **Phase A complete**: Dual-DB architecture (MongoDB + PostgreSQL)
+- [x] **Phase A complete**: CRF mounted under product backend at `/api/crf/*`
+- [x] `.env.example` files for backend and frontend
+
+### In Progress (Phase B: Frontend)
 - [ ] Assessment React component library (port standalone HTML → React + CRF API)
 - [ ] Wire assessment routes into `frontend/src/App.js`
+- [ ] Results visualization (tier card, domain breakdown chart)
 
-### Planned
+### Planned (Phase C: Content Loop)
 - [ ] Sleep Quality Assessment (Sleep & Circadian category)
 - [ ] Content recommendation engine (map risk tier → courses/newsletters)
 - [ ] Reassessment tracking and progress visualization
