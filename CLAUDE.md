@@ -416,12 +416,62 @@ See `crf-framework/integration/database-schema.sql` for full PostgreSQL schema i
 
 ---
 
+## Application Architecture (Full-Stack)
+
+This repo is a full-stack application originally scaffolded via **Emergent.sh**
+(`.emergent/emergent.yml`, base image `fastapi_react_mongo_shadcn`). There are
+**two distinct backends** that are not yet unified — this is the most important
+thing to understand before doing integration work.
+
+### A. Product App (live: courses, newsletters, payments)
+| Layer | Stack | Location |
+|-------|-------|----------|
+| Frontend | React 19, CRACO, Tailwind, shadcn/ui, react-router 7 | `frontend/` |
+| Backend | FastAPI + **MongoDB** (motor), Stripe, Gemini/OpenAI (litellm) | `backend/` |
+| Routing | All API under `/api` prefix; frontend reads `REACT_APP_BACKEND_URL` | `backend/server.py`, `frontend/src/App.js` |
+
+Frontend routes today: `/` (NewsletterHub), `/muscle-metabolic-health`,
+`/hiit-longevity`, `/courses`, course detail/success pages, and `/admin*`.
+**No assessment routes are wired into the live app yet.**
+
+### B. CRF Clinical Engine (assessment + risk)
+| Layer | Stack | Location |
+|-------|-------|----------|
+| Library | Pure-Python clinical engine (validated instruments + composite) | `crf-framework/src/crf/` |
+| API | Separate FastAPI app | `crf-framework/api/` |
+| Persistence | **PostgreSQL** (asyncpg) — schema + repos | `crf-framework/integration/` |
+| Parsers | PDF lab / DEXA biomarker extraction | `crf-framework/src/crf/parsers/` |
+| Standalone assessments | Self-contained HTML/JS | `assessments/*/` |
+
+### ⚠️ Known Architectural Forks (decide before deploy)
+1. **Two databases**: product app = MongoDB; CRF integration = PostgreSQL.
+   Pick one of: (a) keep CRF as a separate Postgres service, (b) port the CRF
+   repos to MongoDB to match the product app, or (c) run both (Mongo for
+   content/commerce, Postgres for clinical data).
+2. **Two FastAPI apps**: `backend/server.py` and `crf-framework/api/main.py`.
+   Either mount CRF as a sub-app/router under the product backend's `/api`, or
+   deploy it as an independent microservice the frontend calls directly.
+3. **Assessments are standalone HTML**, not yet React components consuming the
+   CRF API. The component library (`frontend/src/components/`) is the target home.
+
 ## Development Workflow
 
 ### Running Tests
 ```bash
 cd crf-framework
-python -m pytest tests/ -v
+python -m pytest tests/ -v          # 92 tests (engine, instruments, parsers)
+```
+
+### Running the App
+```bash
+# Backend (product app) — needs MONGO_URL, DB_NAME, Stripe keys in backend/.env
+cd backend && uvicorn server:app --reload
+
+# CRF API (clinical engine) — needs DATABASE_URL in env for persistence
+cd crf-framework && uvicorn api.main:app --reload --port 8001
+
+# Frontend — needs REACT_APP_BACKEND_URL in frontend/.env
+cd frontend && yarn install && yarn start
 ```
 
 ### Current Branch
@@ -429,9 +479,12 @@ Development happens on: `claude/crf-muscle-meta-setup-Us7jA`
 
 ### Key Files
 - `/CLAUDE.md` — This file (ecosystem documentation)
-- `/crf-framework/` — Python backend
-- `/assessments/` — Assessment JSON definitions (to be created)
-- `/components/` — React assessment components (to be created)
+- `/backend/` — Product FastAPI + MongoDB (courses, newsletters, Stripe)
+- `/frontend/` — React 19 + Tailwind + shadcn/ui
+- `/contracts.md` — Product API contracts and data models
+- `/crf-framework/` — Clinical risk engine, CRF API, Postgres integration, parsers
+- `/assessments/` — Standalone HTML assessments (GMMBB, Metabolic Flexibility,
+  Mitochondrial Health, Fall Risk)
 
 ---
 
@@ -445,18 +498,23 @@ Development happens on: `claude/crf-muscle-meta-setup-Us7jA`
 - [x] GMMBB Axis Assessment (JSX)
 - [x] Metabolic Flexibility Assessment (HTML)
 
-### In Progress
-- [ ] FastAPI wrapper for CRF backend
-- [ ] Database schema deployment
-- [ ] Assessment component library
+- [x] FastAPI wrapper for CRF backend (`crf-framework/api/`)
+- [x] Database schema + repositories (PostgreSQL, `crf-framework/integration/`)
+- [x] Lab upload parser — PDF blood labs + DEXA (`crf-framework/src/crf/parsers/`)
+- [x] Fall Risk Assessment (Balance & Fall Risk category, standalone HTML)
+- [x] Mitochondrial Health Assessment (standalone HTML)
+
+### In Progress / Decisions Needed
+- [ ] Resolve DB fork (MongoDB vs PostgreSQL) — see "Known Architectural Forks"
+- [ ] Unify the two FastAPI apps (mount CRF under `/api` or deploy as microservice)
+- [ ] Assessment React component library (port standalone HTML → React + CRF API)
+- [ ] Wire assessment routes into `frontend/src/App.js`
 
 ### Planned
-- [ ] Fall Risk Assessment (Balance & Fall Risk category)
-- [ ] Mitochondrial Health Assessment (Mitochondrial Health category)
 - [ ] Sleep Quality Assessment (Sleep & Circadian category)
-- [ ] Lab upload parser (biomarker extraction from PDFs)
-- [ ] Content recommendation engine
+- [ ] Content recommendation engine (map risk tier → courses/newsletters)
 - [ ] Reassessment tracking and progress visualization
+- [ ] Auth for clinical data (currently only product-side users exist)
 
 ---
 
