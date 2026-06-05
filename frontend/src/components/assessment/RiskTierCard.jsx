@@ -81,6 +81,7 @@ export function RiskTierCard({
   validatedSummary = {},
   exploratoryComposite = {},
   recommendation,
+  recommendations = null,
   disclaimer,
   className,
 }) {
@@ -229,6 +230,81 @@ export function RiskTierCard({
               Recommended next step
             </h4>
             <p style={{ color: BRAND.inkSoft }}>{recommendation}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Recommended courses */}
+      {recommendations?.courses?.length > 0 && (
+        <Card className="border shadow-sm" style={{ borderColor: BRAND.border }}>
+          <CardHeader className="pb-2">
+            <p
+              className="text-xs font-semibold uppercase tracking-wider"
+              style={{ color: BRAND.teal }}
+            >
+              {recommendations.headline || 'Recommended for you'}
+            </p>
+            <CardTitle
+              className="text-lg"
+              style={{
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                color: BRAND.ink,
+              }}
+            >
+              Your personalized path
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {recommendations.courses.map((course, i) => (
+                <a
+                  key={course.id || i}
+                  href={`/courses/${course.id}`}
+                  className="block p-4 rounded-lg border transition-all hover:shadow-md"
+                  style={{
+                    borderColor: BRAND.border,
+                    backgroundColor: BRAND.white,
+                  }}
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4
+                        className="font-semibold mb-1"
+                        style={{ color: BRAND.ink }}
+                      >
+                        {course.title}
+                      </h4>
+                      {course.subtitle && (
+                        <p className="text-sm" style={{ color: BRAND.inkMuted }}>
+                          {course.subtitle}
+                        </p>
+                      )}
+                    </div>
+                    {course.price && (
+                      <span
+                        className="text-sm font-semibold"
+                        style={{ color: BRAND.teal }}
+                      >
+                        ${course.price}
+                      </span>
+                    )}
+                  </div>
+                </a>
+              ))}
+            </div>
+            {recommendations.primaryCta && (
+              <button
+                className="w-full mt-4 py-3 font-medium transition-all"
+                style={{
+                  backgroundColor: BRAND.teal,
+                  color: BRAND.white,
+                  borderRadius: '999px',
+                }}
+                onClick={() => window.location.href = '/courses'}
+              >
+                {recommendations.primaryCta}
+              </button>
+            )}
           </CardContent>
         </Card>
       )}
