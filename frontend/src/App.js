@@ -14,6 +14,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import CourseEditor from "./components/CourseEditor";
 import AdminTest from "./components/AdminTest";
 import ResearchAdmin from "./components/ResearchAdmin";
+import AssetLibrary from "./components/AssetLibrary";
 import { Toaster } from "./components/ui/toaster";
 import { CatabolicRiskAssessment } from "./components/assessment";
 
@@ -59,6 +60,7 @@ function App() {
           <Route path="/admin-test" element={<AdminTest />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/research" element={<ResearchAdmin />} />
+          <Route path="/admin/assets" element={<AssetLibrary />} />
           <Route path="/admin/courses/create" element={<CourseEditor />} />
           <Route path="/admin/courses/edit/:courseId" element={<CourseEditor />} />
         </Routes>

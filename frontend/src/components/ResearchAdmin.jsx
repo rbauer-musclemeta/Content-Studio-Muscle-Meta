@@ -127,6 +127,9 @@ export default function ResearchAdmin() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Link to="/admin/assets" className="hover:underline" style={{ color: BRAND.teal }}>
+                Asset Library
+              </Link>
               <Link to="/admin" className="hover:underline" style={{ color: BRAND.inkSoft }}>
                 &larr; Admin Dashboard
               </Link>
