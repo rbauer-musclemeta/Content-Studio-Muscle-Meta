@@ -25,6 +25,7 @@ import os
 import uuid
 
 import mm_parser
+import aeo_analyzer
 
 load_dotenv()
 
@@ -105,6 +106,12 @@ class Asset(BaseModel):
     generated: bool = False
     generation_prompt: Optional[str] = None
 
+    # AEO/SEO metadata
+    target_keywords: List[str] = []
+    aeo_score: Optional[int] = None                # 0-100 overall score
+    aeo_analysis: Optional[Dict[str, Any]] = None  # Full analysis result
+    aeo_analyzed_at: Optional[datetime] = None
+
     # Status
     status: str = "active"             # active, draft, archived
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -140,6 +147,7 @@ class AssetUpdate(BaseModel):
     citations: Optional[List[AssetCitation]] = None
     source_asset_id: Optional[str] = None
     related_asset_ids: Optional[List[str]] = None
+    target_keywords: Optional[List[str]] = None
     status: Optional[str] = None
 
 
@@ -194,7 +202,7 @@ async def get_asset_types():
 
 @router.get("/stats")
 async def get_asset_stats():
-    """Library statistics by type, pillar, and persona."""
+    """Library statistics by type, pillar, persona, and AEO."""
     total = await db.assets.count_documents({})
 
     async def _group(field):
@@ -213,12 +221,23 @@ async def get_asset_stats():
     ]
     cit = await db.assets.aggregate(cit_pipeline).to_list(1)
 
+    # AEO stats
+    aeo_pipeline = [
+        {"$match": {"aeo_score": {"$ne": None}}},
+        {"$group": {"_id": None, "count": {"$sum": 1}, "avg": {"$avg": "$aeo_score"}}},
+    ]
+    aeo = await db.assets.aggregate(aeo_pipeline).to_list(1)
+    aeo_analyzed = aeo[0]["count"] if aeo else 0
+    aeo_avg = round(aeo[0]["avg"]) if aeo and aeo[0].get("avg") else None
+
     return {
         "total_assets": total,
         "total_citations": cit[0]["total"] if cit else 0,
         "by_type": by_type,
         "by_pillar": by_pillar,
         "by_file_type": by_file_type,
+        "aeo_analyzed": aeo_analyzed,
+        "aeo_avg_score": aeo_avg,
     }
 
 
@@ -464,6 +483,70 @@ async def reparse_asset(asset_id: str):
     await db.assets.update_one({"id": asset_id}, {"$set": update})
     updated = await db.assets.find_one({"id": asset_id})
     return _serialize(updated)
+
+
+@router.post("/{asset_id}/aeo-analyze")
+async def analyze_asset_aeo(asset_id: str, keywords: Optional[List[str]] = None):
+    """
+    Run AEO analysis on an asset's content. Stores the result and returns it.
+
+    Query param `keywords` can be passed to check keyword presence in title.
+    """
+    asset = await db.assets.find_one({"id": asset_id})
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+
+    text = asset.get("content")
+    if not text and asset.get("file_path"):
+        full = UPLOAD_DIR / asset["file_path"]
+        if asset.get("file_type") == "pdf" and full.exists():
+            text = _extract_pdf_text(full)
+
+    if not text:
+        raise HTTPException(status_code=400, detail="No analyzable text content")
+
+    # Use stored keywords if none provided
+    kw_list = keywords or asset.get("target_keywords") or []
+
+    analysis = aeo_analyzer.analyze_aeo(
+        content=text,
+        title=asset.get("title", ""),
+        target_keywords=kw_list,
+        is_html=(asset.get("file_type") == "html"),
+    )
+
+    update = {
+        "aeo_score": analysis["overall_score"],
+        "aeo_analysis": analysis,
+        "aeo_analyzed_at": datetime.utcnow(),
+        "target_keywords": kw_list,
+        "updated_at": datetime.utcnow(),
+    }
+    await db.assets.update_one({"id": asset_id}, {"$set": update})
+
+    return analysis
+
+
+@router.get("/{asset_id}/aeo-score")
+async def get_asset_aeo_score(asset_id: str):
+    """Get the cached AEO score and analysis for an asset."""
+    asset = await db.assets.find_one(
+        {"id": asset_id},
+        {"aeo_score": 1, "aeo_analysis": 1, "aeo_analyzed_at": 1, "target_keywords": 1}
+    )
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+
+    if asset.get("aeo_score") is None:
+        return {"analyzed": False, "message": "No AEO analysis yet. POST to /aeo-analyze first."}
+
+    return {
+        "analyzed": True,
+        "aeo_score": asset["aeo_score"],
+        "aeo_analysis": asset.get("aeo_analysis"),
+        "aeo_analyzed_at": asset.get("aeo_analyzed_at"),
+        "target_keywords": asset.get("target_keywords", []),
+    }
 
 
 @router.delete("/{asset_id}")

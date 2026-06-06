@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import {
   Upload, FileText, FileCode, FileType, Video, Music, File as FileIcon,
   Search, Trash2, X, ExternalLink, Quote, Layers, Sparkles, Link2, RefreshCw,
+  TrendingUp, AlertCircle, CheckCircle,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BRAND } from '../lib/brand';
@@ -146,11 +147,18 @@ export default function AssetLibrary() {
 
       <main className="max-w-7xl mx-auto px-6 py-8">
         {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <div className="grid md:grid-cols-5 gap-6 mb-8">
           <StatsCard icon={<Layers className="w-6 h-6" />} label="Total Assets" value={stats.total_assets || 0} color={BRAND.gold} />
           <StatsCard icon={<Quote className="w-6 h-6" />} label="Citations" value={stats.total_citations || 0} color={BRAND.purple} />
           <StatsCard icon={<FileText className="w-6 h-6" />} label="Briefs" value={stats.by_type?.research_brief || 0} color={BRAND.teal} />
           <StatsCard icon={<Video className="w-6 h-6" />} label="Media" value={(stats.by_type?.video || 0) + (stats.by_type?.audio || 0)} color={BRAND.green} />
+          <StatsCard
+            icon={<TrendingUp className="w-6 h-6" />}
+            label="Avg AEO Score"
+            value={stats.aeo_avg_score != null ? stats.aeo_avg_score : '—'}
+            subvalue={stats.aeo_analyzed > 0 ? `${stats.aeo_analyzed} analyzed` : null}
+            color={stats.aeo_avg_score >= 60 ? '#16a34a' : stats.aeo_avg_score >= 40 ? '#f59e0b' : BRAND.inkMuted}
+          />
         </div>
 
         {/* Upload zone */}
@@ -252,7 +260,7 @@ export default function AssetLibrary() {
   );
 }
 
-function StatsCard({ icon, label, value, color }) {
+function StatsCard({ icon, label, value, subvalue, color }) {
   return (
     <Card>
       <CardContent className="p-6">
@@ -263,6 +271,7 @@ function StatsCard({ icon, label, value, color }) {
           <div>
             <p className="text-2xl font-bold" style={{ color: BRAND.ink }}>{value}</p>
             <p className="text-sm" style={{ color: BRAND.inkMuted }}>{label}</p>
+            {subvalue && <p className="text-xs" style={{ color: BRAND.inkMuted }}>{subvalue}</p>}
           </div>
         </div>
       </CardContent>
@@ -315,6 +324,9 @@ function AssetCard({ asset, onPreview, onDelete }) {
           {asset.source_asset_id && (
             <span className="flex items-center gap-1"><Link2 className="w-3 h-3" /> derived</span>
           )}
+          {asset.aeo_score != null && (
+            <AeoScoreBadge score={asset.aeo_score} size="sm" />
+          )}
           <button className="ml-auto hover:underline" style={{ color: BRAND.teal }} onClick={onPreview}>
             View →
           </button>
@@ -327,12 +339,18 @@ function AssetCard({ asset, onPreview, onDelete }) {
 function PreviewModal({ asset, onClose, onChanged }) {
   const [full, setFull] = useState(asset);
   const [reparsing, setReparsing] = useState(false);
+  const [aeoAnalysis, setAeoAnalysis] = useState(null);
+  const [analyzingAeo, setAnalyzingAeo] = useState(false);
+  const [showAeo, setShowAeo] = useState(false);
 
   useEffect(() => {
     // Fetch full asset (with content)
     fetch(`${BACKEND_URL}/api/assets/${asset.id}`)
       .then((r) => r.ok ? r.json() : asset)
-      .then(setFull)
+      .then((data) => {
+        setFull(data);
+        if (data.aeo_analysis) setAeoAnalysis(data.aeo_analysis);
+      })
       .catch(() => setFull(asset));
   }, [asset]);
 
@@ -344,6 +362,23 @@ function PreviewModal({ asset, onClose, onChanged }) {
       onChanged?.();
     }
     setReparsing(false);
+  };
+
+  const analyzeAeo = async () => {
+    setAnalyzingAeo(true);
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/assets/${asset.id}/aeo-analyze`, { method: 'POST' });
+      if (res.ok) {
+        const analysis = await res.json();
+        setAeoAnalysis(analysis);
+        setFull((prev) => ({ ...prev, aeo_score: analysis.overall_score, aeo_analysis: analysis }));
+        setShowAeo(true);
+        onChanged?.();
+      }
+    } catch (e) {
+      console.error('AEO analysis failed:', e);
+    }
+    setAnalyzingAeo(false);
   };
 
   const rawUrl = `${BACKEND_URL}/api/assets/${asset.id}/raw`;
@@ -366,6 +401,10 @@ function PreviewModal({ asset, onClose, onChanged }) {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={analyzeAeo} disabled={analyzingAeo}>
+                <TrendingUp className={`w-4 h-4 mr-1 ${analyzingAeo ? 'animate-pulse' : ''}`} />
+                {analyzingAeo ? 'Analyzing…' : full.aeo_score != null ? 'Re-analyze AEO' : 'Analyze AEO'}
+              </Button>
               <Button variant="outline" size="sm" onClick={reparse} disabled={reparsing}>
                 <RefreshCw className={`w-4 h-4 mr-1 ${reparsing ? 'animate-spin' : ''}`} /> Re-parse
               </Button>
@@ -375,6 +414,81 @@ function PreviewModal({ asset, onClose, onChanged }) {
         </CardHeader>
 
         <CardContent className="pt-4 space-y-5">
+          {/* AEO Score Panel */}
+          {(aeoAnalysis || full.aeo_score != null) && (
+            <div className="rounded-lg border p-4" style={{ borderColor: BRAND.border, backgroundColor: BRAND.surface }}>
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-semibold flex items-center gap-2" style={{ color: BRAND.ink }}>
+                  <TrendingUp className="w-4 h-4" style={{ color: BRAND.teal }} />
+                  AEO Readiness Score
+                </h4>
+                <button onClick={() => setShowAeo(!showAeo)} className="text-xs hover:underline" style={{ color: BRAND.teal }}>
+                  {showAeo ? 'Hide details' : 'Show details'}
+                </button>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <AeoScoreBadge score={aeoAnalysis?.overall_score ?? full.aeo_score} size="lg" />
+                <div className="flex-1">
+                  <div className="grid grid-cols-4 gap-2">
+                    <ScoreBar label="Headings" score={aeoAnalysis?.heading_score?.score} />
+                    <ScoreBar label="Title" score={aeoAnalysis?.title_score?.score} />
+                    <ScoreBar label="Structure" score={aeoAnalysis?.structure_score?.score} />
+                    <ScoreBar label="Authority" score={aeoAnalysis?.authority_score?.score} />
+                  </div>
+                </div>
+              </div>
+
+              {showAeo && aeoAnalysis && (
+                <div className="mt-4 space-y-4">
+                  {/* Recommendations */}
+                  {aeoAnalysis.recommendations?.length > 0 && (
+                    <div>
+                      <h5 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: BRAND.inkMuted }}>
+                        Recommendations
+                      </h5>
+                      <div className="space-y-2">
+                        {aeoAnalysis.recommendations.map((rec, i) => (
+                          <div key={i} className="flex items-start gap-2 text-sm" style={{ color: BRAND.inkSoft }}>
+                            {rec.priority === 'high' ? (
+                              <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-orange-500" />
+                            ) : (
+                              <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: BRAND.teal }} />
+                            )}
+                            <div>
+                              <span className="font-medium capitalize">{rec.category}:</span> {rec.action}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Platform fit */}
+                  {aeoAnalysis.platform_fit && (
+                    <div>
+                      <h5 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: BRAND.inkMuted }}>
+                        Platform Fit
+                      </h5>
+                      <div className="grid grid-cols-2 gap-2">
+                        {Object.entries(aeoAnalysis.platform_fit).map(([platform, data]) => (
+                          <div key={platform} className="flex items-center justify-between p-2 rounded" style={{ backgroundColor: BRAND.white }}>
+                            <span className="text-xs capitalize" style={{ color: BRAND.inkSoft }}>
+                              {platform.replace(/_/g, ' ')}
+                            </span>
+                            <span className="text-xs font-semibold" style={{ color: scoreColor(data.score) }}>
+                              {data.score}%
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* GMMBB axes */}
           {full.gmmbb_axes?.length > 0 && (
             <div>
@@ -448,6 +562,50 @@ function PreviewModal({ asset, onClose, onChanged }) {
           </div>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+function scoreColor(score) {
+  if (score == null) return BRAND.inkMuted;
+  if (score >= 80) return '#16a34a';
+  if (score >= 60) return BRAND.teal;
+  if (score >= 40) return '#f59e0b';
+  return '#dc2626';
+}
+
+function AeoScoreBadge({ score, size = 'sm' }) {
+  if (score == null) return null;
+  const color = scoreColor(score);
+  const sizeClasses = size === 'lg' ? 'w-16 h-16 text-xl' : 'w-8 h-8 text-xs';
+
+  return (
+    <div
+      className={`${sizeClasses} rounded-full flex items-center justify-center font-bold flex-shrink-0`}
+      style={{ backgroundColor: `${color}20`, color, border: `2px solid ${color}` }}
+      title={`AEO Score: ${score}/100`}
+    >
+      {score}
+    </div>
+  );
+}
+
+function ScoreBar({ label, score }) {
+  if (score == null) return null;
+  const color = scoreColor(score);
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-xs" style={{ color: BRAND.inkMuted }}>{label}</span>
+        <span className="text-xs font-semibold" style={{ color }}>{score}</span>
+      </div>
+      <div className="h-1.5 rounded-full" style={{ backgroundColor: BRAND.border }}>
+        <div
+          className="h-full rounded-full transition-all"
+          style={{ width: `${score}%`, backgroundColor: color }}
+        />
+      </div>
     </div>
   );
 }
