@@ -16,6 +16,7 @@ from admin import admin
 from crf_integration import crf_router
 from research import router as research_router
 from assets import router as assets_router
+from content import router as content_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -87,6 +88,7 @@ async def health_check():
             "crf": "active",
             "research": "active",
             "assets": "active",
+            "content": "active",
         },
         "databases": {
             "mongodb": "product data (courses, users, payments)",
@@ -101,6 +103,7 @@ app.include_router(admin)
 app.include_router(crf_router, prefix="/api")  # CRF at /api/crf/*
 app.include_router(research_router)            # Research at /api/research/*
 app.include_router(assets_router)              # Assets at /api/assets/*
+app.include_router(content_router)             # Content Studio at /api/content/*
 
 app.add_middleware(
     CORSMiddleware,

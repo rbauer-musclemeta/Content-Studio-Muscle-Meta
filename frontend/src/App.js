@@ -21,6 +21,7 @@ import { CatabolicRiskAssessment } from "./components/assessment";
 // New unified admin layout
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminHome from "./components/admin/AdminHome";
+import ContentStudio from "./components/admin/ContentStudio";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -65,6 +66,7 @@ function App() {
             <Route index element={<AdminHome />} />
             <Route path="research" element={<ResearchAdmin embedded />} />
             <Route path="assets" element={<AssetLibrary embedded />} />
+            <Route path="studio" element={<ContentStudio embedded />} />
             <Route path="courses/create" element={<CourseEditor />} />
             <Route path="courses/edit/:courseId" element={<CourseEditor />} />
           </Route>

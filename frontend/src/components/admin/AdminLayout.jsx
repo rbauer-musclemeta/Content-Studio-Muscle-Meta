@@ -58,8 +58,7 @@ const NAV_ITEMS = [
     label: 'Content Studio',
     icon: Sparkles,
     path: '/admin/studio',
-    badge: 'Soon',
-    disabled: true,
+    description: 'AI-powered generation',
   },
   {
     id: 'workflows',

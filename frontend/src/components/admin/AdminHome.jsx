@@ -246,11 +246,12 @@ export default function AdminHome() {
                   New Research Prompt
                 </Button>
               </Link>
-              <Button variant="outline" size="sm" className="w-full justify-start" disabled>
-                <Sparkles className="w-4 h-4 mr-2" />
-                Generate Newsletter
-                <Badge variant="outline" className="ml-auto text-xs">Soon</Badge>
-              </Button>
+              <Link to="/admin/studio">
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Generate Content
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>
