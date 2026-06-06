@@ -13,6 +13,7 @@ import CourseSuccess from "./components/CourseSuccess";
 import AdminDashboard from "./components/AdminDashboard";
 import CourseEditor from "./components/CourseEditor";
 import AdminTest from "./components/AdminTest";
+import ResearchAdmin from "./components/ResearchAdmin";
 import { Toaster } from "./components/ui/toaster";
 import { CatabolicRiskAssessment } from "./components/assessment";
 
@@ -57,6 +58,7 @@ function App() {
           {/* Admin Routes */}
           <Route path="/admin-test" element={<AdminTest />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/research" element={<ResearchAdmin />} />
           <Route path="/admin/courses/create" element={<CourseEditor />} />
           <Route path="/admin/courses/edit/:courseId" element={<CourseEditor />} />
         </Routes>

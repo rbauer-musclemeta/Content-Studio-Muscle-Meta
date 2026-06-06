@@ -14,6 +14,7 @@ from datetime import datetime
 from payments import payments
 from admin import admin
 from crf_integration import crf_router
+from research import router as research_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -83,6 +84,7 @@ async def health_check():
             "payments": "active",
             "admin": "active",
             "crf": "active",
+            "research": "active",
         },
         "databases": {
             "mongodb": "product data (courses, users, payments)",
@@ -95,6 +97,7 @@ app.include_router(api_router)
 app.include_router(payments)
 app.include_router(admin)
 app.include_router(crf_router, prefix="/api")  # CRF at /api/crf/*
+app.include_router(research_router)            # Research at /api/research/*
 
 app.add_middleware(
     CORSMiddleware,

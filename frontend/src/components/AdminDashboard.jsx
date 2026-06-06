@@ -82,6 +82,9 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Link to="/admin/research" className="text-teal-600 hover:text-teal-800 font-medium">
+                Research Library
+              </Link>
               <Link to="/" className="text-gray-600 hover:text-gray-900">← Back to Site</Link>
               <Badge className="bg-green-100 text-green-700">Admin Mode</Badge>
             </div>
