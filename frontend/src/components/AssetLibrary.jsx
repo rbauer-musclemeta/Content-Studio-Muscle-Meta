@@ -52,7 +52,7 @@ function fileIcon(fileType) {
   return Icon;
 }
 
-export default function AssetLibrary() {
+export default function AssetLibrary({ embedded = false }) {
   const [assets, setAssets] = useState([]);
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(true);
@@ -116,36 +116,38 @@ export default function AssetLibrary() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: BRAND.surface }}>
+      <div className={embedded ? 'flex items-center justify-center h-64' : 'min-h-screen flex items-center justify-center'} style={{ backgroundColor: BRAND.surface }}>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: BRAND.teal }} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: BRAND.surface }}>
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b" style={{ borderColor: BRAND.border }}>
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: BRAND.gold }}>
-              <Layers className="w-6 h-6 text-white" />
+    <div className={embedded ? '' : 'min-h-screen'} style={{ backgroundColor: BRAND.surface }}>
+      {/* Header — only show in standalone mode */}
+      {!embedded && (
+        <header className="bg-white shadow-sm border-b" style={{ borderColor: BRAND.border }}>
+          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: BRAND.gold }}>
+                <Layers className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold" style={{ color: BRAND.ink, fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+                  Asset Library
+                </h1>
+                <p style={{ color: BRAND.inkMuted }}>Briefs, newsletters, spotlights, handouts, media</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold" style={{ color: BRAND.ink, fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
-                Asset Library
-              </h1>
-              <p style={{ color: BRAND.inkMuted }}>Briefs, newsletters, spotlights, handouts, media</p>
+            <div className="flex items-center space-x-4">
+              <Link to="/admin/research" className="hover:underline" style={{ color: BRAND.teal }}>Research Library</Link>
+              <Link to="/admin" className="hover:underline" style={{ color: BRAND.inkSoft }}>&larr; Admin</Link>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <Link to="/admin/research" className="hover:underline" style={{ color: BRAND.teal }}>Research Library</Link>
-            <Link to="/admin" className="hover:underline" style={{ color: BRAND.inkSoft }}>&larr; Admin</Link>
-          </div>
-        </div>
-      </header>
+        </header>
+      )}
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className={embedded ? 'p-6 lg:p-8' : 'max-w-7xl mx-auto px-6 py-8'}>
         {/* Stats */}
         <div className="grid md:grid-cols-5 gap-6 mb-8">
           <StatsCard icon={<Layers className="w-6 h-6" />} label="Total Assets" value={stats.total_assets || 0} color={BRAND.gold} />

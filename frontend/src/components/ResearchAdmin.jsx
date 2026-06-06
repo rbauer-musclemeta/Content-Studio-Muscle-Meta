@@ -47,7 +47,7 @@ const CATEGORY_MAP = {
   comorbidity_management: 'Comorbidity Management',
 };
 
-export default function ResearchAdmin() {
+export default function ResearchAdmin({ embedded = false }) {
   const [activeTab, setActiveTab] = useState('prompts');
   const [stats, setStats] = useState({});
   const [prompts, setPrompts] = useState([]);
@@ -97,52 +97,54 @@ export default function ResearchAdmin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: BRAND.surface }}>
+      <div className={embedded ? 'flex items-center justify-center h-64' : 'min-h-screen flex items-center justify-center'} style={{ backgroundColor: BRAND.surface }}>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: BRAND.teal }}></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: BRAND.surface }}>
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b" style={{ borderColor: BRAND.border }}>
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{ backgroundColor: BRAND.teal }}
-              >
-                <Beaker className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1
-                  className="text-2xl font-bold"
-                  style={{ color: BRAND.ink, fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+    <div className={embedded ? '' : 'min-h-screen'} style={{ backgroundColor: BRAND.surface }}>
+      {/* Header — only show in standalone mode */}
+      {!embedded && (
+        <header className="bg-white shadow-sm border-b" style={{ borderColor: BRAND.border }}>
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: BRAND.teal }}
                 >
-                  Research Library
-                </h1>
-                <p style={{ color: BRAND.inkMuted }}>Prompts, artifacts, and citations</p>
+                  <Beaker className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h1
+                    className="text-2xl font-bold"
+                    style={{ color: BRAND.ink, fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                  >
+                    Research Library
+                  </h1>
+                  <p style={{ color: BRAND.inkMuted }}>Prompts, artifacts, and citations</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link to="/admin/assets" className="hover:underline" style={{ color: BRAND.teal }}>
-                Asset Library
-              </Link>
-              <Link to="/admin" className="hover:underline" style={{ color: BRAND.inkSoft }}>
-                &larr; Admin Dashboard
-              </Link>
-              <Badge style={{ backgroundColor: BRAND.tealMuted, color: BRAND.teal }}>
-                Research Mode
-              </Badge>
+              <div className="flex items-center space-x-4">
+                <Link to="/admin/assets" className="hover:underline" style={{ color: BRAND.teal }}>
+                  Asset Library
+                </Link>
+                <Link to="/admin" className="hover:underline" style={{ color: BRAND.inkSoft }}>
+                  &larr; Admin Dashboard
+                </Link>
+                <Badge style={{ backgroundColor: BRAND.tealMuted, color: BRAND.teal }}>
+                  Research Mode
+                </Badge>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className={embedded ? 'p-6 lg:p-8' : 'max-w-7xl mx-auto px-6 py-8'}>
         {/* Stats Overview */}
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           <StatsCard
