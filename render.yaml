@@ -56,6 +56,12 @@ services:
         source: /*
         destination: /index.html
     envVars:
+      - key: NODE_VERSION
+        value: "20.18.0"
+      # Points to your backend service
+      # Replace with your actual backend URL after first deploy
+      - key: REACT_APP_BACKEND_URL
+        value: https://mm-backend.onrender.com
       # Points to your backend service
       # Replace with your actual backend URL after first deploy
       - key: REACT_APP_BACKEND_URL
