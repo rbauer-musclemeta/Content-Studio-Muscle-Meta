@@ -76,8 +76,14 @@ agenthub/agents/youtube/db
 # Build caches
 .cache/
 
+# Uploaded asset binaries (pdf/video/audio) — metadata lives in Mongo
+backend/uploads/
+
 # Mobile development
 android-sdk/ -e 
 # Environment files
 *.env
 *.env.*
+!*.env.example
+*.egg-info/
+*.log

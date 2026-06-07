@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fall Risk Assessment — Muscle-Meta Matrix™</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================================
+       MUSCLE-META MATRIX™  •  BRAND TOKENS
+       Clinical Intelligence for Active Aging
+       ========================================================= */
+    :root {
+      --teal:          #009090;
+      --teal-dark:     #006b6b;
+      --teal-light:    #00b3b3;
+      --teal-muted:    #e6f5f5;
+      --teal-tint:     #f0f9f9;
+      --gold:          #D4AF37;
+      --gold-dark:     #B5952F;
+      --gold-light:    #e3c56a;
+      --gold-muted:    #faf6e8;
+      --purple:        #7c3aed;
+      --purple-muted:  #f3f0fd;
+      --green:         #16a34a;
+      --green-muted:   #f0fdf4;
+      --ink:           #1a2332;
+      --ink-soft:      #344256;
+      --ink-muted:     #6b7b8f;
+      --ink-faint:     #a8b3c2;
+      --surface:       #f7f6f3;
+      --surface-tint:  #fdfcfa;
+      --border:        #e8e6e1;
+      --border-soft:   #f0eeea;
+      --white:         #ffffff;
+      --tier-1:        #009090;
+      --tier-2:        #3b82f6;
+      --tier-3:        #f59e0b;
+      --tier-4:        #f97316;
+      --tier-5:        #dc2626;
+      --tier-1-muted:  #e6f5f5;
+      --tier-2-muted:  #eff6ff;
+      --tier-3-muted:  #fef3c7;
+      --tier-4-muted:  #ffedd5;
+      --tier-5-muted:  #fee2e2;
+      --font-display:  'Cormorant Garamond', Georgia, serif;
+      --font-body:     'Outfit', 'Helvetica Neue', Arial, sans-serif;
+      --fs-eyebrow: 11px; --tr-eyebrow: 0.18em;
+      --fs-caption: 12px;
+      --fs-micro:   13px;
+      --fs-body:    16px;
+      --fs-lede:    19px;
+      --fs-h4:      22px;
+      --fs-h3:      28px;
+      --fs-h2:      40px;
+      --fs-h1:      56px;
+      --fw-regular: 400; --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
+      --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
+      --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px;
+      --r-1:6px; --r-2:10px; --r-3:14px; --r-4:20px; --r-5:28px; --r-pill:999px;
+      --shadow-xs:  0 1px 2px rgba(26,35,50,0.04);
+      --shadow-sm:  0 2px 8px rgba(26,35,50,0.05);
+      --shadow-md:  0 6px 20px rgba(26,35,50,0.07);
+      --shadow-lg:  0 12px 40px rgba(26,35,50,0.08);
+      --shadow-teal: 0 8px 30px rgba(0,144,144,0.15);
+      --shadow-gold: 0 4px 16px rgba(212,175,55,0.25);
+      --ease-out:  cubic-bezier(0.16,1,0.3,1);
+      --dur-fast:  150ms; --dur-base: 240ms; --dur-slow: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--surface);
+      color: var(--ink-soft);
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.018;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      mix-blend-mode: multiply;
+    }
+
+    h1,h2,h3,h4 { font-family: var(--font-display); color: var(--ink); font-weight: var(--fw-bold); letter-spacing: -0.01em; }
+
+    /* =========================================================
+       PERSISTENT HEADER
+       ========================================================= */
+    #app-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(247,246,243,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--dur-base) var(--ease-out);
+    }
+    #app-header.scrolled { border-color: rgba(0,144,144,0.15); }
+
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s-4);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 32px; height: 32px;
+      background: var(--ink);
+      border-radius: var(--r-2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-mark svg { width: 18px; height: 18px; fill: var(--gold); }
+    .logo-text {
+      font-family: var(--font-body);
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-semi);
+      color: var(--ink);
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+    .logo-text span { color: var(--teal); }
+
+    .header-progress {
+      flex: 1;
+      max-width: 300px;
+      display: none;
+    }
+    .header-progress.visible { display: block; }
+    .progress-label {
+      font-size: var(--fs-caption);
+      color: var(--ink-muted);
+      font-weight: var(--fw-medium);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .progress-track {
+      height: 4px;
+      background: var(--border);
+      border-radius: var(--r-pill);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--teal-dark));
+      border-radius: var(--r-pill);
+      transition: width 0.5s var(--ease-out);
+      width: 0%;
+    }
+
+    .header-pillar-badge {
+      font-family: var(--font-body);
+      font-size: var(--fs-eyebrow);
+      font-weight: var(--fw-semi);
+      letter-spacing: var(--tr-eyebrow);
+      text-transform: uppercase;
+      color: var(--teal);
+      white-space: nowrap;
+    }
+
+    /* =========================================================
+       SCREEN SYSTEM
+       ========================================================= */
+    .screen {
+      min-height: 100vh;
+      padding-top: 60px;
+      display: flex;
+      flex-direction: column;
+    }
+    .screen.hidden { display: none; }
+
+    /* =========================================================
+       WELCOME SCREEN
+       ========================================================= */
+    #screen-welcome {
+      background: linear-gradient(160deg, var(--surface) 0%, var(--teal-muted) 100%);
+    }
+
+    .welcome-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s-7) 20px;
+    }
+
+    .welcome-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-5);
+      padding: var(--s-8) var(--s-7);
+      max-width: 620px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-dark));
+    }
+
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--fs-eyebrow);
+      font-weight: var(--fw-semi);
+      letter-spacing: var(--tr-eyebrow);
+      text-transform: uppercase;
+      color: var(--teal);
+      display: block;
+      margin-bottom: var(--s-3);
+    }
+
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: var(--fs-h1);
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--s-5);
+    }
+
+    .welcome-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--s-5);
+      margin-bottom: var(--s-5);
+      padding-bottom: var(--s-5);
+      border-bottom: 1px solid var(--border-soft);
+      flex-wrap: wrap;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-2);
+      background: var(--teal-muted);
+      color: var(--teal);
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-medium);
+      padding: 5px 12px;
+      border-radius: var(--r-pill);
+    }
+
+    .meta-pill svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    .welcome-desc {
+      color: var(--ink-soft);
+      line-height: 1.7;
+      margin-bottom: var(--s-5);
+      font-size: 15px;
+    }
+
+    .welcome-pillars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-3);
+      margin-bottom: var(--s-6);
+    }
+
+    .pillar-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s-3);
+      padding: var(--s-3) var(--s-4);
+      background: var(--surface);
+      border-radius: var(--r-2);
+      border: 1px solid var(--border-soft);
+    }
+
+    .pillar-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .pillar-item-text {
+      font-size: var(--fs-micro);
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+
+    .pillar-item-text strong {
+      display: block;
+      color: var(--ink-soft);
+      font-weight: var(--fw-medium);
+      font-size: 13px;
+    }
+
+    .welcome-privacy {
+      text-align: center;
+      font-size: var(--fs-caption);
+      color: var(--ink-faint);
+      margin-top: var(--s-4);
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+    .mmm-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: var(--fw-semi);
+      letter-spacing: 0.01em;
+      border-radius: var(--r-pill);
+      padding: 14px 28px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all var(--dur-base) var(--ease-out);
+      text-decoration: none;
+      line-height: 1;
+      width: 100%;
+      justify-content: center;
+    }
+    .mmm-btn-primary {
+      background: var(--teal);
+      color: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+    .mmm-btn-primary:hover {
+      background: var(--ink);
+      border-color: var(--gold);
+      box-shadow: var(--shadow-gold);
+      transform: translateY(-1px);
+    }
+    .mmm-btn-ghost {
+      background: transparent;
+      color: var(--ink-muted);
+      border-color: var(--border);
+    }
+    .mmm-btn-ghost:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-muted);
+    }
+    .mmm-btn-gold {
+      background: var(--gold);
+      color: var(--ink);
+      box-shadow: var(--shadow-gold);
+    }
+    .mmm-btn-gold:hover {
+      background: var(--gold-dark);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+    .mmm-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* =========================================================
+       INTAKE SCREEN
+       ========================================================= */
+    .intake-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s-7) 20px;
+    }
+
+    .intake-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-5);
+      padding: var(--s-7) var(--s-6);
+      max-width: 520px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+    }
+
+    .intake-title {
+      font-family: var(--font-display);
+      font-size: var(--fs-h3);
+      color: var(--ink);
+      font-weight: var(--fw-bold);
+      margin-bottom: var(--s-2);
+    }
+
+    .intake-sub {
+      color: var(--ink-muted);
+      font-size: 15px;
+      margin-bottom: var(--s-6);
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: var(--s-5);
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-semi);
+      color: var(--ink);
+      margin-bottom: var(--s-2);
+      letter-spacing: 0.01em;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-2);
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      color: var(--ink);
+      background: var(--surface);
+      transition: border-color var(--dur-fast) var(--ease-out),
+                  box-shadow var(--dur-fast) var(--ease-out);
+      appearance: none;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px var(--teal-muted);
+      background: var(--white);
+    }
+
+    select.form-input {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7b8f' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 44px;
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       QUESTION SCREEN
+       ========================================================= */
+    .question-body {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: var(--s-6) 20px var(--s-8);
+    }
+
+    .question-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-5);
+      padding: var(--s-6) var(--s-6) var(--s-5);
+      max-width: 640px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .question-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-dark));
+    }
+
+    .q-domain {
+      font-family: var(--font-body);
+      font-size: var(--fs-eyebrow);
+      font-weight: var(--fw-semi);
+      letter-spacing: var(--tr-eyebrow);
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: var(--s-3);
+    }
+
+    .q-text {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: var(--s-5);
+      letter-spacing: -0.01em;
+    }
+
+    .q-instruction {
+      font-size: var(--fs-micro);
+      color: var(--ink-muted);
+      margin-bottom: var(--s-4);
+      font-style: italic;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-3);
+      margin-bottom: var(--s-5);
+    }
+
+    .option-item {
+      position: relative;
+    }
+
+    .option-item input[type="radio"],
+    .option-item input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s-4);
+      padding: var(--s-4) var(--s-5);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-3);
+      cursor: pointer;
+      transition: all var(--dur-fast) var(--ease-out);
+      background: var(--surface);
+      min-height: 52px;
+    }
+
+    .option-label:hover {
+      border-color: var(--teal);
+      background: var(--teal-muted);
+    }
+
+    .option-indicator {
+      width: 20px; height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: all var(--dur-fast) var(--ease-out);
+      display: flex; align-items: center; justify-content: center;
+      background: var(--white);
+    }
+
+    .option-check .option-indicator { border-radius: var(--r-1); }
+
+    .option-item input:checked + .option-label {
+      border-color: var(--teal);
+      background: var(--teal-muted);
+    }
+
+    .option-item input:checked + .option-label .option-indicator {
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+
+    .option-item input:checked + .option-label .option-indicator::after {
+      content: "";
+      display: block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .option-item.option-check input:checked + .option-label .option-indicator::after {
+      width: 5px; height: 8px;
+      border-radius: 0;
+      border: 2px solid var(--white);
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+      background: transparent;
+    }
+
+    .option-item.risk-high input:checked + .option-label {
+      border-color: var(--tier-4);
+      background: var(--tier-4-muted);
+    }
+    .option-item.risk-high input:checked + .option-label .option-indicator {
+      background: var(--tier-4);
+      border-color: var(--tier-4);
+    }
+
+    .option-text {
+      flex: 1;
+      font-size: 15px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .option-text strong { color: var(--ink); font-weight: var(--fw-medium); }
+
+    .option-none .option-label { border-style: dashed; }
+    .option-none input:checked + .option-label { border-style: solid; }
+
+    .option-protective .option-label { border-color: var(--green); border-style: dashed; }
+    .option-protective input:checked + .option-label {
+      border-style: solid;
+      background: var(--green-muted);
+      border-color: var(--green);
+    }
+    .option-protective input:checked + .option-label .option-indicator {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .q-flag-tip {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s-3);
+      background: var(--teal-muted);
+      border-radius: var(--r-2);
+      padding: var(--s-3) var(--s-4);
+      margin-bottom: var(--s-5);
+      font-size: var(--fs-micro);
+      color: var(--teal);
+      line-height: 1.5;
+    }
+
+    .q-flag-tip svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+
+    .q-nav {
+      display: flex;
+      gap: var(--s-3);
+      align-items: center;
+    }
+
+    .q-nav .mmm-btn { width: auto; flex: 1; }
+    .q-nav .mmm-btn.back-btn { flex: 0 0 auto; padding: 14px 20px; }
+
+    .q-error {
+      font-size: var(--fs-micro);
+      color: var(--tier-5);
+      margin-bottom: var(--s-3);
+      display: none;
+      font-weight: var(--fw-medium);
+    }
+    .q-error.visible { display: block; }
+
+    /* =========================================================
+       RESULTS SCREEN
+       ========================================================= */
+    #screen-results {
+      background: linear-gradient(160deg, var(--surface) 0%, var(--teal-muted) 60%, var(--surface) 100%);
+    }
+
+    .results-body {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: var(--s-7) 20px var(--s-9);
+      width: 100%;
+    }
+
+    .results-greeting {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      margin-bottom: var(--s-2);
+    }
+
+    .results-sub {
+      color: var(--ink-muted);
+      font-size: 15px;
+      margin-bottom: var(--s-6);
+    }
+
+    .score-hero {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-5);
+      padding: var(--s-7) var(--s-6);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: var(--s-5);
+      display: flex;
+      gap: var(--s-7);
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .score-hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--tier-color, var(--teal));
+    }
+
+    .score-ring-wrap {
+      flex-shrink: 0;
+    }
+
+    .score-ring {
+      position: relative;
+      width: 120px; height: 120px;
+    }
+
+    .score-ring svg {
+      width: 120px; height: 120px;
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg { fill: none; stroke: var(--border); stroke-width: 8; }
+    .ring-fill {
+      fill: none;
+      stroke: var(--tier-color, var(--teal));
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 314;
+      stroke-dashoffset: 314;
+      transition: stroke-dashoffset 1.4s var(--ease-out) 0.3s;
+    }
+
+    .score-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-pct {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .score-pct-label {
+      font-size: var(--fs-caption);
+      color: var(--ink-muted);
+      font-weight: var(--fw-medium);
+    }
+
+    .score-meta { flex: 1; }
+
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-2);
+      padding: 6px 14px;
+      border-radius: var(--r-pill);
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-semi);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: var(--s-3);
+    }
+
+    .tier-badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.8;
+    }
+
+    .tier-name {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+      margin-bottom: var(--s-2);
+      line-height: 1.2;
+    }
+
+    .tier-track {
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-semi);
+      color: var(--teal);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: var(--s-3);
+    }
+
+    .tier-desc {
+      font-size: 14px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    .age-adjust-note {
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+      font-size: var(--fs-caption);
+      color: var(--ink-muted);
+      margin-top: var(--s-3);
+      padding-top: var(--s-3);
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .age-adjust-note svg { width: 13px; height: 13px; color: var(--gold-dark); flex-shrink: 0; }
+
+    .results-section-head {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      margin-bottom: var(--s-4);
+      margin-top: var(--s-6);
+    }
+
+    .results-section-head h3 {
+      font-family: var(--font-display);
+      font-size: var(--fs-h4);
+      color: var(--ink);
+      font-weight: var(--fw-bold);
+    }
+
+    .domains-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-4);
+      padding: var(--s-5) var(--s-6);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--s-5);
+    }
+
+    .domain-row {
+      display: grid;
+      grid-template-columns: 160px 1fr 36px;
+      align-items: center;
+      gap: var(--s-4);
+      padding: var(--s-3) 0;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .domain-row:last-child { border-bottom: none; }
+
+    .domain-label {
+      font-size: var(--fs-micro);
+      color: var(--ink-soft);
+      font-weight: var(--fw-medium);
+      line-height: 1.3;
+    }
+
+    .domain-bar-track {
+      height: 8px;
+      background: var(--surface);
+      border-radius: var(--r-pill);
+      overflow: hidden;
+    }
+
+    .domain-bar-fill {
+      height: 100%;
+      border-radius: var(--r-pill);
+      transition: width 1s var(--ease-out) 0.6s;
+      width: 0%;
+    }
+
+    .domain-score-label {
+      font-size: var(--fs-caption);
+      color: var(--ink-muted);
+      font-weight: var(--fw-semi);
+      text-align: right;
+    }
+
+    .flags-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-3);
+      margin-bottom: var(--s-5);
+    }
+
+    .flag-card {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s-4);
+      padding: var(--s-4) var(--s-5);
+      border-radius: var(--r-3);
+      border: 1px solid;
+    }
+
+    .flag-card.flag-urgent {
+      background: var(--tier-5-muted);
+      border-color: rgba(220,38,38,0.25);
+      color: #991b1b;
+    }
+
+    .flag-card.flag-warning {
+      background: var(--tier-4-muted);
+      border-color: rgba(249,115,22,0.25);
+      color: #9a3412;
+    }
+
+    .flag-card.flag-info {
+      background: var(--teal-muted);
+      border-color: rgba(0,144,144,0.2);
+      color: var(--teal);
+    }
+
+    .flag-icon { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    .flag-text {
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .crossref-card {
+      background: var(--white);
+      border: 2px solid var(--teal);
+      border-radius: var(--r-4);
+      padding: var(--s-5) var(--s-6);
+      box-shadow: var(--shadow-teal);
+      margin-bottom: var(--s-5);
+      display: flex;
+      gap: var(--s-5);
+      align-items: flex-start;
+    }
+
+    .crossref-icon {
+      width: 44px; height: 44px;
+      background: var(--teal-muted);
+      border-radius: var(--r-3);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .crossref-icon svg { width: 22px; height: 22px; color: var(--teal); }
+
+    .crossref-body { flex: 1; }
+
+    .crossref-body h4 {
+      font-family: var(--font-display);
+      font-size: var(--fs-h4);
+      color: var(--ink);
+      margin-bottom: var(--s-2);
+    }
+
+    .crossref-body p {
+      font-size: 14px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      margin-bottom: var(--s-4);
+    }
+
+    .track-cta {
+      background: var(--ink);
+      border-radius: var(--r-4);
+      padding: var(--s-6);
+      color: var(--white);
+      margin-bottom: var(--s-5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .track-cta::before {
+      content: "";
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(0,144,144,0.12);
+    }
+
+    .track-eyebrow {
+      font-size: var(--fs-eyebrow);
+      font-weight: var(--fw-semi);
+      letter-spacing: var(--tr-eyebrow);
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: var(--s-2);
+    }
+
+    .track-cta h3 {
+      font-family: var(--font-display);
+      font-size: var(--fs-h3);
+      color: var(--white);
+      font-weight: var(--fw-bold);
+      margin-bottom: var(--s-3);
+      line-height: 1.2;
+    }
+
+    .track-cta p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      margin-bottom: var(--s-5);
+      max-width: 440px;
+    }
+
+    .track-cta .mmm-btn { width: auto; }
+
+    .results-restart {
+      text-align: center;
+      padding-top: var(--s-5);
+    }
+
+    .restart-link {
+      font-size: var(--fs-micro);
+      color: var(--ink-faint);
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      font-family: var(--font-body);
+      transition: color var(--dur-fast) var(--ease-out);
+    }
+
+    .restart-link:hover { color: var(--ink-muted); }
+
+    .score-tag-0, .score-tag-1 { color: var(--tier-1); }
+    .score-tag-2 { color: var(--tier-3); }
+    .score-tag-3 { color: var(--tier-4); }
+    .score-tag-4 { color: var(--tier-5); }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in { transition: none; opacity: 1; transform: none; }
+      .ring-fill { transition: none; }
+      .domain-bar-fill { transition: none; }
+    }
+
+    @media (max-width: 600px) {
+      .welcome-card { padding: var(--s-6) var(--s-5); }
+      .welcome-title { font-size: 36px; }
+      .welcome-pillars { grid-template-columns: 1fr; }
+      .welcome-meta { flex-wrap: wrap; gap: var(--s-3); }
+      .score-hero { flex-direction: column; align-items: flex-start; gap: var(--s-5); }
+      .score-ring { margin: 0 auto; }
+      .domain-row { grid-template-columns: 130px 1fr 30px; gap: var(--s-3); }
+      .domain-label { font-size: 11px; }
+      .crossref-card { flex-direction: column; }
+      .q-text { font-size: 22px; }
+      .results-greeting { font-size: 28px; }
+    }
+
+    @media (max-width: 420px) {
+      .domain-row { grid-template-columns: 1fr; gap: var(--s-2); }
+      .domain-score-label { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       PERSISTENT HEADER
+       ============================================================ -->
+  <header id="app-header">
+    <div class="header-inner">
+      <a class="header-logo" href="#">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+        </div>
+        <div class="logo-text">Muscle-Meta <span>Matrix™</span></div>
+      </a>
+      <div class="header-progress" id="header-progress">
+        <div class="progress-label">
+          <span id="progress-text">Question 1 of 13</span>
+          <span id="progress-pct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+      <div class="header-pillar-badge">Exercise &amp; Mobility</div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       SCREEN 0: WELCOME
+       ============================================================ -->
+  <div id="screen-welcome" class="screen">
+    <div class="welcome-body">
+      <div class="welcome-card">
+        <span class="eyebrow">Fall Risk Assessment</span>
+        <h1 class="welcome-title">How stable is your foundation?</h1>
+
+        <div class="welcome-meta">
+          <div class="meta-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            6 – 8 minutes
+          </div>
+          <div class="meta-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+            13 questions
+          </div>
+          <div class="meta-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Private &amp; secure
+          </div>
+        </div>
+
+        <p class="welcome-desc">
+          Falls are the leading cause of injury-related death in adults 65 and older. Yet most falls are preventable with proper screening and targeted intervention. This assessment evaluates your balance, strength, environmental factors, and medical history to identify your personal fall risk level and create a prevention roadmap.
+        </p>
+
+        <div class="welcome-pillars">
+          <div class="pillar-item">
+            <div class="pillar-dot"></div>
+            <div class="pillar-item-text">
+              <strong>Balance confidence</strong>
+              How steady are you on uneven surfaces?
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-dot" style="background:var(--gold)"></div>
+            <div class="pillar-item-text">
+              <strong>Lower limb strength</strong>
+              Can you rise from a chair without using your hands?
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-dot" style="background:var(--purple)"></div>
+            <div class="pillar-item-text">
+              <strong>Environmental hazards</strong>
+              Is your home set up for safety?
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-dot" style="background:var(--green)"></div>
+            <div class="pillar-item-text">
+              <strong>Medical risk factors</strong>
+              Conditions and medications that affect stability
+            </div>
+          </div>
+        </div>
+
+        <button class="mmm-btn mmm-btn-primary" onclick="showScreen('intake')">
+          Begin your assessment
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+
+        <p class="welcome-privacy">Your responses are used only to personalize your results and are not stored beyond this session.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 1: INTAKE (Name + Age)
+       ============================================================ -->
+  <div id="screen-intake" class="screen hidden">
+    <div class="intake-body">
+      <div class="intake-card">
+        <span class="eyebrow">Your profile</span>
+        <h2 class="intake-title">Let's personalize your results</h2>
+        <p class="intake-sub">Your name and age allow us to tailor your risk tier and content recommendations. Fall risk increases significantly with age, and our recommendations adjust accordingly.</p>
+
+        <div class="form-group">
+          <label class="form-label" for="field-name">Full name</label>
+          <input class="form-input" type="text" id="field-name" placeholder="e.g. Randy Bauer" autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="field-age">Age range</label>
+          <select class="form-input" id="field-age">
+            <option value="">Select your age range</option>
+            <option value="under50">Under 50</option>
+            <option value="50-59">50 – 59</option>
+            <option value="60-69">60 – 69</option>
+            <option value="70-79">70 – 79</option>
+            <option value="80plus">80 and older</option>
+          </select>
+        </div>
+
+        <div class="q-error" id="intake-error">Please enter your name and select an age range to continue.</div>
+
+        <button class="mmm-btn mmm-btn-primary" onclick="submitIntake()">
+          Continue to assessment
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 2–14: QUESTIONS (dynamically rendered)
+       ============================================================ -->
+  <div id="screen-question" class="screen hidden">
+    <div class="question-body">
+      <div class="question-card" id="question-card">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SCREEN 15: RESULTS
+       ============================================================ -->
+  <div id="screen-results" class="screen hidden">
+    <div class="results-body">
+
+      <div class="fade-in" id="results-header">
+        <p class="results-sub">Exercise &amp; Mobility Pillar &nbsp;·&nbsp; Balance &amp; Fall Risk</p>
+        <h1 class="results-greeting" id="results-greeting">Your results are ready</h1>
+      </div>
+
+      <div class="score-hero fade-in" id="score-hero" style="--tier-color: var(--teal);">
+        <div class="score-ring-wrap">
+          <div class="score-ring">
+            <svg viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="50"/>
+              <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="50"/>
+            </svg>
+            <div class="score-center">
+              <div class="score-pct" id="score-pct">0%</div>
+              <div class="score-pct-label">risk score</div>
+            </div>
+          </div>
+        </div>
+        <div class="score-meta">
+          <div class="tier-badge" id="tier-badge">
+            <div class="tier-badge-dot"></div>
+            <span id="tier-badge-text">Tier 1</span>
+          </div>
+          <div class="tier-name" id="tier-name">Low fall risk</div>
+          <div class="tier-track" id="tier-track">Maintenance &amp; optimization</div>
+          <div class="tier-desc" id="tier-desc">Your results description will appear here.</div>
+          <div class="age-adjust-note" id="age-adjust-note" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="age-adjust-text"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="flags-section" style="display:none;">
+        <div class="results-section-head fade-in">
+          <h3>Important clinical notes</h3>
+        </div>
+        <div class="flags-stack fade-in" id="flags-stack"></div>
+      </div>
+
+      <div class="crossref-card fade-in" id="crossref-gmmbb" style="display:none;">
+        <div class="crossref-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="crossref-body">
+          <h4>Complete your GMMBB Axis Assessment</h4>
+          <p>Your fall risk results indicate potential neuromuscular decline that may benefit from a comprehensive evaluation. The GMMBB Axis Assessment examines the interconnected systems (Gut-Muscle-Metabolic-Bone-Brain) that influence balance and stability. This deeper dive can reveal root causes and targeted intervention opportunities.</p>
+          <button class="mmm-btn mmm-btn-primary" style="width:auto; font-size:13px; padding:10px 20px;" onclick="alert('GMMBB Axis Assessment — check your dashboard.')">
+            Take the GMMBB Axis Assessment
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="crossref-card fade-in" id="crossref-strength" style="display:none;">
+        <div class="crossref-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 6.5L17.5 17.5"/><path d="M6.5 6.5a2 2 0 10-2.8-2.8 2 2 0 002.8 2.8z"/><path d="M17.5 17.5a2 2 0 102.8 2.8 2 2 0 00-2.8-2.8z"/><path d="M8.5 8.5L4 13l4.5 4.5"/><path d="M15.5 15.5L20 11l-4.5-4.5"/></svg>
+        </div>
+        <div class="crossref-body">
+          <h4>Strength & Sarcopenia Pathway</h4>
+          <p>Your lower limb strength assessment indicates potential muscle weakness that may be contributing to your fall risk. We recommend exploring the Strength & Sarcopenia pathway to address muscle mass and strength deficits — two of the most modifiable fall risk factors.</p>
+          <button class="mmm-btn mmm-btn-primary" style="width:auto; font-size:13px; padding:10px 20px;" onclick="alert('Strength & Sarcopenia Assessment — check your dashboard.')">
+            Explore the Strength Pathway
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="results-section-head fade-in">
+        <h3>Your fall risk profile</h3>
+      </div>
+      <div class="domains-card fade-in" id="domains-card"></div>
+
+      <div class="track-cta fade-in" id="track-cta">
+        <span class="track-eyebrow">Your personalized path</span>
+        <h3 id="track-title">Maintenance &amp; optimization track</h3>
+        <p id="track-body">Your recommended next step will appear here.</p>
+        <button class="mmm-btn mmm-btn-gold" style="width:auto;" onclick="alert('Loading your personalized module — connect your dashboard to begin.')">
+          Begin your module
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="results-restart fade-in">
+        <button class="restart-link" onclick="restartAssessment()">Retake assessment from the beginning</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT — ASSESSMENT ENGINE
+       ============================================================ -->
+  <script>
+  // ================================================================
+  // ASSESSMENT METADATA
+  // ================================================================
+  const ASSESSMENT_META = {
+    id: 'fall-risk-v1',
+    name: 'Fall Risk Assessment',
+    pillar: 'exercise_mobility',
+    category: 'balance_fall_risk',
+    version: '1.0',
+    questions: 13,
+    duration_minutes: 7,
+  };
+
+  // ================================================================
+  // DATA: ASSESSMENT QUESTIONS
+  // ================================================================
+  const QUESTIONS = [
+    // Q1 — Medical History (screener, checkbox)
+    {
+      id: 'medical-history',
+      domain: 'Medical history screener',
+      text: 'Have you been diagnosed with any of the following conditions that affect balance or stability?',
+      instruction: 'Select all that apply. Select "None of the above" if none apply.',
+      type: 'checkbox',
+      tip: 'These conditions significantly increase fall risk and help us place you in the safest intervention track.',
+      options: [
+        { value: 'parkinsons',           label: 'Parkinson\'s disease',                               points: 4 },
+        { value: 'neuropathy',           label: 'Peripheral neuropathy (numbness/tingling in feet)',  points: 4 },
+        { value: 'vestibular',           label: 'Vestibular disorder / vertigo / Meniere\'s disease', points: 4 },
+        { value: 'stroke',               label: 'Stroke or TIA (mini-stroke)',                        points: 4 },
+        { value: 'orthostatic',          label: 'Orthostatic hypotension (dizziness when standing)',  points: 3 },
+        { value: 'vision',               label: 'Vision impairment (cataracts, macular degeneration, glaucoma)', points: 3 },
+        { value: 'none',                 label: 'None of the above',                                  points: 0, isNone: true },
+      ],
+      cap: 4,
+    },
+
+    // Q2 — Medications (screener, checkbox)
+    {
+      id: 'medications',
+      domain: 'Current medications',
+      text: 'Are you currently taking any of the following medications known to increase fall risk?',
+      instruction: 'Select all that apply. Select "None of the above" if none apply.',
+      type: 'checkbox',
+      tip: 'Certain medications affect balance, alertness, or blood pressure in ways that increase fall risk.',
+      options: [
+        { value: 'sedatives',       label: 'Sedatives / sleep aids (benzodiazepines, z-drugs like Ambien, Lunesta)',  points: 4 },
+        { value: 'antihypertensives', label: 'Antihypertensives (especially alpha-blockers like prazosin, doxazosin)', points: 3 },
+        { value: 'antidepressants', label: 'Antidepressants (especially TCAs like amitriptyline, nortriptyline)',     points: 3 },
+        { value: 'opioids',         label: 'Opioid pain medications (oxycodone, hydrocodone, morphine)',               points: 4 },
+        { value: 'anticonvulsants', label: 'Anticonvulsants (gabapentin, pregabalin, phenytoin)',                      points: 3 },
+        { value: 'polypharmacy',    label: '4+ medications total (polypharmacy)',                                       points: 3 },
+        { value: 'none',            label: 'None of the above',                                                         points: 0, isNone: true },
+      ],
+      cap: 4,
+    },
+
+    // Q3 — Fall History
+    {
+      id: 'fall-history',
+      domain: 'Fall history',
+      text: 'How many times have you fallen in the past 12 months?',
+      type: 'radio',
+      tip: 'A fall is any event where you unintentionally end up on the ground, floor, or lower level — even if you caught yourself.',
+      options: [
+        { value: 4, label: '3 or more falls', riskHigh: true },
+        { value: 3, label: '2 falls' },
+        { value: 2, label: '1 fall' },
+        { value: 1, label: 'No falls, but some near-misses or close calls' },
+        { value: 0, label: 'No falls and no near-misses' },
+      ],
+    },
+
+    // Q4 — Balance Confidence
+    {
+      id: 'balance-confidence',
+      domain: 'Balance confidence',
+      text: 'How confident are you walking on uneven surfaces (grass, gravel, cobblestones)?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'I avoid uneven surfaces completely — too risky', riskHigh: true },
+        { value: 3, label: 'Very unconfident — I need to hold onto something or someone' },
+        { value: 2, label: 'Somewhat unconfident — I walk slowly and carefully' },
+        { value: 1, label: 'Mostly confident — occasional unsteadiness' },
+        { value: 0, label: 'Very confident — no concerns' },
+      ],
+    },
+
+    // Q5 — Gait Quality
+    {
+      id: 'gait-quality',
+      domain: 'Gait quality',
+      text: 'How would you describe your walking pattern?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'Shuffling, unsteady, or require a walker/wheelchair', riskHigh: true },
+        { value: 3, label: 'Short steps, feet barely clearing the ground' },
+        { value: 2, label: 'Slightly shortened stride, occasional unsteadiness' },
+        { value: 1, label: 'Generally normal with minor hesitations' },
+        { value: 0, label: 'Normal stride length and rhythm, confident gait' },
+      ],
+    },
+
+    // Q6 — Lower Limb Strength
+    {
+      id: 'lower-limb-strength',
+      domain: 'Lower limb strength',
+      text: 'How easily can you rise from a standard chair without using your hands?',
+      type: 'radio',
+      tip: 'The chair stand test is a validated measure of lower body strength strongly correlated with fall risk.',
+      options: [
+        { value: 4, label: 'Cannot rise without significant assistance', riskHigh: true },
+        { value: 3, label: 'Need to push off with hands and may need multiple attempts' },
+        { value: 2, label: 'Can do it with hands on thighs for light assistance' },
+        { value: 1, label: 'Can rise without hands but it takes effort' },
+        { value: 0, label: 'Rise easily without using hands' },
+      ],
+    },
+
+    // Q7 — Vision Adequacy
+    {
+      id: 'vision-adequacy',
+      domain: 'Vision adequacy',
+      text: 'How well can you see obstacles and hazards in dim lighting (nighttime, dimly lit rooms)?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'Cannot see obstacles — need full lighting to navigate safely', riskHigh: true },
+        { value: 3, label: 'Significant difficulty — often bump into things' },
+        { value: 2, label: 'Some difficulty — need to move slowly and carefully' },
+        { value: 1, label: 'Slight difficulty — generally manage well' },
+        { value: 0, label: 'No difficulty — can see obstacles clearly' },
+      ],
+    },
+
+    // Q8 — Postural Stability
+    {
+      id: 'postural-stability',
+      domain: 'Postural stability',
+      text: 'How long can you stand with your feet together (touching), without holding onto anything?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'Cannot stand with feet together without support', riskHigh: true },
+        { value: 3, label: 'Less than 10 seconds' },
+        { value: 2, label: '10-30 seconds' },
+        { value: 1, label: '30 seconds to 1 minute' },
+        { value: 0, label: 'More than 1 minute easily' },
+      ],
+    },
+
+    // Q9 — Turning Ability
+    {
+      id: 'turning-ability',
+      domain: 'Turning ability',
+      text: 'How steady are you when turning 360 degrees (full circle) while standing?',
+      type: 'radio',
+      options: [
+        { value: 4, label: 'Very unsteady — need to grab something or cannot complete the turn', riskHigh: true },
+        { value: 3, label: 'Unsteady — stop to regain balance or take many small steps' },
+        { value: 2, label: 'Slightly unsteady — need to slow down' },
+        { value: 1, label: 'Generally steady with minor wobble' },
+        { value: 0, label: 'Smooth and quick — no hesitation' },
+      ],
+    },
+
+    // Q10 — Environmental Hazards
+    {
+      id: 'environmental-hazards',
+      domain: 'Environmental hazards',
+      text: 'How many of these hazards are present in your home?',
+      instruction: 'Select all that apply.',
+      type: 'checkbox',
+      options: [
+        { value: 'rugs',         label: 'Loose rugs or mats without non-slip backing',              points: 2 },
+        { value: 'lighting',     label: 'Poor lighting in hallways, stairs, or bathroom',           points: 2 },
+        { value: 'clutter',      label: 'Cluttered floors, electrical cords in walking paths',      points: 2 },
+        { value: 'stairs',       label: 'Stairs without handrails or with worn carpet',             points: 2 },
+        { value: 'bathroom',     label: 'No grab bars in bathroom / slippery tub or shower',        points: 2 },
+        { value: 'pets',         label: 'Pets that run underfoot',                                  points: 1 },
+        { value: 'none',         label: 'None of the above',                                        points: 0, isNone: true },
+      ],
+      cap: 4,
+    },
+
+    // Q11 — Footwear
+    {
+      id: 'footwear',
+      domain: 'Footwear',
+      text: 'What do you typically wear on your feet when moving around at home?',
+      type: 'radio',
+      tip: 'Proper footwear is one of the most easily modifiable fall risk factors.',
+      options: [
+        { value: 4, label: 'Barefoot or socks only', riskHigh: true },
+        { value: 3, label: 'Loose slippers, flip-flops, or backless shoes' },
+        { value: 2, label: 'House shoes with some heel support but worn soles' },
+        { value: 1, label: 'Supportive slippers with non-slip soles' },
+        { value: 0, label: 'Well-fitting, supportive shoes with non-slip soles' },
+      ],
+    },
+
+    // Q12 — Fear of Falling
+    {
+      id: 'fear-of-falling',
+      domain: 'Fear of falling',
+      text: 'How much does fear of falling affect your daily activities?',
+      type: 'radio',
+      tip: 'Fear of falling can become a self-fulfilling prophecy — limiting activity leads to deconditioning, which increases actual fall risk.',
+      options: [
+        { value: 4, label: 'Severely — I avoid leaving home or limit myself to essential activities', riskHigh: true },
+        { value: 3, label: 'Significantly — I avoid many activities I used to enjoy' },
+        { value: 2, label: 'Moderately — I\'m cautious and avoid some activities' },
+        { value: 1, label: 'Slightly — occasional concern but doesn\'t limit me much' },
+        { value: 0, label: 'Not at all — I have no fear of falling' },
+      ],
+    },
+
+    // Q13 — Protective Factors
+    {
+      id: 'protective-factors',
+      domain: 'Protective factors',
+      text: 'Which of the following protective practices do you currently follow?',
+      instruction: 'Select all that apply. These are protective factors that may improve your score.',
+      type: 'checkbox',
+      options: [
+        { value: 'balance-training',   label: 'Regular balance training (tai chi, yoga, balance exercises)',      points: -2 },
+        { value: 'assistive-device',   label: 'Use assistive device appropriately when needed (cane, walker)',    points: -1 },
+        { value: 'home-safety',        label: 'Home safety assessment completed (professional or self-audit)',    points: -1 },
+        { value: 'strength-training',  label: 'Strength training 2+ times per week',                              points: -2 },
+        { value: 'vision-checked',     label: 'Vision checked within past year',                                  points: -1 },
+        { value: 'none',               label: 'None of the above',                                                points: 0, isNone: true },
+      ],
+      cap: -4, // Protective cap (reduces score)
+    },
+  ];
+
+  // ================================================================
+  // DATA: TIER DEFINITIONS
+  // ================================================================
+  const TIERS = {
+    1: {
+      label: 'Low fall risk',
+      track: 'Maintenance & optimization track',
+      color: '#009090',
+      muted: '#e6f5f5',
+      badgeText: 'Tier 1 — Low Risk',
+      desc: 'Your balance, strength, and environmental factors are well-managed. You have minimal fall risk factors present. Your program focuses on maintaining your current stability and progressively challenging your balance system to build reserves for the future.',
+      cta: 'Begin Module: Advanced balance challenges',
+      ctaBody: 'You\'re in an excellent position to build fall-proof resilience. Your roadmap focuses on progressive balance challenges, proprioceptive training, and maintaining the strength and stability you\'ve built.',
+    },
+    2: {
+      label: 'Mild fall risk',
+      track: 'Prevention & priming track',
+      color: '#3b82f6',
+      muted: '#eff6ff',
+      badgeText: 'Tier 2 — Mild Risk',
+      desc: 'You show some early fall risk indicators — perhaps occasional unsteadiness, mild balance concerns, or some environmental hazards. Your program focuses on proactive prevention: foundational balance work, home safety improvements, and building strength reserves.',
+      cta: 'Begin Module: Fall prevention foundations',
+      ctaBody: 'Small interventions now can make a big difference. Your roadmap begins with foundational balance and strength work, home safety modifications, and building the stability habits that prevent falls before they happen.',
+    },
+    3: {
+      label: 'Moderate fall risk',
+      track: 'Structured intervention track',
+      color: '#f59e0b',
+      muted: '#fef3c7',
+      badgeText: 'Tier 3 — Moderate Risk',
+      desc: 'Your results indicate meaningful fall risk factors that warrant structured attention. You may have had a fall, experience balance uncertainty, have medical conditions affecting stability, or have environmental hazards at home. Your program provides systematic intervention to reduce your risk.',
+      cta: 'Begin Module: Fall risk reduction',
+      ctaBody: 'Your results call for focused attention on fall prevention. Your roadmap uses a structured approach — addressing balance, strength, home safety, and medical factors systematically to significantly reduce your risk.',
+    },
+    4: {
+      label: 'High fall risk',
+      track: 'Intensive support track',
+      color: '#f97316',
+      muted: '#ffedd5',
+      badgeText: 'Tier 4 — High Risk',
+      desc: 'Your results indicate high fall risk with multiple contributing factors. You may have experienced recent falls, have significant medical conditions affecting balance, take medications that increase risk, or have substantial home hazards. Medical consultation is recommended alongside our intervention program.',
+      cta: 'Begin Module: Comprehensive fall prevention',
+      ctaBody: 'Your safety is the priority. Your roadmap focuses on comprehensive fall prevention with medical collaboration. We recommend discussing these results with your healthcare provider and considering a professional home safety assessment.',
+    },
+    5: {
+      label: 'Very high fall risk',
+      track: 'Medical co-management track',
+      color: '#dc2626',
+      muted: '#fee2e2',
+      badgeText: 'Tier 5 — Critical Risk',
+      desc: 'Your results indicate very high fall risk requiring immediate attention and medical co-management. Multiple serious risk factors are present. Please share these results with your healthcare provider before beginning any exercise program. A professional home safety assessment is strongly recommended.',
+      cta: 'Download your results to share with your provider',
+      ctaBody: 'Your health and safety come first. We strongly recommend presenting these results to your healthcare team before beginning any new activity. When you have medical clearance and a home safety plan in place, your personalized safe-start roadmap will be ready.',
+    },
+  };
+
+  // Domain labels for the breakdown chart
+  const DOMAIN_LABELS = [
+    'Fall history',
+    'Balance confidence',
+    'Gait quality',
+    'Lower limb strength',
+    'Vision adequacy',
+    'Postural stability',
+    'Turning ability',
+    'Footwear',
+    'Fear of falling',
+  ];
+
+  // ================================================================
+  // STATE
+  // ================================================================
+  let currentQ   = 0;
+  let answers    = {};
+  let userData   = { name: '', age: '' };
+
+  // ================================================================
+  // NAVIGATION
+  // ================================================================
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById('screen-' + id).classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const showProgress = (id === 'question');
+    document.getElementById('header-progress').classList.toggle('visible', showProgress);
+  }
+
+  // ================================================================
+  // INTAKE SUBMIT
+  // ================================================================
+  function submitIntake() {
+    const nameVal = document.getElementById('field-name').value.trim();
+    const ageVal  = document.getElementById('field-age').value;
+    const errEl   = document.getElementById('intake-error');
+
+    if (!nameVal || !ageVal) {
+      errEl.classList.add('visible');
+      return;
+    }
+    errEl.classList.remove('visible');
+
+    userData.name = nameVal;
+    userData.age  = ageVal;
+
+    currentQ = 0;
+    renderQuestion();
+    showScreen('question');
+  }
+
+  // ================================================================
+  // QUESTION RENDER
+  // ================================================================
+  function renderQuestion() {
+    const q    = QUESTIONS[currentQ];
+    const card = document.getElementById('question-card');
+
+    const pct = Math.round(((currentQ) / QUESTIONS.length) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent =
+      'Question ' + (currentQ + 1) + ' of ' + QUESTIONS.length;
+    document.getElementById('progress-pct').textContent = pct + '%';
+
+    let optionsHTML = '';
+
+    if (q.type === 'radio') {
+      q.options.forEach((opt, i) => {
+        const checked = answers[q.id] === opt.value ? 'checked' : '';
+        const riskClass = opt.riskHigh ? 'risk-high' : '';
+        optionsHTML += `
+          <div class="option-item ${riskClass}">
+            <input type="radio" name="q_${q.id}" id="opt_${q.id}_${i}" value="${opt.value}" ${checked}>
+            <label class="option-label" for="opt_${q.id}_${i}">
+              <span class="option-indicator"></span>
+              <span class="option-text">${opt.label}</span>
+            </label>
+          </div>`;
+      });
+    } else {
+      const savedArr = answers[q.id] || [];
+      q.options.forEach((opt, i) => {
+        const checked = savedArr.includes(opt.value) ? 'checked' : '';
+        const noneClass = opt.isNone ? 'option-none option-check' : 'option-check';
+        const protectiveClass = (opt.points < 0 && !opt.isNone) ? 'option-protective' : '';
+        optionsHTML += `
+          <div class="option-item ${noneClass} ${protectiveClass}">
+            <input type="checkbox" name="q_${q.id}" id="opt_${q.id}_${i}" value="${opt.value}" data-is-none="${!!opt.isNone}" ${checked}>
+            <label class="option-label" for="opt_${q.id}_${i}">
+              <span class="option-indicator"></span>
+              <span class="option-text">${opt.label}</span>
+            </label>
+          </div>`;
+      });
+    }
+
+    const tipHTML = q.tip ? `
+      <div class="q-flag-tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        ${q.tip}
+      </div>` : '';
+
+    const instructHTML = q.instruction
+      ? `<p class="q-instruction">${q.instruction}</p>` : '';
+
+    const backBtn = currentQ > 0
+      ? `<button class="mmm-btn mmm-btn-ghost back-btn" onclick="goBack()">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+           Back
+         </button>`
+      : '';
+
+    const isLast = currentQ === QUESTIONS.length - 1;
+    const nextLabel = isLast ? 'See my results' : 'Continue';
+    const nextIcon  = isLast
+      ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+
+    card.innerHTML = `
+      <div class="q-domain">${q.domain}</div>
+      <div class="q-text">${q.text}</div>
+      ${instructHTML}
+      ${tipHTML}
+      <div class="options-list">${optionsHTML}</div>
+      <div class="q-error" id="q-error">Please make a selection before continuing.</div>
+      <div class="q-nav">
+        ${backBtn}
+        <button class="mmm-btn mmm-btn-primary" onclick="goNext()">
+          ${nextLabel} ${nextIcon}
+        </button>
+      </div>`;
+
+    if (q.type === 'checkbox') {
+      card.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', function () {
+          const isNone = this.dataset.isNone === 'true';
+          const allCbs = card.querySelectorAll('input[type="checkbox"]');
+          if (isNone && this.checked) {
+            allCbs.forEach(c => { if (c !== this) c.checked = false; });
+          } else if (this.checked) {
+            allCbs.forEach(c => { if (c.dataset.isNone === 'true') c.checked = false; });
+          }
+        });
+      });
+    }
+  }
+
+  // ================================================================
+  // NAVIGATION: NEXT / BACK
+  // ================================================================
+  function goNext() {
+    const q     = QUESTIONS[currentQ];
+    const errEl = document.getElementById('q-error');
+
+    if (q.type === 'radio') {
+      const sel = document.querySelector(`input[name="q_${q.id}"]:checked`);
+      if (!sel) { errEl.classList.add('visible'); return; }
+      answers[q.id] = parseInt(sel.value);
+    } else {
+      const checked = [...document.querySelectorAll(`input[name="q_${q.id}"]:checked`)]
+        .map(c => c.value);
+      if (checked.length === 0) { errEl.classList.add('visible'); return; }
+      answers[q.id] = checked;
+    }
+
+    errEl.classList.remove('visible');
+
+    if (currentQ < QUESTIONS.length - 1) {
+      currentQ++;
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      showResults();
+    }
+  }
+
+  function goBack() {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      showScreen('intake');
+    }
+  }
+
+  // ================================================================
+  // SCORING ENGINE
+  // ================================================================
+  function calculateScore() {
+    // Build point maps from question options
+    const q1Options = QUESTIONS[0].options.reduce((m, o) => { m[o.value] = o.points; return m; }, {});
+    const q2Options = QUESTIONS[1].options.reduce((m, o) => { m[o.value] = o.points; return m; }, {});
+    const q10Options = QUESTIONS[9].options.reduce((m, o) => { m[o.value] = o.points; return m; }, {});
+    const q13Options = QUESTIONS[12].options.reduce((m, o) => { m[o.value] = o.points; return m; }, {});
+
+    // Q1 — Medical History
+    const q1Vals = answers['medical-history'] || [];
+    let q1Raw = q1Vals.reduce((sum, v) => sum + (q1Options[v] || 0), 0);
+    let q1Score = Math.min(q1Raw, 4);
+    const q1Flags = q1Vals.filter(v => v !== 'none');
+
+    // Q2 — Medications
+    const q2Vals = answers['medications'] || [];
+    let q2Raw = q2Vals.reduce((sum, v) => sum + (q2Options[v] || 0), 0);
+    let q2Score = Math.min(q2Raw, 4);
+    const q2Flags = q2Vals.filter(v => v !== 'none');
+
+    // Q3-Q9, Q11-Q12 Core (10 questions)
+    const coreIds = [
+      'fall-history', 'balance-confidence', 'gait-quality', 'lower-limb-strength',
+      'vision-adequacy', 'postural-stability', 'turning-ability', 'footwear', 'fear-of-falling'
+    ];
+    const coreScores = coreIds.map(id => answers[id] || 0);
+    const coreTotal  = coreScores.reduce((a, b) => a + b, 0);
+
+    // Q10 — Environmental Hazards
+    const q10Vals = answers['environmental-hazards'] || [];
+    let q10Raw = q10Vals.reduce((sum, v) => sum + (q10Options[v] || 0), 0);
+    let q10Score = Math.min(q10Raw, 4);
+    const hazardFlags = q10Vals.filter(v => v !== 'none');
+
+    // Q13 — Protective Factors (negative points)
+    const q13Vals = answers['protective-factors'] || [];
+    let q13Raw = q13Vals.reduce((sum, v) => sum + (q13Options[v] || 0), 0);
+    let q13Score = Math.max(q13Raw, -4); // Cap at -4 reduction
+    const protectiveFactors = q13Vals.filter(v => v !== 'none');
+
+    const totalRaw  = Math.max(0, q1Score + q2Score + coreTotal + q10Score + q13Score);
+    const maxRaw    = 4 + 4 + (9 * 4) + 4; // 48 max (without protective reduction)
+    const riskPct   = Math.round((totalRaw / maxRaw) * 100);
+
+    // Base tier
+    let baseTier;
+    if (riskPct >= 81) baseTier = 5;
+    else if (riskPct >= 61) baseTier = 4;
+    else if (riskPct >= 41) baseTier = 3;
+    else if (riskPct >= 21) baseTier = 2;
+    else baseTier = 1;
+
+    // Age modifier
+    const AGE_MODIFIERS = {
+      'under50': -1, '50-59': 0, '60-69': 1, '70-79': 2, '80plus': 2
+    };
+    const ageMod = AGE_MODIFIERS[userData.age] || 0;
+    let adjustedTier = Math.max(1, Math.min(5, baseTier + ageMod));
+    const ageAdjusted = adjustedTier !== baseTier;
+
+    // Clinical overrides
+    // 2+ falls in past year → minimum Tier 4
+    if ((answers['fall-history'] || 0) >= 3) // value 3 = "2 falls", value 4 = "3+ falls"
+      adjustedTier = Math.max(adjustedTier, 4);
+
+    // Parkinson's disease → minimum Tier 4
+    if (q1Flags.includes('parkinsons'))
+      adjustedTier = Math.max(adjustedTier, 4);
+
+    // Fall with injury is approximated by 3+ falls (severe)
+    if ((answers['fall-history'] || 0) === 4)
+      adjustedTier = Math.max(adjustedTier, 4);
+
+    // Uses wheelchair (approximated by gait = 4)
+    if ((answers['gait-quality'] || 0) === 4)
+      adjustedTier = Math.max(adjustedTier, 4);
+
+    // Peripheral neuropathy → minimum Tier 3
+    if (q1Flags.includes('neuropathy'))
+      adjustedTier = Math.max(adjustedTier, 3);
+
+    // Vestibular disorder → minimum Tier 3
+    if (q1Flags.includes('vestibular'))
+      adjustedTier = Math.max(adjustedTier, 3);
+
+    // Build clinical flags
+    const clinicalFlags = [];
+
+    // Urgent flags
+    if ((answers['fall-history'] || 0) >= 3 && q1Flags.includes('parkinsons')) {
+      clinicalFlags.push({ type: 'urgent', text: 'Parkinson\'s disease with recent falls detected. This combination requires immediate medical evaluation and a comprehensive fall prevention program under medical supervision. Do not begin a new exercise program without consulting your neurologist.' });
+    } else if ((answers['fall-history'] || 0) === 4) {
+      clinicalFlags.push({ type: 'urgent', text: 'Multiple falls (3+) in the past year indicates very high fall risk. Please consult your healthcare provider for a comprehensive fall risk evaluation, including medication review, vision check, and home safety assessment before beginning any exercise program.' });
+    } else if ((answers['fall-history'] || 0) >= 3) {
+      clinicalFlags.push({ type: 'urgent', text: 'Two or more falls in the past year significantly increases future fall risk. We strongly recommend a medical evaluation to identify contributing factors and a professional home safety assessment.' });
+    }
+
+    if (q1Flags.includes('parkinsons') && !clinicalFlags.some(f => f.text.includes('Parkinson'))) {
+      clinicalFlags.push({ type: 'urgent', text: 'Parkinson\'s disease significantly affects balance and increases fall risk. Your exercise program should be supervised by a physical therapist experienced with Parkinson\'s. Discuss fall prevention strategies with your neurologist.' });
+    }
+
+    // Warning flags
+    if (q2Flags.includes('polypharmacy')) {
+      clinicalFlags.push({ type: 'warning', text: 'Polypharmacy (4+ medications) is associated with increased fall risk due to drug interactions and side effects. Request a medication review with your pharmacist or physician to identify any medications that could be reduced, eliminated, or timed differently.' });
+    }
+
+    if (q1Flags.includes('neuropathy')) {
+      clinicalFlags.push({ type: 'warning', text: 'Peripheral neuropathy reduces sensation in your feet, making it harder to detect obstacles and maintain balance. Proper footwear with good support is essential. Consider working with a physical therapist on proprioceptive training exercises.' });
+    }
+
+    if (q2Flags.includes('sedatives')) {
+      clinicalFlags.push({ type: 'warning', text: 'Sedatives and sleep aids significantly increase fall risk, especially at night. Discuss alternatives with your prescriber, and ensure nighttime navigation paths are well-lit with night lights.' });
+    }
+
+    if (q1Flags.includes('orthostatic')) {
+      clinicalFlags.push({ type: 'warning', text: 'Orthostatic hypotension (dizziness when standing) increases fall risk during position changes. Rise slowly from lying or sitting, pause before walking, and ensure adequate hydration. This should be monitored by your physician.' });
+    }
+
+    // Info flags
+    if (hazardFlags.length > 0) {
+      clinicalFlags.push({ type: 'info', text: 'Environmental hazards identified in your home. These are highly modifiable risk factors. Prioritize removing loose rugs, improving lighting, and installing grab bars in the bathroom. A professional home safety assessment can identify additional improvements.' });
+    }
+
+    if ((answers['footwear'] || 0) >= 3) {
+      clinicalFlags.push({ type: 'info', text: 'Your footwear increases fall risk. Avoid walking in socks, barefoot, or in loose slippers. Invest in well-fitting shoes or slippers with non-slip soles and good heel support — this is one of the easiest fall prevention interventions.' });
+    }
+
+    if ((answers['fear-of-falling'] || 0) >= 3) {
+      clinicalFlags.push({ type: 'info', text: 'Fear of falling is affecting your daily activities. While caution is appropriate, excessive fear can lead to activity avoidance, deconditioning, and paradoxically increase fall risk. A structured balance training program can help rebuild confidence safely.' });
+    }
+
+    if (userData.age === '80plus') {
+      clinicalFlags.push({ type: 'info', text: 'At 80 and older, fall prevention becomes especially important. We recommend discussing these results with your healthcare team and considering a professional fall risk assessment. All exercise recommendations will be appropriately gentle and progressive.' });
+    }
+
+    // Cross-referral flags
+    const showGMMBBCrossref = (
+      adjustedTier >= 3 ||
+      (answers['balance-confidence'] || 0) >= 3 ||
+      (answers['postural-stability'] || 0) >= 3
+    );
+
+    const showStrengthCrossref = (
+      (answers['lower-limb-strength'] || 0) >= 3 ||
+      (adjustedTier >= 3 && (answers['lower-limb-strength'] || 0) >= 2)
+    );
+
+    return {
+      totalRaw, riskPct, baseTier, adjustedTier, ageAdjusted, ageMod,
+      q1Flags, q2Flags, hazardFlags, protectiveFactors, coreScores, clinicalFlags,
+      showGMMBBCrossref, showStrengthCrossref,
+      hasProtectiveFactors: protectiveFactors.length > 0,
+    };
+  }
+
+  // ================================================================
+  // RESULTS RENDER
+  // ================================================================
+  function showResults() {
+    const result = calculateScore();
+    const tier   = TIERS[result.adjustedTier];
+
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('progress-text').textContent = 'Assessment complete';
+    document.getElementById('progress-pct').textContent = '100%';
+
+    showScreen('results');
+
+    const firstName = userData.name.split(' ')[0];
+    document.getElementById('results-greeting').textContent =
+      firstName ? `${firstName}, here are your results` : 'Your results are ready';
+
+    const hero = document.getElementById('score-hero');
+    hero.style.setProperty('--tier-color', tier.color);
+
+    const ringFill = document.getElementById('ring-fill');
+    ringFill.style.stroke = tier.color;
+    setTimeout(() => {
+      const offset = 314 - (314 * result.riskPct / 100);
+      ringFill.style.strokeDashoffset = offset;
+    }, 200);
+
+    animateNumber('score-pct', 0, result.riskPct, 1200, v => v + '%');
+
+    const badge = document.getElementById('tier-badge');
+    badge.style.background = tier.muted;
+    badge.style.color       = tier.color;
+    document.getElementById('tier-badge-text').textContent = tier.badgeText;
+
+    document.getElementById('tier-name').textContent  = tier.label;
+    document.getElementById('tier-track').textContent = tier.track;
+    document.getElementById('tier-desc').textContent  = tier.desc;
+
+    if (result.ageAdjusted) {
+      const note = document.getElementById('age-adjust-note');
+      note.style.display = 'flex';
+      const direction = result.ageMod > 0 ? 'adjusted upward' : 'adjusted downward';
+      document.getElementById('age-adjust-text').textContent =
+        `Risk tier ${direction} from Tier ${result.baseTier} to Tier ${result.adjustedTier} based on your age (${userData.age.replace('plus','+')} years). Fall risk increases significantly with age.`;
+    }
+
+    if (result.clinicalFlags.length > 0) {
+      document.getElementById('flags-section').style.display = 'block';
+      const stack = document.getElementById('flags-stack');
+      stack.innerHTML = result.clinicalFlags.map(f => {
+        const icons = {
+          urgent:  `<svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+          warning: `<svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+          info:    `<svg class="flag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+        };
+        return `<div class="flag-card flag-${f.type}">${icons[f.type]}<div class="flag-text">${f.text}</div></div>`;
+      }).join('');
+    }
+
+    if (result.showGMMBBCrossref) {
+      document.getElementById('crossref-gmmbb').style.display = 'flex';
+    }
+
+    if (result.showStrengthCrossref) {
+      document.getElementById('crossref-strength').style.display = 'flex';
+    }
+
+    const domainColors = ['#009090','#3b82f6','#f59e0b','#f97316','#dc2626'];
+    const domainsCard = document.getElementById('domains-card');
+    domainsCard.innerHTML = result.coreScores.map((score, i) => {
+      const pct   = (score / 4) * 100;
+      const color = score <= 1 ? domainColors[0] : score === 2 ? domainColors[2] : score === 3 ? domainColors[3] : domainColors[4];
+      const label = score === 0 ? 'Optimal' : score === 1 ? 'Good' : score === 2 ? 'Fair' : score === 3 ? 'Poor' : 'Critical';
+      return `
+        <div class="domain-row">
+          <div class="domain-label">${DOMAIN_LABELS[i]}</div>
+          <div class="domain-bar-track">
+            <div class="domain-bar-fill" style="width:0%; background:${color};" data-target="${pct}"></div>
+          </div>
+          <div class="domain-score-label score-tag-${score}">${label}</div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('track-title').textContent = tier.track;
+    document.getElementById('track-body').textContent  = tier.ctaBody;
+
+    setTimeout(() => {
+      domainsCard.querySelectorAll('.domain-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.target + '%';
+      });
+    }, 400);
+
+    setTimeout(() => {
+      document.querySelectorAll('.fade-in').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 100);
+      });
+    }, 100);
+  }
+
+  // ================================================================
+  // UTILITY: Animate number
+  // ================================================================
+  function animateNumber(elId, from, to, duration, format) {
+    const el    = document.getElementById(elId);
+    const start = performance.now();
+    function step(now) {
+      const t   = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      el.textContent = format(Math.round(from + (to - from) * ease));
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ================================================================
+  // RESTART
+  // ================================================================
+  function restartAssessment() {
+    answers  = {};
+    userData = { name: '', age: '' };
+    currentQ = 0;
+    document.getElementById('field-name').value = '';
+    document.getElementById('field-age').value  = '';
+    document.getElementById('flags-section').style.display = 'none';
+    document.getElementById('crossref-gmmbb').style.display = 'none';
+    document.getElementById('crossref-strength').style.display = 'none';
+    document.getElementById('age-adjust-note').style.display = 'none';
+    document.getElementById('header-progress').classList.remove('visible');
+    document.querySelectorAll('.fade-in').forEach(el => el.classList.remove('visible'));
+    showScreen('welcome');
+  }
+
+  // ================================================================
+  // SCROLL HEADER BORDER
+  // ================================================================
+  window.addEventListener('scroll', () => {
+    document.getElementById('app-header').classList.toggle('scrolled', window.scrollY > 10);
+  });
+  </script>
+</body>
+</html>

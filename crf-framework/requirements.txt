@@ -1,0 +1,22 @@
+# Core dependencies
+pydantic>=2.0
+numpy>=1.24
+
+# PDF parsing (for lab upload parser)
+pdfplumber>=0.10.0
+PyMuPDF>=1.23.0  # Optional fallback for PDF extraction
+
+# API dependencies
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# Database
+asyncpg>=0.29.0
+
+# Development dependencies
+pytest>=7.0
+pytest-cov>=4.0
+pytest-asyncio>=0.23.0
+black>=23.0
+ruff>=0.1
+mypy>=1.0

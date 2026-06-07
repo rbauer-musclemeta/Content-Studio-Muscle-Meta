@@ -1,0 +1,152 @@
+/**
+ * Muscle-Meta Matrix Brand Tokens
+ *
+ * Import this file in index.css or App.css to apply brand styles.
+ * See .claude/skills/muscle-meta-design/assets/tokens.css for the full reference.
+ */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Core palette */
+  --mm-teal: #009090;
+  --mm-teal-dark: #006b6b;
+  --mm-teal-muted: #e6f5f5;
+  --mm-gold: #D4AF37;
+  --mm-gold-dark: #B5952F;
+  --mm-gold-muted: #faf6e8;
+  --mm-purple: #7c3aed;
+  --mm-purple-muted: #f3f0fd;
+  --mm-green: #16a34a;
+  --mm-green-muted: #f0fdf4;
+
+  /* Neutrals */
+  --mm-ink: #1a2332;
+  --mm-ink-soft: #344256;
+  --mm-ink-muted: #6b7b8f;
+  --mm-surface: #f7f6f3;
+  --mm-border: #e8e6e1;
+  --mm-white: #ffffff;
+
+  /* Risk tiers (semantic) */
+  --mm-tier-1: #009090;
+  --mm-tier-2: #3b82f6;
+  --mm-tier-3: #f59e0b;
+  --mm-tier-4: #f97316;
+  --mm-tier-5: #dc2626;
+
+  /* Typography */
+  --mm-font-display: 'Cormorant Garamond', Georgia, serif;
+  --mm-font-body: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Spacing (8pt grid) */
+  --mm-s-1: 4px;
+  --mm-s-2: 8px;
+  --mm-s-3: 12px;
+  --mm-s-4: 16px;
+  --mm-s-5: 24px;
+  --mm-s-6: 32px;
+  --mm-s-7: 48px;
+  --mm-s-8: 64px;
+
+  /* Radii */
+  --mm-r-1: 6px;
+  --mm-r-2: 10px;
+  --mm-r-3: 14px;
+  --mm-r-pill: 999px;
+
+  /* Shadows */
+  --mm-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --mm-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --mm-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --mm-shadow-teal: 0 8px 30px rgba(0, 144, 144, 0.15);
+}
+
+/* Base font application */
+body {
+  font-family: var(--mm-font-body);
+  color: var(--mm-ink-soft);
+  background-color: var(--mm-surface);
+}
+
+/* Display headings */
+h1, h2, h3, .mm-display {
+  font-family: var(--mm-font-display);
+  color: var(--mm-ink);
+  font-weight: 600;
+}
+
+/* Eyebrow text */
+.mm-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--mm-teal);
+}
+
+/* Primary button */
+.mm-btn-primary {
+  background-color: var(--mm-teal);
+  color: white;
+  border-radius: var(--mm-r-pill);
+  padding: 12px 24px;
+  font-weight: 500;
+  transition: all 200ms ease;
+}
+
+.mm-btn-primary:hover {
+  background-color: var(--mm-teal-dark);
+  box-shadow: var(--mm-shadow-teal);
+}
+
+/* Gold accent button */
+.mm-btn-gold {
+  background-color: var(--mm-gold);
+  color: white;
+  border-radius: var(--mm-r-pill);
+}
+
+.mm-btn-gold:hover {
+  background-color: var(--mm-gold-dark);
+}
+
+/* Card styling */
+.mm-card {
+  background: var(--mm-white);
+  border: 1px solid var(--mm-border);
+  border-radius: var(--mm-r-3);
+  box-shadow: var(--mm-shadow-sm);
+}
+
+.mm-card-hover {
+  transition: all 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mm-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--mm-shadow-lg);
+}
+
+/* Tier badges */
+.mm-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--mm-r-pill);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
