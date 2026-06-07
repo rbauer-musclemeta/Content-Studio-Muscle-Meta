@@ -1,0 +1,62 @@
+# Render.com Blueprint — Infrastructure as Code
+# Deploy both backend and frontend from one repo
+#
+# To deploy:
+# 1. Push this file to your GitHub repo
+# 2. Go to render.com → New → Blueprint
+# 3. Connect your repo → Render auto-detects this file
+# 4. Fill in environment variables when prompted
+# 5. Click "Apply" to deploy everything
+
+services:
+  # =============================================================================
+  # Backend — FastAPI + MongoDB
+  # =============================================================================
+  - type: web
+    name: mm-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      # MongoDB Atlas connection (get from mongodb.com/atlas)
+      - key: MONGO_URL
+        sync: false  # Prompts you to enter value on deploy
+      - key: DB_NAME
+        value: muscle_meta_matrix
+      # OpenAI for Content Studio
+      - key: OPENAI_API_KEY
+        sync: false
+      # Stripe (optional, for payments)
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      # Python settings
+      - key: PYTHON_VERSION
+        value: "3.11"
+
+  # =============================================================================
+  # Frontend — React Static Site
+  # =============================================================================
+  - type: web
+    name: mm-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: yarn install && yarn build
+    staticPublishPath: build
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+    routes:
+      # SPA fallback — all routes serve index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      # Points to your backend service
+      # Replace with your actual backend URL after first deploy
+      - key: REACT_APP_BACKEND_URL
+        value: https://mm-backend.onrender.com
